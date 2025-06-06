@@ -44,7 +44,7 @@ export default function Home() {
                 RSVP
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Моля, потвърдете присъствието си до 1 септември 2025 г.
+                Потвърждение за присъствие на сватбата
               </p>
             </div>
             <div className="max-w-md mx-auto">

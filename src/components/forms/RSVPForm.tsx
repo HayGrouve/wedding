@@ -150,14 +150,14 @@ export function RSVPForm() {
             </div>
             <div className="space-y-3">
               <h3 className="text-2xl font-playfair font-semibold text-wedding-rose">
-                Благодарим ви!
+                Благодарим ви за RSVP-то!
               </h3>
               <p className="text-muted-foreground text-lg">
-                RSVP-то ви е получено успешно. Очакваме ви с нетърпение!
+                Вашият отговор е получен успешно. Очакваме ви с нетърпение!
               </p>
               <p className="text-sm text-muted-foreground">
-                Ще получите email потвърждение скоро. Ако имате въпроси или
-                трябва да направите промени, моля свържете се с нас.
+                Ако имате въпроси или трябва да направите промени, моля свържете
+                се с нас директно.
               </p>
             </div>
             <div className="pt-4">
@@ -219,7 +219,7 @@ export function RSVPForm() {
               className={errors.email ? "border-red-500" : ""}
             />
             <p className="text-sm text-muted-foreground">
-              Ще използваме този email за потвърждение
+              За връзка и организационни въпроси
             </p>
             {errors.email && (
               <p className="text-sm text-red-500">{errors.email}</p>
