@@ -6,35 +6,30 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Heart, Calendar, MapPin, Users } from "lucide-react";
+import { Calendar, MapPin, Users } from "lucide-react";
+import Hero from "@/components/Hero";
 
 export default function Home() {
   return (
-    <div className="min-h-screen wedding-gradient">
-      {/* Hero Section Preview */}
-      <section className="section-padding">
-        <div className="container-wedding text-center">
-          <div className="mb-8">
-            <Heart className="mx-auto mb-6 h-16 w-16 text-primary" />
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 wedding-text-gradient">
-              Ана-Мария & Иван
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8">
-              Заедно със семействата си, ви канят на тяхната сватба
-            </p>
-            <Button size="lg" className="wedding-glow">
-              Вижте нашата история
-            </Button>
-          </div>
-        </div>
-      </section>
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <Hero
+        brideName="Ана-Мария"
+        groomName="Иван"
+        weddingDate="15 юни 2024 г."
+      />
 
-      {/* Theme Showcase Section */}
-      <section className="section-padding bg-background/80 backdrop-blur-sm">
+      {/* Wedding Details Section */}
+      <section id="wedding-details" className="section-padding bg-background">
         <div className="container-wedding">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            Сватбен уебсайт
-          </h2>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 wedding-text-gradient">
+              Детайли за сватбата
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Всичко, което трябва да знаете за нашия специален ден
+            </p>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Wedding Details Card */}
@@ -42,37 +37,57 @@ export default function Home() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Calendar className="h-5 w-5 text-primary" />
-                  Детайли за сватбата
+                  Дата и час
                 </CardTitle>
-                <CardDescription>Кога и къде ще празнуваме</CardDescription>
+                <CardDescription>Кога ще празнуваме</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div>
-                    <p className="font-semibold">Дата и час</p>
+                    <p className="font-semibold">Церемония</p>
                     <p className="text-muted-foreground">
                       15 юни 2024 г. от 16:00 ч.
                     </p>
                   </div>
                   <div>
-                    <p className="font-semibold flex items-center gap-1">
-                      <MapPin className="h-4 w-4" />
-                      Място
-                    </p>
+                    <p className="font-semibold">Празненство</p>
                     <p className="text-muted-foreground">
-                      Красива градинска зала
+                      15 юни 2024 г. от 18:00 ч.
                     </p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* RSVP Card */}
+            {/* Venue Card */}
             <Card className="wedding-shadow">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
+                  <MapPin className="h-5 w-5 text-primary" />
+                  Място
+                </CardTitle>
+                <CardDescription>Къде ще се проведе сватбата</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <p className="font-semibold">Църква</p>
+                    <p className="text-muted-foreground">Св. София, София</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold">Празненство</p>
+                    <p className="text-muted-foreground">Хотел Гранд, София</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* RSVP Card */}
+            <Card className="wedding-shadow md:col-span-2 lg:col-span-1">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
                   <Users className="h-5 w-5 text-secondary" />
-                  RSVP Формуляр
+                  RSVP
                 </CardTitle>
                 <CardDescription>
                   Моля, потвърдете присъствието си
@@ -92,9 +107,20 @@ export default function Home() {
                 </div>
               </CardContent>
             </Card>
+          </div>
+        </div>
+      </section>
 
+      {/* Theme Showcase Section */}
+      <section className="section-padding bg-background/80 backdrop-blur-sm">
+        <div className="container-wedding">
+          <h2 className="text-3xl font-bold text-center mb-12">
+            Сватбен уебсайт
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Color Palette Card */}
-            <Card className="wedding-shadow md:col-span-2 lg:col-span-1">
+            <Card className="wedding-shadow">
               <CardHeader>
                 <CardTitle>Цветова палитра</CardTitle>
                 <CardDescription>Цветовете на нашата сватба</CardDescription>
@@ -120,37 +146,49 @@ export default function Home() {
                 </div>
               </CardContent>
             </Card>
-          </div>
 
-          {/* Typography Showcase */}
-          <div className="mt-16 text-center">
-            <h2 className="text-2xl font-bold mb-4">Типография</h2>
-            <div className="space-y-4">
-              <h1 className="text-4xl font-bold">
-                Елегантни заглавия (Playfair Display)
-              </h1>
-              <h2 className="text-2xl font-semibold">Красиви подзаглавия</h2>
-              <p className="text-lg">
-                Чист основен текст с шрифт Inter за отлична четимост
-              </p>
-              <p className="text-muted-foreground">
-                Заглушен текст за вторична информация
-              </p>
-            </div>
-          </div>
+            {/* Typography Card */}
+            <Card className="wedding-shadow">
+              <CardHeader>
+                <CardTitle>Типография</CardTitle>
+                <CardDescription>Елегантни шрифтове</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div>
+                    <h3 className="text-xl font-bold">Заглавия</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Playfair Display
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-base">Основен текст</p>
+                    <p className="text-sm text-muted-foreground">Inter шрифт</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
-          {/* Button Variations */}
-          <div className="mt-16">
-            <h3 className="text-xl font-bold text-center mb-8">
-              Стилове на бутоните
-            </h3>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Button>Основен бутон</Button>
-              <Button variant="secondary">Вторичен бутон</Button>
-              <Button variant="outline">Контурен бутон</Button>
-              <Button variant="ghost">Прозрачен бутон</Button>
-              <Button variant="destructive">Деструктивен бутон</Button>
-            </div>
+            {/* Button Styles Card */}
+            <Card className="wedding-shadow">
+              <CardHeader>
+                <CardTitle>Стилове на бутоните</CardTitle>
+                <CardDescription>Интерактивни елементи</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <Button size="sm" className="w-full">
+                    Основен
+                  </Button>
+                  <Button size="sm" variant="outline" className="w-full">
+                    Контурен
+                  </Button>
+                  <Button size="sm" variant="secondary" className="w-full">
+                    Вторичен
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
@@ -159,7 +197,7 @@ export default function Home() {
       <footer className="bg-card border-t py-8">
         <div className="container-wedding text-center">
           <p className="text-muted-foreground">
-            Сватбен уебсайт - готов за внедряване
+            Сватбен уебсайт на Ана-Мария & Иван
           </p>
         </div>
       </footer>
