@@ -1,36 +1,145 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💒 Ана-Мария & Иван - Wedding Website
 
-## Getting Started
+A beautiful, responsive wedding website built with modern web technologies, featuring Bulgarian language support and elegant design.
 
-First, run the development server:
+## 👰🤵 Wedding Details
+
+- **Bride:** Ана-Мария (Ana-Maria)
+- **Groom:** Иван (Ivan)
+- **Language:** Bulgarian (България)
+- **Theme:** Rose Gold & Sage Green
+
+## ✨ Features
+
+- 🌍 **Fully Bulgarian Interface** - All text in Bulgarian language
+- 📱 **Fully Responsive** - Beautiful on all devices
+- 🎨 **Wedding Theme** - Custom color palette with rose, gold, sage, and cream colors
+- ⏰ **Countdown Timer** - Live countdown to the wedding day
+- 📸 **Photo Gallery** - Curated wedding photos with lightbox
+- 📝 **RSVP Form** - Complete guest response form with validation
+- 🔐 **Admin Dashboard** - Secure admin panel for managing RSVPs
+- 🎬 **Video Hero Section** - Elegant video background
+- ⚡ **Performance Optimized** - Fast loading and SEO friendly
+
+## 🏗️ Tech Stack
+
+- **Framework:** Next.js 15.3.3 with TypeScript
+- **Styling:** Tailwind CSS with custom wedding theme
+- **Components:** shadcn/ui component library
+- **Forms:** React Hook Form with Zod validation
+- **Icons:** Lucide React
+- **Fonts:** Playfair Display (headings) + Inter (body)
+- **Deployment:** Vercel
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+
+### Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone [your-repo-url]
+   cd wedding-website
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Run the development server**
+
+   ```bash
+   npm run dev
+   ```
+
+4. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+### Build and Deploy
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Build for production
+npm run build
+
+# Start production server
+npm start
+
+# Deploy to Vercel
+vercel --prod
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🎨 Theme Customization
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The wedding theme is configured in `src/app/globals.css`:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Primary (Rose):** `hsl(var(--primary))` - Wedding rose color
+- **Secondary (Gold):** `hsl(var(--secondary))` - Champagne gold
+- **Accent (Sage):** `hsl(var(--accent))` - Garden sage green
+- **Muted (Cream):** `hsl(var(--muted))` - Elegant cream
 
-## Learn More
+## 📁 Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+wedding-website/
+├── src/
+│   ├── app/
+│   │   ├── globals.css      # Global styles & theme
+│   │   ├── layout.tsx       # Root layout
+│   │   └── page.tsx         # Home page
+│   ├── components/
+│   │   └── ui/              # shadcn/ui components
+│   ├── lib/
+│   │   └── utils.ts         # Utility functions
+│   └── types/
+│       └── wedding.ts       # TypeScript definitions
+├── public/                  # Static assets
+├── vercel.json             # Vercel configuration
+└── package.json
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔒 Security Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Environment variables for sensitive data
+- Comprehensive `.gitignore` for security
+- Admin authentication for dashboard
+- Form validation and sanitization
 
-## Deploy on Vercel
+## 🌐 Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project is optimized for Vercel deployment:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Push to GitHub
+2. Connect repository to Vercel
+3. Deploy automatically on push
+
+## 📝 Development Notes
+
+- All text content is in Bulgarian
+- TypeScript is used throughout for type safety
+- Components follow shadcn/ui patterns
+- Responsive design with mobile-first approach
+- Performance optimized with Next.js best practices
+
+## 💝 Contributing
+
+This is a personal wedding website. For similar projects:
+
+1. Fork the repository
+2. Update wedding details in relevant files
+3. Customize colors in `globals.css`
+4. Update content in components
+
+## 📄 License
+
+This project is for personal use for Ana-Maria & Ivan's wedding.
+
+---
+
+**Built with 💖 for Ana-Maria & Ivan's special day**
