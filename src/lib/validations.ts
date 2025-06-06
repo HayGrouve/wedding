@@ -1,8 +1,10 @@
 import { z } from "zod";
 
-// Bulgarian phone number regex (common formats)
+// Bulgarian phone number regex (supports common formats)
+// Supports: 087XXXXXXX, 088XXXXXXX, 089XXXXXXX (mobile), 02XXXXXXX, 032XXXXXX (landline), etc.
+// With/without spaces and dashes, with/without +359 international prefix
 const BULGARIAN_PHONE_REGEX =
-  /^(\+359|0)(\s|-)?[2-9]\d{1}(\s|-)?(\d{3}(\s|-)?){2}\d{3}$/;
+  /^(\+359[\s-]?|0)[2-9]\d{1}[\s-]?\d{3}[\s-]?\d{3,4}$/;
 
 // Email validation with more comprehensive regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -28,7 +30,7 @@ export const GuestSchema = z.object({
     .optional()
     .refine(
       (phone) => !phone || BULGARIAN_PHONE_REGEX.test(phone),
-      "Невалиден български телефонен номер (използвайте формат: +359 2 XXX XXX или 02 XXX XXX)"
+      "Невалиден български телефонен номер (използвайте формат: 0877311601, 087 731 1601, +359 87 731 1601 или подобни)"
     ),
   attending: z.boolean({
     required_error: "Моля, посочете дали ще присъствате",

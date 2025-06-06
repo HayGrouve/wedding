@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import AdminLoginForm from "@/components/admin/AdminLoginForm";
 import { AuthResponse } from "@/lib/auth";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle } from "lucide-react";
 
-export default function AdminLoginPage() {
+function AdminLoginContent() {
   const [isLoginOpen, setIsLoginOpen] = useState(true);
   const [message, setMessage] = useState<{
     type: "error" | "info";
@@ -150,5 +150,26 @@ export default function AdminLoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-br from-wedding-cream via-background to-wedding-sage/10 flex items-center justify-center p-4">
+          <div className="w-full max-w-md space-y-6">
+            <div className="text-center space-y-2">
+              <h1 className="text-3xl font-serif text-wedding-rose">
+                Админ Панел
+              </h1>
+              <p className="text-muted-foreground">Зареждане...</p>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <AdminLoginContent />
+    </Suspense>
   );
 }

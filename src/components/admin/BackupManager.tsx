@@ -65,16 +65,9 @@ export function BackupManager({ guests }: BackupManagerProps) {
     try {
       setIsProcessing(true);
       exportBackup(guests);
-      toast({
-        title: "Backup Created",
-        description: `Successfully created backup of ${guests.length} guests`,
-      });
+      toast.success(`Successfully created backup of ${guests.length} guests`);
     } catch (error) {
-      toast({
-        title: "Backup Failed",
-        description: error instanceof Error ? error.message : "Unknown error",
-        variant: "destructive",
-      });
+      toast.error(error instanceof Error ? error.message : "Backup failed");
     } finally {
       setIsProcessing(false);
     }
@@ -92,23 +85,16 @@ export function BackupManager({ guests }: BackupManagerProps) {
       setRestoreValidation(validation);
 
       if (validation.isValid) {
-        toast({
-          title: "Backup File Valid",
-          description: `Found ${validation.metadata?.totalGuests} guests in backup`,
-        });
+        toast.success(
+          `Found ${validation.metadata?.totalGuests} guests in backup`
+        );
       } else {
-        toast({
-          title: "Invalid Backup File",
-          description: validation.errors.join(", "),
-          variant: "destructive",
-        });
+        toast.error(validation.errors.join(", "));
       }
     } catch (error) {
-      toast({
-        title: "File Processing Failed",
-        description: error instanceof Error ? error.message : "Unknown error",
-        variant: "destructive",
-      });
+      toast.error(
+        error instanceof Error ? error.message : "File processing failed"
+      );
     } finally {
       setIsProcessing(false);
     }
@@ -127,23 +113,16 @@ export function BackupManager({ guests }: BackupManagerProps) {
       setRestoreResult(result);
 
       if (result.success) {
-        toast({
-          title: "Restore Simulation Complete",
-          description: `Would restore ${result.restored} guests, skip ${result.skipped} duplicates`,
-        });
+        toast.success(
+          `Would restore ${result.restored} guests, skip ${result.skipped} duplicates`
+        );
       } else {
-        toast({
-          title: "Restore Simulation Failed",
-          description: result.errors.join(", "),
-          variant: "destructive",
-        });
+        toast.error(result.errors.join(", "));
       }
     } catch (error) {
-      toast({
-        title: "Restore Simulation Failed",
-        description: error instanceof Error ? error.message : "Unknown error",
-        variant: "destructive",
-      });
+      toast.error(
+        error instanceof Error ? error.message : "Restore simulation failed"
+      );
     }
   };
 
@@ -166,16 +145,11 @@ export function BackupManager({ guests }: BackupManagerProps) {
       downloadEmailExport(emailData, platform, attendingOnly);
 
       const attendingSuffix = attendingOnly ? " (attending only)" : "";
-      toast({
-        title: "Email Export Complete",
-        description: `Exported emails for ${platform}${attendingSuffix}`,
-      });
+      toast.success(`Exported emails for ${platform}${attendingSuffix}`);
     } catch (error) {
-      toast({
-        title: "Email Export Failed",
-        description: error instanceof Error ? error.message : "Unknown error",
-        variant: "destructive",
-      });
+      toast.error(
+        error instanceof Error ? error.message : "Email export failed"
+      );
     } finally {
       setIsProcessing(false);
     }

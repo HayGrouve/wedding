@@ -5,6 +5,7 @@ import React, {
   useContext,
   useState,
   useEffect,
+  useCallback,
   ReactNode,
 } from "react";
 
@@ -120,7 +121,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   });
 
   // Check authentication status
-  const checkAuth = async (): Promise<void> => {
+  const checkAuth = useCallback(async (): Promise<void> => {
     try {
       const response = await fetch("/api/auth/session", {
         method: "GET",
@@ -149,7 +150,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         isLoading: false,
       });
     }
-  };
+  }, []);
 
   // Login function
   const login = async (
@@ -219,17 +220,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   // Refresh session info
-  const refreshSession = async (): Promise<void> => {
+  const refreshSession = useCallback(async (): Promise<void> => {
     if (authState.isAuthenticated) {
       await checkAuth();
     }
-  };
+  }, [authState.isAuthenticated, checkAuth]);
 
   // Check auth on mount and load security log
   useEffect(() => {
     securityMonitor.loadFromStorage();
     checkAuth();
-  }, []);
+  }, [checkAuth]);
 
   // Set up periodic session refresh (every 5 minutes)
   useEffect(() => {
@@ -237,7 +238,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const interval = setInterval(refreshSession, 5 * 60 * 1000);
       return () => clearInterval(interval);
     }
-  }, [authState.isAuthenticated]);
+  }, [authState.isAuthenticated, refreshSession]);
 
   // Provide context value
   const contextValue: AuthContextType = {

@@ -394,7 +394,15 @@ export function exportEmailsForPlatform(
   }
 }
 
-function exportMailchimpFormat(guests: GuestRecord[], options: any): string {
+interface MailchimpOptions {
+  includeNames?: boolean;
+  includePhones?: boolean;
+}
+
+function exportMailchimpFormat(
+  guests: GuestRecord[],
+  options: MailchimpOptions
+): string {
   const headers = ["Email Address"];
   if (options.includeNames) {
     headers.push("First Name", "Last Name");
@@ -422,9 +430,14 @@ function exportMailchimpFormat(guests: GuestRecord[], options: any): string {
   return [headers, ...data].map((row) => row.join(",")).join("\n");
 }
 
+interface ConstantContactOptions {
+  includeNames?: boolean;
+  includePhones?: boolean;
+}
+
 function exportConstantContactFormat(
   guests: GuestRecord[],
-  options: any
+  options: ConstantContactOptions
 ): string {
   const headers = ["Email"];
   if (options.includeNames) {
@@ -453,7 +466,15 @@ function exportConstantContactFormat(
   return [headers, ...data].map((row) => row.join(",")).join("\n");
 }
 
-function exportSendGridFormat(guests: GuestRecord[], options: any): string {
+interface SendGridOptions {
+  includeNames?: boolean;
+  includeDietary?: boolean;
+}
+
+function exportSendGridFormat(
+  guests: GuestRecord[],
+  options: SendGridOptions
+): string {
   const headers = ["email"];
   if (options.includeNames) {
     headers.push("first_name", "last_name");
@@ -481,7 +502,17 @@ function exportSendGridFormat(guests: GuestRecord[], options: any): string {
   return [headers, ...data].map((row) => row.join(",")).join("\n");
 }
 
-function exportGenericEmailFormat(guests: GuestRecord[], options: any): string {
+interface GenericEmailOptions {
+  includeNames?: boolean;
+  includePhones?: boolean;
+  includeDietary?: boolean;
+  format?: "csv" | "txt";
+}
+
+function exportGenericEmailFormat(
+  guests: GuestRecord[],
+  options: GenericEmailOptions
+): string {
   if (options.format === "txt") {
     return guests.map((guest) => guest.email).join("\n");
   }

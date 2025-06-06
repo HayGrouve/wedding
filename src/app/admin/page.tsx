@@ -1,6 +1,9 @@
 import React from "react";
 import { redirect } from "next/navigation";
 import { getAdminSession, getSessionInfo } from "@/lib/auth";
+
+// Force dynamic rendering since we use cookies for authentication
+export const dynamic = "force-dynamic";
 import {
   Card,
   CardContent,

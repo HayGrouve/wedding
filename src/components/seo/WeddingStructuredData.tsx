@@ -147,7 +147,7 @@ const WeddingStructuredData: React.FC<WeddingStructuredDataProps> = ({
     <Script
       id="wedding-structured-data"
       type="application/ld+json"
-      strategy="beforeInteractive"
+      strategy="afterInteractive"
       dangerouslySetInnerHTML={{
         __html: JSON.stringify(structuredData, null, 2),
       }}

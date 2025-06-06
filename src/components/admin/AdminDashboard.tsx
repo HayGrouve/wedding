@@ -156,10 +156,10 @@ export function AdminDashboard() {
   const [selectedGuests, setSelectedGuests] = useState<GuestRecord[]>([]);
 
   // Guest editing functions
-  const handleEditGuest = (guest: GuestRecord) => {
+  const handleEditGuest = useCallback((guest: GuestRecord) => {
     setEditingGuest(guest);
     setIsEditModalOpen(true);
-  };
+  }, []);
 
   const handleSaveGuest = async (
     guestId: string,
@@ -189,31 +189,34 @@ export function AdminDashboard() {
     }
   };
 
-  const handleBulkDelete = async (guestIds: string[]) => {
-    try {
-      const response = await fetch("/api/admin/guests/bulk", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          action: "delete",
-          guestIds,
-        }),
-      });
+  const handleBulkDelete = useCallback(
+    async (guestIds: string[]) => {
+      try {
+        const response = await fetch("/api/admin/guests/bulk", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            action: "delete",
+            guestIds,
+          }),
+        });
 
-      if (!response.ok) {
-        throw new Error("Failed to delete guests");
+        if (!response.ok) {
+          throw new Error("Failed to delete guests");
+        }
+
+        // Refresh data
+        await mutate();
+      } catch (error) {
+        console.error("Error deleting guests:", error);
+        throw error;
       }
-
-      // Refresh data
-      await mutate();
-    } catch (error) {
-      console.error("Error deleting guests:", error);
-      throw error;
-    }
-  };
+    },
+    [mutate]
+  );
 
   const handleBulkMarkAttending = async (
     guestIds: string[],
@@ -255,13 +258,16 @@ export function AdminDashboard() {
     });
   };
 
-  const handleSelectAllGuests = (selected: boolean) => {
-    if (selected && data?.guests) {
-      setSelectedGuests([...data.guests]);
-    } else {
-      setSelectedGuests([]);
-    }
-  };
+  const handleSelectAllGuests = useCallback(
+    (selected: boolean) => {
+      if (selected && data?.guests) {
+        setSelectedGuests([...data.guests]);
+      } else {
+        setSelectedGuests([]);
+      }
+    },
+    [data?.guests]
+  );
 
   const clearSelection = () => {
     setSelectedGuests([]);
@@ -613,18 +619,25 @@ export function AdminDashboard() {
 
   // Calculate dynamic statistics based on filtered data
   const dynamicStats = useMemo(() => {
-    const totalGuests = filteredData.length;
-    const attendingCount = filteredData.filter(
+    const totalRSVPs = filteredData.length;
+    const attendingRSVPs = filteredData.filter(
       (guest) => guest.attending
     ).length;
-    const notAttendingCount = totalGuests - attendingCount;
-    const totalChildrenCount = filteredData.reduce(
-      (sum, guest) => sum + guest.childrenCount,
-      0
-    );
+    const notAttendingRSVPs = totalRSVPs - attendingRSVPs;
+
+    // Calculate total children count (only for attending guests)
+    const totalChildrenCount = filteredData
+      .filter((guest) => guest.attending)
+      .reduce((sum, guest) => sum + guest.childrenCount, 0);
+
+    // Calculate total plus ones (only for attending guests)
     const totalPlusOnes = filteredData.filter(
       (guest) => guest.attending && guest.plusOneAttending
     ).length;
+
+    // Calculate total people attending (primary guests + plus ones + children)
+    const totalPeopleAttending =
+      attendingRSVPs + totalPlusOnes + totalChildrenCount;
 
     // Calculate dietary preferences
     const dietaryPreferences = filteredData
@@ -648,9 +661,10 @@ export function AdminDashboard() {
     ).length;
 
     return {
-      totalGuests,
-      attendingCount,
-      notAttendingCount,
+      totalRSVPs,
+      totalPeopleAttending,
+      attendingCount: attendingRSVPs,
+      notAttendingCount: notAttendingRSVPs,
       totalChildrenCount,
       totalPlusOnes,
       vegetarianCount,
@@ -746,11 +760,16 @@ export function AdminDashboard() {
       <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Общо гости</CardTitle>
+            <CardTitle className="text-sm font-medium">Общо хора</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{dynamicStats.totalGuests}</div>
+            <div className="text-2xl font-bold">
+              {dynamicStats.totalPeopleAttending}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              {dynamicStats.totalRSVPs} RSVP форми
+            </div>
           </CardContent>
         </Card>
 
