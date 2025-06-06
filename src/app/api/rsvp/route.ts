@@ -5,7 +5,7 @@ import {
   checkRateLimit,
   updateRateLimit,
   findGuestByEmail,
-} from "@/lib/db-kv";
+} from "@/lib/db-redis";
 
 // Helper function to get client IP address
 function getClientIP(request: NextRequest): string {

@@ -1,6 +1,6 @@
 # 🚀 Wedding Website Deployment Guide
 
-This guide explains how to deploy your wedding website to Vercel with Vercel KV database.
+This guide explains how to deploy your wedding website to Vercel with Redis database.
 
 ## ⚡ Quick Setup
 
@@ -13,14 +13,11 @@ This guide explains how to deploy your wedding website to Vercel with Vercel KV 
 
 Your deployment needs these environment variables configured in Vercel:
 
-#### **KV Database (Required)**
+#### **Redis Database (Required)**
 
 ```bash
-# Vercel KV Database URLs - Get these from Vercel Dashboard
-KV_REST_API_URL=your_kv_rest_api_url
-KV_REST_API_TOKEN=your_kv_rest_api_token
-KV_REST_API_READ_ONLY_TOKEN=your_kv_rest_api_read_only_token
-KV_URL=your_kv_url
+# Redis Database URL - Get this from your Redis provider (Vercel, Upstash, etc.)
+REDIS_URL=redis://your-redis-url
 ```
 
 #### **Admin Authentication (Optional)**
@@ -31,30 +28,46 @@ ADMIN_PASSWORD=your_secure_admin_password
 JWT_SECRET=your_jwt_secret_key
 ```
 
-### 3. Setting Up Vercel KV
+### 3. Setting Up Redis Database
+
+#### **Option A: Vercel Redis (Recommended)**
 
 1. **Go to Vercel Dashboard**
 
    - Navigate to your project
    - Go to Storage tab
    - Click "Create Database"
-   - Select "KV"
+   - Select "Redis" (powered by Upstash)
 
-2. **Configure KV Database**
+2. **Configure Redis Database**
 
    - Choose a database name (e.g., "wedding-guests")
    - Select your region (choose closest to your users)
    - Create the database
 
-3. **Get Environment Variables**
-   - After creation, Vercel will show you the environment variables
-   - Copy the KV environment variables
+3. **Get Environment Variable**
+   - After creation, copy the `REDIS_URL` value
    - Go to Settings > Environment Variables in your project
-   - Add each variable:
-     - `KV_REST_API_URL`
-     - `KV_REST_API_TOKEN`
-     - `KV_REST_API_READ_ONLY_TOKEN`
-     - `KV_URL`
+   - Add the variable: `REDIS_URL`
+
+#### **Option B: Direct Upstash Setup**
+
+1. **Go to Upstash Console**
+
+   - Visit [Upstash Console](https://console.upstash.com/)
+   - Create account if needed
+   - Create a new Redis database
+
+2. **Configure Database**
+
+   - Choose a database name (e.g., "wedding-guests")
+   - Select your region
+   - Copy the Redis URL
+
+3. **Add to Vercel**
+   - Go to your Vercel project settings
+   - Navigate to Environment Variables
+   - Add `REDIS_URL` with your database URL
 
 ### 4. Deploy to Vercel
 
@@ -88,35 +101,41 @@ After deployment:
    - Fill out the RSVP form
    - Verify it submits successfully
 
-2. **Check KV Database**
-   - Go to Vercel Dashboard > Storage > Your KV Database
+2. **Check Redis Database**
+   - Go to your Redis provider dashboard (Vercel Storage or Upstash)
    - You should see the guest data stored
 
 ## 🔧 Troubleshooting
 
 ### **RSVP Submission Fails**
 
-- Check that all KV environment variables are set correctly
-- Verify KV database is active in Vercel dashboard
+- Check that `REDIS_URL` environment variable is set correctly
+- Verify Redis database is active in your provider dashboard
 - Check function logs in Vercel dashboard for error details
 
 ### **Database Connection Issues**
 
-- Ensure environment variables match exactly what Vercel provided
+- Ensure `REDIS_URL` matches exactly what your provider gave you
 - Try redeploying after setting environment variables
-- Check that your Vercel KV database is in the same region as your deployment
+- Check that your Redis database is accessible from Vercel
 
 ### **Environment Variables Not Working**
 
-- Make sure variables are set in Vercel dashboard (not just locally)
+- Make sure `REDIS_URL` is set in Vercel dashboard (not just locally)
 - Redeploy after adding environment variables
-- Check variable names for typos
+- Check variable name for typos (case-sensitive)
+
+### **Redis Connection Errors**
+
+- Verify your Redis URL format: `redis://username:password@host:port`
+- Check if your Redis provider requires authentication
+- Ensure your Redis instance is not sleeping (some free tiers auto-sleep)
 
 ## 📊 Database Structure
 
-Your Vercel KV database will store:
+Your Redis database will store:
 
-### **Guest Records**
+### **Guest Records** (stored as JSON string)
 
 ```json
 {
@@ -135,7 +154,7 @@ Your Vercel KV database will store:
 }
 ```
 
-### **Rate Limiting**
+### **Rate Limiting** (stored as JSON string with expiration)
 
 ```json
 {
@@ -145,12 +164,18 @@ Your Vercel KV database will store:
 }
 ```
 
+### **Redis Keys Structure**
+
+- `wedding:guests` - Main array of all guest records
+- `wedding:guest:email:{email}` - Email to guest ID mapping
+- `wedding:ratelimit:{ip}` - Rate limiting records by IP address
+
 ## 🎯 Production Checklist
 
 Before going live:
 
-- [ ] ✅ KV database created and configured
-- [ ] ✅ All environment variables set in Vercel
+- [ ] ✅ Redis database created and configured
+- [ ] ✅ `REDIS_URL` environment variable set in Vercel
 - [ ] ✅ RSVP form tested and working
 - [ ] ✅ Gallery images uploaded to `/public/gallery/`
 - [ ] ✅ Wedding details updated in components
@@ -162,28 +187,50 @@ Before going live:
 
 1. **Test Locally First**
 
-   - Set up a test KV database for development
+   - Set up a test Redis database for development
+   - Use a different Redis URL for local testing
    - Test all functionality before deploying
 
 2. **Monitor Your Database**
 
-   - Check KV usage in Vercel dashboard
-   - Vercel KV has generous free limits but monitor if you expect many guests
+   - Check Redis usage in your provider dashboard
+   - Most Redis providers have generous free limits
+   - Monitor memory usage if you expect many guests
 
 3. **Backup Strategy**
 
    - Consider exporting guest data periodically
-   - KV data persists but good to have backups
+   - Redis data persists but good to have backups
+   - Some providers offer automatic backups
 
 4. **Performance**
-   - KV is very fast for reads/writes
-   - Consider caching for heavy read operations if needed
+   - Redis is extremely fast for reads/writes
+   - Connection pooling is handled automatically
+   - Consider Redis clustering for very high traffic (not needed for most weddings)
 
 ## 🔗 Useful Links
 
-- [Vercel KV Documentation](https://vercel.com/docs/storage/vercel-kv)
+- [Vercel Redis Documentation](https://vercel.com/docs/storage/vercel-redis)
+- [Upstash Redis Documentation](https://docs.upstash.com/redis)
+- [Redis Client Documentation](https://redis.io/docs/clients/nodejs/)
 - [Vercel Deployment Guide](https://vercel.com/docs/concepts/deployments/overview)
 - [Environment Variables in Vercel](https://vercel.com/docs/concepts/projects/environment-variables)
+
+## 🆚 Redis vs File Storage
+
+**Why Redis is better for production:**
+
+- ✅ **Serverless Compatible:** Works perfectly with Vercel Functions
+- ✅ **Fast & Scalable:** Redis is designed for high-performance operations
+- ✅ **Persistent:** Data is stored reliably and won't be lost
+- ✅ **Concurrent Access:** Multiple requests can access data simultaneously
+- ✅ **Built-in Features:** Rate limiting, expiration, atomic operations
+
+**Previous file storage issues:**
+
+- ❌ **Read-only filesystem:** Serverless functions can't write files
+- ❌ **Data loss:** Files would be lost between function invocations
+- ❌ **Race conditions:** Multiple requests could corrupt data
 
 ---
 
@@ -192,9 +239,10 @@ Before going live:
 Once deployed, your wedding website will be able to:
 
 - ✅ Accept RSVP submissions
-- ✅ Store guest data securely in Vercel KV
+- ✅ Store guest data securely in Redis
 - ✅ Handle rate limiting to prevent spam
 - ✅ Scale automatically for any number of guests
 - ✅ Work reliably in production
+- ✅ Handle concurrent requests safely
 
 Congratulations on your deployment! 🎊

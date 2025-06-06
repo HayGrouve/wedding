@@ -1,4 +1,4 @@
-import { kv } from "@vercel/kv";
+import { createClient } from "redis";
 
 // Types for our database operations
 export interface GuestRecord {
@@ -24,25 +24,56 @@ export interface DatabaseResponse<T = any> {
   count?: number;
 }
 
-// KV Keys
+// Redis Keys
 const GUESTS_KEY = "wedding:guests";
 const RATE_LIMIT_PREFIX = "wedding:ratelimit:";
 const GUEST_EMAIL_PREFIX = "wedding:guest:email:";
+
+// Redis client instance
+let redis: ReturnType<typeof createClient> | null = null;
+
+// Initialize Redis connection
+async function getRedisClient() {
+  if (!redis) {
+    redis = createClient({
+      url: process.env.REDIS_URL,
+    });
+
+    redis.on("error", (err) => {
+      console.error("Redis Client Error:", err);
+    });
+
+    redis.on("connect", () => {
+      console.log("Redis Client Connected");
+    });
+
+    redis.on("disconnect", () => {
+      console.log("Redis Client Disconnected");
+    });
+
+    await redis.connect();
+  }
+
+  return redis;
+}
 
 // Generate unique ID for guests
 export function generateGuestId(): string {
   return `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 }
 
-// Read all guests from KV storage
+// Read all guests from Redis storage
 export async function getAllGuests(): Promise<DatabaseResponse<GuestRecord[]>> {
   try {
-    const guests = await kv.get<GuestRecord[]>(GUESTS_KEY);
-    
+    const client = await getRedisClient();
+    const guestsJson = await client.get(GUESTS_KEY);
+
+    const guests = guestsJson ? JSON.parse(guestsJson) : [];
+
     return {
       success: true,
-      data: guests || [],
-      count: guests?.length || 0,
+      data: guests,
+      count: guests.length,
     };
   } catch (error) {
     console.error("Error reading guests data:", error);
@@ -53,11 +84,13 @@ export async function getAllGuests(): Promise<DatabaseResponse<GuestRecord[]>> {
   }
 }
 
-// Add new guest to KV storage
+// Add new guest to Redis storage
 export async function addGuest(
   guest: Omit<GuestRecord, "id">
 ): Promise<DatabaseResponse<GuestRecord>> {
   try {
+    const client = await getRedisClient();
+
     // Get existing guests
     const existingResult = await getAllGuests();
     if (!existingResult.success) {
@@ -76,11 +109,14 @@ export async function addGuest(
     // Add to array
     guests.push(newGuest);
 
-    // Save to KV
-    await kv.set(GUESTS_KEY, guests);
-    
+    // Save to Redis
+    await client.set(GUESTS_KEY, JSON.stringify(guests));
+
     // Also store email index for quick lookup
-    await kv.set(`${GUEST_EMAIL_PREFIX}${newGuest.email.toLowerCase()}`, newGuest.id);
+    await client.set(
+      `${GUEST_EMAIL_PREFIX}${newGuest.email.toLowerCase()}`,
+      newGuest.id
+    );
 
     console.log(`New guest added: ${newGuest.guestName} (${newGuest.email})`);
 
@@ -102,9 +138,13 @@ export async function findGuestByEmail(
   email: string
 ): Promise<DatabaseResponse<GuestRecord>> {
   try {
+    const client = await getRedisClient();
+
     // First check if email exists in index
-    const guestId = await kv.get<string>(`${GUEST_EMAIL_PREFIX}${email.toLowerCase()}`);
-    
+    const guestId = await client.get(
+      `${GUEST_EMAIL_PREFIX}${email.toLowerCase()}`
+    );
+
     if (!guestId) {
       return {
         success: true,
@@ -142,6 +182,8 @@ export async function updateGuest(
   updates: Partial<Omit<GuestRecord, "id" | "submissionDate">>
 ): Promise<DatabaseResponse<GuestRecord>> {
   try {
+    const client = await getRedisClient();
+
     // Read existing guests
     const existingResult = await getAllGuests();
     if (!existingResult.success) {
@@ -166,15 +208,20 @@ export async function updateGuest(
 
     guests[guestIndex] = updatedGuest;
 
-    // Save back to KV
-    await kv.set(GUESTS_KEY, guests);
+    // Save back to Redis
+    await client.set(GUESTS_KEY, JSON.stringify(guests));
 
     // Update email index if email changed
     if (updates.email && updates.email !== guests[guestIndex].email) {
       // Remove old email index
-      await kv.del(`${GUEST_EMAIL_PREFIX}${guests[guestIndex].email.toLowerCase()}`);
+      await client.del(
+        `${GUEST_EMAIL_PREFIX}${guests[guestIndex].email.toLowerCase()}`
+      );
       // Add new email index
-      await kv.set(`${GUEST_EMAIL_PREFIX}${updates.email.toLowerCase()}`, id);
+      await client.set(
+        `${GUEST_EMAIL_PREFIX}${updates.email.toLowerCase()}`,
+        id
+      );
     }
 
     console.log(
@@ -197,6 +244,8 @@ export async function updateGuest(
 // Delete guest by ID
 export async function deleteGuest(id: string): Promise<DatabaseResponse<void>> {
   try {
+    const client = await getRedisClient();
+
     // Read existing guests
     const existingResult = await getAllGuests();
     if (!existingResult.success) {
@@ -218,11 +267,13 @@ export async function deleteGuest(id: string): Promise<DatabaseResponse<void>> {
     // Remove from array
     guests.splice(guestIndex, 1);
 
-    // Save back to KV
-    await kv.set(GUESTS_KEY, guests);
+    // Save back to Redis
+    await client.set(GUESTS_KEY, JSON.stringify(guests));
 
     // Remove email index
-    await kv.del(`${GUEST_EMAIL_PREFIX}${guestToDelete.email.toLowerCase()}`);
+    await client.del(
+      `${GUEST_EMAIL_PREFIX}${guestToDelete.email.toLowerCase()}`
+    );
 
     console.log(
       `Guest deleted: ${guestToDelete.guestName} (${guestToDelete.email})`
@@ -246,6 +297,8 @@ export async function bulkUpdateGuestAttending(
   attending: boolean
 ): Promise<DatabaseResponse<number>> {
   try {
+    const client = await getRedisClient();
+
     // Read existing guests
     const existingResult = await getAllGuests();
     if (!existingResult.success) {
@@ -270,8 +323,8 @@ export async function bulkUpdateGuestAttending(
       };
     }
 
-    // Save back to KV
-    await kv.set(GUESTS_KEY, guests);
+    // Save back to Redis
+    await client.set(GUESTS_KEY, JSON.stringify(guests));
 
     console.log(
       `Bulk updated ${updatedCount} guests attending status to: ${attending}`
@@ -295,6 +348,8 @@ export async function bulkDeleteGuests(
   guestIds: string[]
 ): Promise<DatabaseResponse<number>> {
   try {
+    const client = await getRedisClient();
+
     // Read existing guests
     const existingResult = await getAllGuests();
     if (!existingResult.success) {
@@ -302,8 +357,12 @@ export async function bulkDeleteGuests(
     }
 
     const guests = existingResult.data || [];
-    const guestsToDelete = guests.filter((guest) => guestIds.includes(guest.id));
-    const remainingGuests = guests.filter((guest) => !guestIds.includes(guest.id));
+    const guestsToDelete = guests.filter((guest) =>
+      guestIds.includes(guest.id)
+    );
+    const remainingGuests = guests.filter(
+      (guest) => !guestIds.includes(guest.id)
+    );
 
     if (guestsToDelete.length === 0) {
       return {
@@ -312,12 +371,12 @@ export async function bulkDeleteGuests(
       };
     }
 
-    // Save remaining guests to KV
-    await kv.set(GUESTS_KEY, remainingGuests);
+    // Save remaining guests to Redis
+    await client.set(GUESTS_KEY, JSON.stringify(remainingGuests));
 
     // Remove email indexes for deleted guests
     for (const guest of guestsToDelete) {
-      await kv.del(`${GUEST_EMAIL_PREFIX}${guest.email.toLowerCase()}`);
+      await client.del(`${GUEST_EMAIL_PREFIX}${guest.email.toLowerCase()}`);
     }
 
     console.log(`Bulk deleted ${guestsToDelete.length} guests`);
@@ -348,10 +407,11 @@ export async function checkRateLimit(
   windowHours: number = 1
 ): Promise<DatabaseResponse<boolean>> {
   try {
+    const client = await getRedisClient();
     const rateLimitKey = `${RATE_LIMIT_PREFIX}${ipAddress}`;
-    const record = await kv.get<RateLimitRecord>(rateLimitKey);
+    const recordJson = await client.get(rateLimitKey);
 
-    if (!record) {
+    if (!recordJson) {
       // No previous attempts
       return {
         success: true,
@@ -359,6 +419,7 @@ export async function checkRateLimit(
       };
     }
 
+    const record: RateLimitRecord = JSON.parse(recordJson);
     const now = new Date();
     const firstAttempt = new Date(record.firstAttempt);
     const windowMs = windowHours * 60 * 60 * 1000;
@@ -398,26 +459,30 @@ export async function updateRateLimit(
   ipAddress: string
 ): Promise<DatabaseResponse<void>> {
   try {
+    const client = await getRedisClient();
     const rateLimitKey = `${RATE_LIMIT_PREFIX}${ipAddress}`;
-    const record = await kv.get<RateLimitRecord>(rateLimitKey);
+    const recordJson = await client.get(rateLimitKey);
     const now = new Date().toISOString();
 
-    if (!record) {
+    if (!recordJson) {
       // First attempt
       const newRecord: RateLimitRecord = {
         count: 1,
         firstAttempt: now,
         lastAttempt: now,
       };
-      await kv.set(rateLimitKey, newRecord, { ex: 60 * 60 }); // Expire in 1 hour
+      await client.set(rateLimitKey, JSON.stringify(newRecord));
+      await client.expire(rateLimitKey, 60 * 60); // Expire in 1 hour
     } else {
       // Update existing record
+      const record: RateLimitRecord = JSON.parse(recordJson);
       const updatedRecord: RateLimitRecord = {
         ...record,
         count: record.count + 1,
         lastAttempt: now,
       };
-      await kv.set(rateLimitKey, updatedRecord, { ex: 60 * 60 }); // Expire in 1 hour
+      await client.set(rateLimitKey, JSON.stringify(updatedRecord));
+      await client.expire(rateLimitKey, 60 * 60); // Expire in 1 hour
     }
 
     return {
@@ -437,25 +502,41 @@ export async function healthCheck(): Promise<
   DatabaseResponse<{ status: string; message: string }>
 > {
   try {
-    // Try to get guests to test KV connection
-    const result = await getAllGuests();
-    
-    if (result.success) {
-      return {
-        success: true,
-        data: {
-          status: "healthy",
-          message: `KV database is working. Found ${result.count} guests.`,
-        },
-      };
+    const client = await getRedisClient();
+
+    // Test Redis connection with a simple ping
+    const pong = await client.ping();
+
+    if (pong === "PONG") {
+      // Try to get guests to test full functionality
+      const result = await getAllGuests();
+
+      if (result.success) {
+        return {
+          success: true,
+          data: {
+            status: "healthy",
+            message: `Redis database is working. Found ${result.count} guests.`,
+          },
+        };
+      } else {
+        return {
+          success: false,
+          data: {
+            status: "unhealthy",
+            message: "Failed to read from Redis database",
+          },
+          error: result.error,
+        };
+      }
     } else {
       return {
         success: false,
         data: {
           status: "unhealthy",
-          message: "Failed to connect to KV database",
+          message: "Redis ping failed",
         },
-        error: result.error,
+        error: "Redis connection issue",
       };
     }
   } catch (error) {
@@ -493,13 +574,16 @@ export async function getGuestStats(): Promise<
     }
 
     const guests = result.data || [];
-    
+
     const stats = {
       totalGuests: guests.length,
       attendingCount: guests.filter((g) => g.attending).length,
       notAttendingCount: guests.filter((g) => !g.attending).length,
       plusOnesCount: guests.filter((g) => g.plusOneAttending).length,
-      totalChildrenCount: guests.reduce((sum, g) => sum + (g.childrenCount || 0), 0),
+      totalChildrenCount: guests.reduce(
+        (sum, g) => sum + (g.childrenCount || 0),
+        0
+      ),
       dietaryPreferences: {} as Record<string, number>,
       allergies: {} as Record<string, number>,
     };
@@ -531,4 +615,17 @@ export async function getGuestStats(): Promise<
       error: "Failed to get guest statistics",
     };
   }
-} 
+}
+
+// Cleanup function to disconnect Redis when needed
+export async function disconnectRedis(): Promise<void> {
+  try {
+    if (redis) {
+      await redis.disconnect();
+      redis = null;
+      console.log("Redis client disconnected");
+    }
+  } catch (error) {
+    console.error("Error disconnecting Redis:", error);
+  }
+}

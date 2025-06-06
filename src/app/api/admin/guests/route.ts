@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminSessionFromRequest } from "@/lib/auth";
-import { getAllGuests, getGuestStats } from "@/lib/db";
+import { getAllGuests, getGuestStats } from "@/lib/db-redis";
 
 // Helper function to create error response
 function createErrorResponse(message: string, status: number = 400) {

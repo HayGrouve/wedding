@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updateGuest, deleteGuest } from "@/lib/db";
+import { updateGuest, deleteGuest } from "@/lib/db-redis";
 import { getAdminSessionFromRequest } from "@/lib/auth";
 
 // Update a specific guest

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { bulkDeleteGuests, bulkUpdateGuestAttending } from "@/lib/db";
+import { bulkDeleteGuests, bulkUpdateGuestAttending } from "@/lib/db-redis";
 import { getAdminSessionFromRequest } from "@/lib/auth";
 
 // Helper function to create error response

@@ -62,7 +62,7 @@ A beautiful, responsive wedding website built with modern web technologies, feat
 4. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-> **⚠️ Note**: RSVP functionality requires Vercel KV database in production. See [`DEPLOYMENT.md`](./DEPLOYMENT.md) for complete setup instructions.
+> **⚠️ Note**: RSVP functionality requires Redis database in production. See [`DEPLOYMENT.md`](./DEPLOYMENT.md) for complete setup instructions.
 
 ### Build and Deploy
 
@@ -124,12 +124,12 @@ wedding-website/
 
 ## 🌐 Deployment
 
-This project is optimized for Vercel deployment with Vercel KV database:
+This project is optimized for Vercel deployment with Redis database:
 
-1. **Set up Vercel KV database** (required for RSVP functionality)
+1. **Set up Redis database** (required for RSVP functionality)
 2. **Push to GitHub**
 3. **Connect repository to Vercel**
-4. **Configure environment variables** (KV database URLs)
+4. **Configure environment variables** (`REDIS_URL`)
 5. **Deploy automatically on push**
 
 📖 **Complete deployment guide:** See [`DEPLOYMENT.md`](./DEPLOYMENT.md) for detailed instructions.
