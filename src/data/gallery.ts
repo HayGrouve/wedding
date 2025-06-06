@@ -1,5 +1,15 @@
 import { GalleryImage, generateBlurDataURL } from "@/types/gallery";
 
+/**
+ * Gallery images for the wedding website.
+ *
+ * Layout specifications:
+ * - Exactly 4 images total (2 venue + 2 couple photos)
+ * - Desktop: 2x2 grid layout (2 columns, 2 rows)
+ * - Mobile: Single column with 4 images stacked vertically
+ * - Centered layout with decorative wedding-themed borders
+ * - Max width: 800px for optimal composition
+ */
 export const galleryImages: GalleryImage[] = [
   {
     id: 1,
@@ -36,11 +46,11 @@ export const galleryImages: GalleryImage[] = [
   {
     id: 3,
     src: "/gallery/couple-1.svg",
-    alt: "Ана-Мария и Иван - романтична снимка",
+    alt: "Ана-Мария и Георги - романтична снимка",
     title: "Нашата любовна история",
     category: "couple",
     description:
-      "Романтичен момент между Ана-Мария и Иван по време на залез слънце.",
+      "Романтичен момент между Ана-Мария и Георги по време на залез слънце.",
     width: 800,
     height: 600,
     blurDataURL: generateBlurDataURL(800, 600),
@@ -52,7 +62,7 @@ export const galleryImages: GalleryImage[] = [
   {
     id: 4,
     src: "/gallery/couple-2.svg",
-    alt: "Венчавката на Ана-Мария и Иван",
+    alt: "Венчавката на Ана-Мария и Георги",
     title: "Венчавката",
     category: "ceremony",
     description: "Магичният момент от венчавката на 15 септември 2025 година.",

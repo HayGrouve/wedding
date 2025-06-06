@@ -46,7 +46,8 @@ const editGuestSchema = z.object({
     .number()
     .min(0, "Броя деца не може да бъде отрицателен")
     .max(10, "Твърде много деца"),
-  dietaryPreference: z.enum(["", "vegetarian", "standard"]).optional(),
+  menuChoice: z.enum(["fish", "meat", "vegetarian"]).optional(),
+  plusOneMenuChoice: z.enum(["fish", "meat", "vegetarian"]).optional(),
   allergies: z.string().optional(),
 });
 
@@ -77,7 +78,8 @@ export function EditGuestModal({
       plusOneAttending: false,
       plusOneName: "",
       childrenCount: 0,
-      dietaryPreference: "",
+      menuChoice: "fish",
+      plusOneMenuChoice: "fish",
       allergies: "",
     },
   });
@@ -93,8 +95,19 @@ export function EditGuestModal({
         plusOneAttending: guest.plusOneAttending,
         plusOneName: guest.plusOneName || "",
         childrenCount: guest.childrenCount,
-        dietaryPreference:
-          (guest.dietaryPreference as "vegetarian" | "standard" | "") || "",
+
+        menuChoice:
+          guest.menuChoice === "fish" ||
+          guest.menuChoice === "meat" ||
+          guest.menuChoice === "vegetarian"
+            ? guest.menuChoice
+            : "fish",
+        plusOneMenuChoice:
+          guest.plusOneMenuChoice === "fish" ||
+          guest.plusOneMenuChoice === "meat" ||
+          guest.plusOneMenuChoice === "vegetarian"
+            ? guest.plusOneMenuChoice
+            : "fish",
         allergies: guest.allergies || "",
       });
     }
@@ -120,9 +133,12 @@ export function EditGuestModal({
             ? data.plusOneName || undefined
             : undefined,
         childrenCount: data.attending ? data.childrenCount : 0,
-        dietaryPreference:
-          data.attending && data.dietaryPreference
-            ? data.dietaryPreference
+
+        menuChoice:
+          data.attending && data.menuChoice ? data.menuChoice : undefined,
+        plusOneMenuChoice:
+          data.attending && data.plusOneAttending && data.plusOneMenuChoice
+            ? data.plusOneMenuChoice
             : undefined,
         allergies:
           data.attending && data.allergies ? data.allergies : undefined,
@@ -152,7 +168,7 @@ export function EditGuestModal({
         <DialogHeader>
           <DialogTitle>Редактиране на гост</DialogTitle>
           <DialogDescription>
-            Направете промени в информацията за гостя. Кликнете
+            Направете промени в информацията за гостите. Кликнете
             &quot;Запази&quot; за да съхраните.
           </DialogDescription>
         </DialogHeader>
@@ -310,13 +326,13 @@ export function EditGuestModal({
                   )}
                 />
 
-                {/* Dietary Preference */}
+                {/* Menu Choice */}
                 <FormField
                   control={form.control}
-                  name="dietaryPreference"
+                  name="menuChoice"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Диетични предпочитания</FormLabel>
+                      <FormLabel>Меню</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
@@ -324,21 +340,61 @@ export function EditGuestModal({
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Изберете диетични предпочитания" />
+                            <SelectValue placeholder="Изберете меню" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="">Няма предпочитания</SelectItem>
-                          <SelectItem value="vegetarian">
-                            Вегетарианска
+                          <SelectItem value="fish">
+                            🐟 Риба - морска бяла риба с билки
                           </SelectItem>
-                          <SelectItem value="standard">Стандартна</SelectItem>
+                          <SelectItem value="meat">
+                            🥩 Месо - пилешко филе със зеленчуци
+                          </SelectItem>
+                          <SelectItem value="vegetarian">
+                            🥗 Вегетарианско - гратин с тиквички
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
+                {/* Plus One Menu Choice */}
+                {isPlusOneAttending && (
+                  <FormField
+                    control={form.control}
+                    name="plusOneMenuChoice"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Меню за партньор</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          disabled={isLoading}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Изберете меню за партньор" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="fish">
+                              🐟 Риба - морска бяла риба с билки
+                            </SelectItem>
+                            <SelectItem value="meat">
+                              🥩 Месо - пилешко филе със зеленчуци
+                            </SelectItem>
+                            <SelectItem value="vegetarian">
+                              🥗 Вегетарианско - гратин с тиквички
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
                 {/* Allergies */}
                 <FormField

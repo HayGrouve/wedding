@@ -98,7 +98,7 @@ function AdminLoginContent() {
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-serif text-wedding-rose">Админ Панел</h1>
           <p className="text-muted-foreground">
-            Ана-Мария & Иван - Сватбена Система
+            Ана-Мария & Георги - Сватбена Система
           </p>
         </div>
 

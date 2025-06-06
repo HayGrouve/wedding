@@ -10,6 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { Menu, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -91,10 +92,13 @@ export default function MobileNavigation({
 
       <SheetContent side="right" className="w-[300px] sm:w-[400px]">
         <SheetHeader className="text-left">
-          <SheetTitle className="flex items-center gap-2">
-            <Heart className="h-5 w-5 text-primary" />
-            <span className="font-serif">Ана-Мария & Иван</span>
-          </SheetTitle>
+          <div className="flex items-center justify-between">
+            <SheetTitle className="flex items-center gap-2">
+              <Heart className="h-5 w-5 text-primary" />
+              <span className="font-serif">Ана-Мария & Георги</span>
+            </SheetTitle>
+            <ThemeToggle />
+          </div>
           <SheetDescription>Навигация по уебсайта</SheetDescription>
         </SheetHeader>
 

@@ -108,7 +108,6 @@ export function AdminDashboard() {
     attending: null,
     hasChildren: null,
     hasPlusOne: null,
-    dietaryPreference: null,
   });
 
   // Debounced search state
@@ -431,7 +430,7 @@ export function AdminDashboard() {
         },
       },
       {
-        accessorKey: "dietaryPreference",
+        accessorKey: "menuChoice",
         header: ({ column }) => (
           <Button
             variant="ghost"
@@ -439,7 +438,7 @@ export function AdminDashboard() {
             className="h-auto p-0 font-semibold"
           >
             <ChefHat className="mr-1 h-4 w-4" />
-            Диета
+            Меню
             {column.getIsSorted() === "asc" ? (
               <ChevronUp className="ml-2 h-4 w-4" />
             ) : column.getIsSorted() === "desc" ? (
@@ -450,28 +449,47 @@ export function AdminDashboard() {
           </Button>
         ),
         cell: ({ row }) => {
-          const preference = row.getValue("dietaryPreference") as
-            | string
-            | undefined;
+          const menuChoice = row.getValue("menuChoice") as string | undefined;
+          const plusOneMenuChoice = row.original.plusOneMenuChoice;
           const allergies = row.original.allergies;
+          const attending = row.original.attending;
+          const plusOneAttending = row.original.plusOneAttending;
+
+          if (!attending) {
+            return <span className="text-muted-foreground">—</span>;
+          }
+
+          const getMenuLabel = (choice: string | undefined) => {
+            switch (choice) {
+              case "fish":
+                return "🐟 Риба";
+              case "meat":
+                return "🥩 Месо";
+              case "vegetarian":
+                return "🥗 Вегетарианско";
+              default:
+                return "Не е избрано";
+            }
+          };
 
           return (
-            <div className="text-sm">
-              {preference ? (
+            <div className="text-sm space-y-1">
+              {menuChoice && (
+                <Badge variant="outline" className="whitespace-nowrap">
+                  {getMenuLabel(menuChoice)}
+                </Badge>
+              )}
+              {plusOneAttending && plusOneMenuChoice && (
                 <div>
-                  <Badge variant="outline">
-                    {preference === "vegetarian"
-                      ? "Вегетарианка"
-                      : "Стандартна"}
+                  <Badge variant="secondary" className="whitespace-nowrap">
+                    +1: {getMenuLabel(plusOneMenuChoice)}
                   </Badge>
-                  {allergies && (
-                    <div className="mt-1 text-xs text-muted-foreground">
-                      Алергии: {allergies}
-                    </div>
-                  )}
                 </div>
-              ) : (
-                <span className="text-muted-foreground">—</span>
+              )}
+              {allergies && (
+                <div className="text-xs text-muted-foreground">
+                  Алергии: {allergies}
+                </div>
               )}
             </div>
           );
@@ -581,14 +599,6 @@ export function AdminDashboard() {
         }
       }
 
-      // Dietary preference filter
-      if (
-        filters.dietaryPreference &&
-        guest.dietaryPreference !== filters.dietaryPreference
-      ) {
-        return false;
-      }
-
       return true;
     });
   }, [
@@ -597,7 +607,6 @@ export function AdminDashboard() {
     filters.attending,
     filters.hasChildren,
     filters.hasPlusOne,
-    filters.dietaryPreference,
   ]);
 
   // Check if any filters are active
@@ -606,15 +615,13 @@ export function AdminDashboard() {
       debouncedSearch ||
       filters.attending !== null ||
       filters.hasChildren !== null ||
-      filters.hasPlusOne !== null ||
-      filters.dietaryPreference !== null
+      filters.hasPlusOne !== null
     );
   }, [
     debouncedSearch,
     filters.attending,
     filters.hasChildren,
     filters.hasPlusOne,
-    filters.dietaryPreference,
   ]);
 
   // Calculate dynamic statistics based on filtered data
@@ -639,20 +646,37 @@ export function AdminDashboard() {
     const totalPeopleAttending =
       attendingRSVPs + totalPlusOnes + totalChildrenCount;
 
-    // Calculate dietary preferences
-    const dietaryPreferences = filteredData
-      .filter((guest) => guest.attending && guest.dietaryPreference)
-      .reduce(
-        (acc, guest) => {
-          const pref = guest.dietaryPreference!;
-          acc[pref] = (acc[pref] || 0) + 1;
-          return acc;
-        },
-        {} as Record<string, number>
-      );
+    // Calculate dietary preferences based on menu choices
+    const attendingGuestsWithMenus = filteredData.filter(
+      (guest) => guest.attending
+    );
 
-    const vegetarianCount = dietaryPreferences.vegetarian || 0;
-    const standardCount = dietaryPreferences.standard || 0;
+    let vegetarianCount = 0;
+    let standardCount = 0;
+
+    attendingGuestsWithMenus.forEach((guest) => {
+      // Count primary guest menu choice
+      if (guest.menuChoice) {
+        if (guest.menuChoice === "vegetarian") {
+          vegetarianCount++;
+        } else if (guest.menuChoice === "fish" || guest.menuChoice === "meat") {
+          standardCount++;
+        }
+      }
+
+      // Count plus one menu choice
+      if (guest.plusOneAttending && guest.plusOneMenuChoice) {
+        if (guest.plusOneMenuChoice === "vegetarian") {
+          vegetarianCount++;
+        } else if (
+          guest.plusOneMenuChoice === "fish" ||
+          guest.plusOneMenuChoice === "meat"
+        ) {
+          standardCount++;
+        }
+      }
+    });
+
     const totalDietaryResponses = vegetarianCount + standardCount;
 
     // Count guests with allergies
@@ -912,6 +936,17 @@ export function AdminDashboard() {
         </div>
       )}
 
+      {/* Edit Guest Modal */}
+      <EditGuestModal
+        guest={editingGuest}
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setEditingGuest(null);
+        }}
+        onSave={handleSaveGuest}
+      />
+
       {/* Filters and Search */}
       <Card>
         <CardHeader>
@@ -1043,31 +1078,6 @@ export function AdminDashboard() {
                 </SelectContent>
               </Select>
             </div>
-
-            {/* Dietary Preference Filter */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium">
-                Диетични предпочитания
-              </label>
-              <Select
-                value={filters.dietaryPreference || "all"}
-                onValueChange={(value) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    dietaryPreference: value === "all" ? null : value,
-                  }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Всички</SelectItem>
-                  <SelectItem value="standard">Стандартна</SelectItem>
-                  <SelectItem value="vegetarian">Вегетарианска</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
           </div>
 
           {/* Clear Filters */}
@@ -1079,7 +1089,6 @@ export function AdminDashboard() {
                   filters.attending !== null && "присъствие",
                   filters.hasChildren !== null && "деца",
                   filters.hasPlusOne !== null && "партньор",
-                  filters.dietaryPreference && "диета",
                 ].filter(Boolean);
 
                 return activeFilters.length > 0
@@ -1095,15 +1104,13 @@ export function AdminDashboard() {
                   attending: null,
                   hasChildren: null,
                   hasPlusOne: null,
-                  dietaryPreference: null,
                 })
               }
               disabled={
                 !debouncedSearch &&
                 filters.attending === null &&
                 filters.hasChildren === null &&
-                filters.hasPlusOne === null &&
-                !filters.dietaryPreference
+                filters.hasPlusOne === null
               }
             >
               Изчисти филтрите
@@ -1314,16 +1321,42 @@ export function AdminDashboard() {
                               </div>
                             </div>
 
-                            {/* Dietary Preference */}
-                            {guest.dietaryPreference && (
+                            {/* Menu Choices */}
+                            {(guest.menuChoice || guest.plusOneMenuChoice) && (
                               <div className="col-span-2">
-                                <span className="font-medium">Диета:</span>
-                                <div className="mt-1">
-                                  <Badge variant="outline">
-                                    {guest.dietaryPreference === "vegetarian"
-                                      ? "Вегетарианска"
-                                      : "Стандартна"}
-                                  </Badge>
+                                <span className="font-medium">Меню:</span>
+                                <div className="mt-1 space-y-1">
+                                  {guest.menuChoice && (
+                                    <div className="flex items-center gap-2">
+                                      <Badge variant="outline">
+                                        {guest.menuChoice === "fish" &&
+                                          "🐟 Риба"}
+                                        {guest.menuChoice === "meat" &&
+                                          "🥩 Месо"}
+                                        {guest.menuChoice === "vegetarian" &&
+                                          "🥗 Вегетарианско"}
+                                      </Badge>
+                                      <span className="text-xs text-muted-foreground">
+                                        ({guest.guestName})
+                                      </span>
+                                    </div>
+                                  )}
+                                  {guest.plusOneMenuChoice &&
+                                    guest.plusOneAttending && (
+                                      <div className="flex items-center gap-2">
+                                        <Badge variant="outline">
+                                          {guest.plusOneMenuChoice === "fish" &&
+                                            "🐟 Риба"}
+                                          {guest.plusOneMenuChoice === "meat" &&
+                                            "🥩 Месо"}
+                                          {guest.plusOneMenuChoice ===
+                                            "vegetarian" && "🥗 Вегетарианско"}
+                                        </Badge>
+                                        <span className="text-xs text-muted-foreground">
+                                          ({guest.plusOneName || "Партньор"})
+                                        </span>
+                                      </div>
+                                    )}
                                   {guest.allergies && (
                                     <div className="text-xs text-muted-foreground mt-1">
                                       Алергии: {guest.allergies}

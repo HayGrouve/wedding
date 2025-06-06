@@ -1,19 +1,5 @@
 [
   {
-    "id": "guest_1749240552896_5sfbuxlf3",
-    "guestName": "asd",
-    "email": "haygrouve@gmail.com",
-    "phone": "0877311601",
-    "attending": true,
-    "plusOneAttending": true,
-    "plusOneName": "qwe",
-    "childrenCount": 2,
-    "dietaryPreference": "vegetarian",
-    "allergies": "sdfdsgsdfg df gdfg",
-    "ipAddress": "::1",
-    "submissionDate": "2025-06-06T20:09:12.896Z"
-  },
-  {
     "id": "guest_1749240583171_00mecss3y",
     "guestName": "www",
     "email": "haygwwrouve@gmail.com",
@@ -22,6 +8,22 @@
     "plusOneAttending": false,
     "childrenCount": 0,
     "ipAddress": "::1",
-    "submissionDate": "2025-06-06T20:09:43.171Z"
+    "submissionDate": "2025-06-06T20:09:43.171Z",
+    "menuChoice": "vegetarian"
+  },
+  {
+    "id": "guest_1749247207418_ucwqhd1nz",
+    "guestName": "цвети",
+    "email": "cveti@gmail.com",
+    "phone": "0877311608",
+    "attending": true,
+    "plusOneAttending": true,
+    "plusOneName": "Петра",
+    "childrenCount": 3,
+    "menuChoice": "meat",
+    "plusOneMenuChoice": "fish",
+    "allergies": "Всичко че едеме",
+    "ipAddress": "::1",
+    "submissionDate": "2025-06-06T22:00:07.418Z"
   }
 ]

@@ -33,11 +33,18 @@ export interface GalleryCategory {
 
 export interface PhotoGalleryProps {
   images: GalleryImage[];
-  onImageClick: (image: GalleryImage, index: number) => void;
+  onImageClick?: (image: GalleryImage, index: number) => void; // Optional since clicking is disabled
   loading?: boolean;
   className?: string;
   showCategories?: boolean;
   filterCategory?: string;
+  /**
+   * @deprecated columns prop is no longer used.
+   * Gallery is now fixed to display exactly 4 images:
+   * - Desktop: 2x2 grid (2 columns, 2 rows)
+   * - Mobile: 1 column with 4 images stacked vertically
+   * - Centered layout with max-width: 800px and decorative borders
+   */
   columns?: {
     mobile: number;
     tablet: number;

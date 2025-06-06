@@ -1,5 +1,6 @@
 import React from "react";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { getAdminSession, getSessionInfo } from "@/lib/auth";
 
 // Force dynamic rendering since we use cookies for authentication
@@ -13,7 +14,8 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Shield, Clock, LogOut } from "lucide-react";
+import { Shield, Clock, LogOut, ArrowLeft } from "lucide-react";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { AdminDashboard as AdminDashboardComponent } from "@/components/admin/AdminDashboard";
 
 export default async function AdminDashboard() {
@@ -52,6 +54,15 @@ export default async function AdminDashboard() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
+              <Link
+                href="/"
+                className="text-muted-foreground hover:text-wedding-rose transition-colors"
+                title="Върни се към началната страница"
+              >
+                <Button variant="ghost" size="sm" className="h-10 w-10 p-0">
+                  <ArrowLeft className="h-5 w-5" />
+                </Button>
+              </Link>
               <div className="w-10 h-10 bg-wedding-rose/10 rounded-full flex items-center justify-center">
                 <Shield className="w-5 h-5 text-wedding-rose" />
               </div>
@@ -60,7 +71,7 @@ export default async function AdminDashboard() {
                   Админ Панел
                 </h1>
                 <p className="text-sm text-muted-foreground">
-                  Ана-Мария & Иван - Сватбена Система
+                  Ана-Мария & Георги - Сватбена Система
                 </p>
               </div>
             </div>
@@ -68,11 +79,13 @@ export default async function AdminDashboard() {
             <div className="flex items-center space-x-4">
               <Badge
                 variant="secondary"
-                className="bg-green-100 text-green-800"
+                className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
               >
                 <Shield className="w-3 h-3 mr-1" />
                 Автентифициран
               </Badge>
+
+              <ThemeToggle />
 
               <form action="/api/auth/logout?redirect=true" method="POST">
                 <Button

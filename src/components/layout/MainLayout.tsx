@@ -58,7 +58,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
         >
           <div className="container-wedding text-center">
             <p className="text-muted-foreground">
-              Сватбен уебсайт на Ана-Мария & Иван
+              Сватбен уебсайт на Ана-Мария & Георги
             </p>
             <p className="text-sm text-muted-foreground mt-2">
               15 септември 2025 г. • София, България

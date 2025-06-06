@@ -8,6 +8,8 @@ export interface GuestRecord {
   plusOneName?: string;
   childrenCount: number;
   dietaryPreference?: string;
+  menuChoice?: string;
+  plusOneMenuChoice?: string;
   allergies?: string;
   submissionDate: string; // ISO string
   ipAddress?: string;
@@ -39,6 +41,5 @@ export interface FilterConfig {
   attending?: boolean | null;
   hasChildren?: boolean | null;
   hasPlusOne?: boolean | null;
-  dietaryPreference?: string | null;
   search?: string;
-} 
+}

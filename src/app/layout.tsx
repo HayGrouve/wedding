@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfair",
@@ -15,13 +16,14 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Ана-Мария & Иван - Сватба 15 септември 2025",
+  metadataBase: new URL("https://wedding-ana-maria-georgi.vercel.app"),
+  title: "Ана-Мария & Георги - Сватба 15 септември 2025",
   description:
-    "Присъединете се към нас за сватбата на Ана-Мария и Иван на 15 септември 2025 г. в София. RSVP и детайли за церемонията и празненството.",
+    "Присъединете се към нас за сватбата на Ана-Мария и Георги на 15 септември 2025 г. в София. RSVP и детайли за церемонията и празненството.",
   keywords: [
     "сватба",
     "Ана-Мария",
-    "Иван",
+    "Георги",
     "София",
     "15 септември 2025",
     "RSVP",
@@ -32,9 +34,9 @@ export const metadata: Metadata = {
     "ceremony",
     "reception",
   ],
-  authors: [{ name: "Ана-Мария & Иван" }],
-  creator: "Ана-Мария & Иван",
-  publisher: "Ана-Мария & Иван",
+  authors: [{ name: "Ана-Мария & Георги" }],
+  creator: "Ана-Мария & Георги",
+  publisher: "Ана-Мария & Георги",
   robots: {
     index: true,
     follow: true,
@@ -47,30 +49,30 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Ана-Мария & Иван - Сватба 15 септември 2025",
+    title: "Ана-Мария & Георги - Сватба 15 септември 2025",
     description:
       "Присъединете се към нас за нашия специален ден! Венчавка в Къща на Културата и тържество в Хотел България, София.",
     type: "website",
     locale: "bg_BG",
-    url: "https://wedding-ana-maria-ivan.vercel.app",
-    siteName: "Сватба на Ана-Мария и Иван",
+    url: "https://wedding-ana-maria-georgi.vercel.app",
+    siteName: "Сватба на Ана-Мария и Георги",
     images: [
       {
-        url: "/hero-bg.jpg",
-        width: 1920,
-        height: 1080,
-        alt: "Сватба на Ана-Мария и Иван - 15 септември 2025",
+        url: "/wedding-social-thumbnail.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Сватба на Ана-Мария и Георги - 15 септември 2025",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ана-Мария & Иван - Сватба 15 септември 2025",
+    title: "Ана-Мария & Георги - Сватба 15 септември 2025",
     description: "Присъединете се към нас за нашия специален ден!",
-    images: ["/hero-bg.jpg"],
+    images: ["/wedding-social-thumbnail.jpg"],
   },
   alternates: {
-    canonical: "https://wedding-ana-maria-ivan.vercel.app",
+    canonical: "https://wedding-ana-maria-georgi.vercel.app",
   },
   category: "event",
 };
@@ -81,11 +83,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="bg" dir="ltr">
+    <html lang="bg" dir="ltr" suppressHydrationWarning>
       <body
         className={`${playfairDisplay.variable} ${inter.variable} font-sans antialiased`}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

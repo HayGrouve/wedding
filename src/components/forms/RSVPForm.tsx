@@ -49,8 +49,25 @@ export function RSVPForm() {
   const [plusOneAttending, setPlusOneAttending] = useState(false);
   const [plusOneName, setPlusOneName] = useState("");
   const [childrenCount, setChildrenCount] = useState(0);
-  const [dietaryPreference, setDietaryPreference] = useState<string>("");
+  const [menuChoice, setMenuChoice] = useState<string>("");
+  const [plusOneMenuChoice, setPlusOneMenuChoice] = useState<string>("");
   const [allergies, setAllergies] = useState("");
+
+  const handleGoBack = () => {
+    // Reset form to initial state
+    setGuestName("");
+    setEmail("");
+    setPhone("");
+    setAttending(true);
+    setPlusOneAttending(false);
+    setPlusOneName("");
+    setChildrenCount(0);
+    setMenuChoice("");
+    setPlusOneMenuChoice("");
+    setAllergies("");
+    setSubmitSuccess(false);
+    setErrors({});
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,7 +91,9 @@ export function RSVPForm() {
       plusOneAttending,
       plusOneName: plusOneName || undefined,
       childrenCount,
-      dietaryPreference: dietaryPreference || undefined,
+
+      menuChoice: menuChoice || undefined,
+      plusOneMenuChoice: plusOneMenuChoice || undefined,
       allergies: allergies || undefined,
       clientIP, // Include detected IP if available
     };
@@ -113,20 +132,6 @@ export function RSVPForm() {
 
       setSubmitSuccess(true);
       toast.success(result.message || "RSVP-то ви е изпратено успешно!");
-
-      setTimeout(() => {
-        // Reset form
-        setGuestName("");
-        setEmail("");
-        setPhone("");
-        setAttending(true);
-        setPlusOneAttending(false);
-        setPlusOneName("");
-        setChildrenCount(0);
-        setDietaryPreference("");
-        setAllergies("");
-        setSubmitSuccess(false);
-      }, 3000);
     } catch (error) {
       console.error("RSVP submission error:", error);
       toast.error("Възникна неочаквана грешка. Моля, опитайте отново.");
@@ -139,17 +144,30 @@ export function RSVPForm() {
     return (
       <Card className="w-full max-w-2xl mx-auto">
         <CardContent className="pt-6">
-          <div className="text-center space-y-4">
+          <div className="text-center space-y-6">
             <div className="mx-auto w-16 h-16 bg-wedding-rose/10 rounded-full flex items-center justify-center">
               <Heart className="w-8 h-8 text-wedding-rose fill-current" />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-3">
               <h3 className="text-2xl font-playfair font-semibold text-wedding-rose">
                 Благодарим ви!
               </h3>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-lg">
                 RSVP-то ви е получено успешно. Очакваме ви с нетърпение!
               </p>
+              <p className="text-sm text-muted-foreground">
+                Ще получите email потвърждение скоро. Ако имате въпроси или
+                трябва да направите промени, моля свържете се с нас.
+              </p>
+            </div>
+            <div className="pt-4">
+              <Button
+                onClick={handleGoBack}
+                variant="outline"
+                className="border-wedding-rose text-wedding-rose hover:bg-wedding-rose hover:text-white"
+              >
+                Изпрати друго RSVP
+              </Button>
             </div>
           </div>
         </CardContent>
@@ -341,38 +359,83 @@ export function RSVPForm() {
                 )}
               </div>
 
-              {/* Dietary Preferences */}
+              {/* Menu Choice for Primary Guest */}
               <div className="space-y-2">
                 <Label className="flex items-center gap-2">
                   <ChefHat className="w-4 h-4" />
-                  Хранителни предпочитания
+                  Вашето меню *
                 </Label>
                 <Select
-                  value={dietaryPreference}
-                  onValueChange={setDietaryPreference}
+                  value={menuChoice}
+                  onValueChange={setMenuChoice}
                   disabled={isSubmitting}
                 >
                   <SelectTrigger
-                    className={errors.dietaryPreference ? "border-red-500" : ""}
+                    className={errors.menuChoice ? "border-red-500" : ""}
                   >
-                    <SelectValue placeholder="Изберете предпочитание" />
+                    <SelectValue placeholder="Изберете основно ястие" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="standard">Стандартно меню</SelectItem>
+                    <SelectItem value="fish">
+                      🐟 Риба - морска бяла риба с билки
+                    </SelectItem>
+                    <SelectItem value="meat">
+                      🥩 Месо - пилешко филе със зеленчуци
+                    </SelectItem>
                     <SelectItem value="vegetarian">
-                      Вегетарианско меню
+                      🥗 Вегетарианско - гратин с тиквички
                     </SelectItem>
                   </SelectContent>
                 </Select>
                 <p className="text-sm text-muted-foreground">
-                  Помогнете ни да подготвим подходящото меню за вас
+                  Моля, изберете основното ястие за себе си
                 </p>
-                {errors.dietaryPreference && (
-                  <p className="text-sm text-red-500">
-                    {errors.dietaryPreference}
-                  </p>
+                {errors.menuChoice && (
+                  <p className="text-sm text-red-500">{errors.menuChoice}</p>
                 )}
               </div>
+
+              {/* Menu Choice for Plus One */}
+              {plusOneAttending && (
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-2">
+                    <ChefHat className="w-4 h-4" />
+                    Меню за спътника *
+                  </Label>
+                  <Select
+                    value={plusOneMenuChoice}
+                    onValueChange={setPlusOneMenuChoice}
+                    disabled={isSubmitting}
+                  >
+                    <SelectTrigger
+                      className={
+                        errors.plusOneMenuChoice ? "border-red-500" : ""
+                      }
+                    >
+                      <SelectValue placeholder="Изберете основно ястие за спътника" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="fish">
+                        🐟 Риба - морска бяла риба с билки
+                      </SelectItem>
+                      <SelectItem value="meat">
+                        🥩 Месо - пилешко филе със зеленчуци
+                      </SelectItem>
+                      <SelectItem value="vegetarian">
+                        🥗 Вегетарианско - гратин с тиквички
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-sm text-muted-foreground">
+                    Моля, изберете основното ястие за вашия спътник
+                  </p>
+                  {errors.plusOneMenuChoice && (
+                    <p className="text-sm text-red-500">
+                      {errors.plusOneMenuChoice}
+                    </p>
+                  )}
+                </div>
+              )}
 
               {/* Allergies */}
               <div className="space-y-2">

@@ -15,7 +15,7 @@ A beautiful, responsive wedding website built with modern web technologies, feat
 - 📱 **Fully Responsive** - Beautiful on all devices
 - 🎨 **Wedding Theme** - Custom color palette with rose, gold, sage, and cream colors
 - ⏰ **Countdown Timer** - Live countdown to the wedding day
-- 📸 **Photo Gallery** - Curated wedding photos with lightbox
+- 📸 **Photo Gallery** - Curated 4-photo gallery (2x2 desktop, 1-column mobile) with decorative borders and lightbox
 - 📝 **RSVP Form** - Complete guest response form with validation
 - 🔐 **Admin Dashboard** - Secure admin panel for managing RSVPs
 - 🎬 **Video Hero Section** - Elegant video background
@@ -83,6 +83,15 @@ The wedding theme is configured in `src/app/globals.css`:
 - **Secondary (Gold):** `hsl(var(--secondary))` - Champagne gold
 - **Accent (Sage):** `hsl(var(--accent))` - Garden sage green
 - **Muted (Cream):** `hsl(var(--muted))` - Elegant cream
+
+### 📸 Gallery Styling
+
+The photo gallery features enhanced decorative borders:
+
+- **Gradient Borders:** Multi-layered gradient borders using wedding theme colors
+- **Box Shadows:** Layered shadows with rose and gold wedding colors
+- **Hover Effects:** Enhanced gradients and shadows on interaction
+- **Responsive Design:** Fixed 4-image layout (2x2 desktop, 1-column mobile)
 
 ## 📁 Project Structure
 

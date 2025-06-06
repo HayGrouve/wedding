@@ -3,6 +3,7 @@
 import * as React from "react";
 import DesktopNavigation from "@/components/navigation/DesktopNavigation";
 import MobileNavigation from "@/components/navigation/MobileNavigation";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -63,15 +64,21 @@ export default function Header({ activeSection }: HeaderProps) {
                 isScrolled ? "text-lg md:text-xl" : "text-xl md:text-2xl"
               )}
             >
-              Ана-Мария & Иван
+              Ана-Мария & Георги
             </span>
           </div>
 
-          {/* Desktop Navigation */}
-          <DesktopNavigation activeSection={activeSection} />
+          {/* Right side - Navigation and Theme Toggle */}
+          <div className="flex items-center gap-2">
+            {/* Desktop Navigation */}
+            <DesktopNavigation activeSection={activeSection} />
 
-          {/* Mobile Navigation */}
-          <MobileNavigation activeSection={activeSection} />
+            {/* Theme Toggle */}
+            <ThemeToggle />
+
+            {/* Mobile Navigation */}
+            <MobileNavigation activeSection={activeSection} />
+          </div>
         </div>
       </div>
     </div>

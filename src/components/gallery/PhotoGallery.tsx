@@ -5,15 +5,10 @@ import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import {
-  GalleryImage,
-  PhotoGalleryProps,
-  GALLERY_CATEGORIES,
-} from "@/types/gallery";
+import { PhotoGalleryProps, GALLERY_CATEGORIES } from "@/types/gallery";
 
 const PhotoGallery: React.FC<PhotoGalleryProps> = ({
   images,
-  onImageClick,
   loading = false,
   className = "",
   filterCategory = "all",
@@ -22,21 +17,6 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
 
   const handleImageLoad = (imageId: number) => {
     setLoadedImages((prev) => new Set([...prev, imageId]));
-  };
-
-  const handleImageClick = (image: GalleryImage, index: number) => {
-    onImageClick(image, index);
-  };
-
-  const handleKeyDown = (
-    e: React.KeyboardEvent,
-    image: GalleryImage,
-    index: number
-  ) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      handleImageClick(image, index);
-    }
   };
 
   // Get category information for display
@@ -102,18 +82,13 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
           role="region"
           aria-labelledby="gallery-heading"
         >
-          {filteredImages.map((image, index) => {
+          {filteredImages.map((image) => {
             const categoryInfo = getCategoryInfo(image.category);
 
             return (
               <Card
                 key={image.id}
-                className="gallery-item group cursor-pointer overflow-hidden border-wedding-rose/20 bg-card/95 backdrop-blur-sm hover:border-wedding-rose/40 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 transition-all duration-500 ease-out focus-within:ring-2 focus-within:ring-wedding-rose focus-within:ring-offset-2"
-                onClick={() => handleImageClick(image, index)}
-                tabIndex={0}
-                role="button"
-                aria-label={`Отвори снимка ${index + 1}: ${image.alt}`}
-                onKeyDown={(e) => handleKeyDown(e, image, index)}
+                className="gallery-item group overflow-hidden backdrop-blur-sm"
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
                   {/* Next.js optimized image */}
@@ -129,7 +104,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                     priority={image.priority}
                     placeholder={image.blurDataURL ? "blur" : "empty"}
                     blurDataURL={image.blurDataURL}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    sizes="(max-width: 767px) 100vw, 50vw"
                     onLoad={() => handleImageLoad(image.id)}
                     loading={image.priority ? "eager" : "lazy"}
                   />
@@ -147,26 +122,6 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                       <span className="text-sm text-muted-foreground font-medium">
                         Зареждане...
                       </span>
-                    </div>
-                  </div>
-
-                  {/* Hover overlay with icon */}
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
-                    <div className="transform scale-0 group-hover:scale-100 transition-transform duration-300 bg-white/95 rounded-full p-3 shadow-lg">
-                      <svg
-                        className="w-6 h-6 text-wedding-rose"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
-                        />
-                      </svg>
                     </div>
                   </div>
 

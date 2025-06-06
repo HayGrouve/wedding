@@ -10,9 +10,9 @@ const WeddingStructuredData: React.FC<WeddingStructuredDataProps> = ({
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Event",
-    name: "Сватба на Ана-Мария и Иван",
+    name: "Сватба на Ана-Мария и Георги",
     description:
-      "Празнуване на сватбата на Ана-Мария и Иван - специален ден, изпълнен с любов, радост и незабравими моменти заедно с най-близките хора.",
+      "Празнуване на сватбата на Ана-Мария и Георги - специален ден, изпълнен с любов, радост и незабравими моменти заедно с най-близките хора.",
     startDate: weddingDate.toISOString(),
     endDate: new Date(weddingDate.getTime() + 8 * 60 * 60 * 1000).toISOString(), // 8 hours later
     eventStatus: "https://schema.org/EventScheduled",
@@ -53,12 +53,12 @@ const WeddingStructuredData: React.FC<WeddingStructuredDataProps> = ({
     ],
     organizer: {
       "@type": "Person",
-      name: "Ана-Мария и Иван",
+      name: "Ана-Мария и Георги",
       description: "Младоженци",
     },
     performer: {
       "@type": "Person",
-      name: "Ана-Мария и Иван",
+      name: "Ана-Мария и Георги",
     },
     offers: {
       "@type": "Offer",
@@ -73,10 +73,10 @@ const WeddingStructuredData: React.FC<WeddingStructuredDataProps> = ({
     image: [
       {
         "@type": "ImageObject",
-        url: "/hero-bg.jpg",
-        width: 1920,
-        height: 1080,
-        caption: "Сватба на Ана-Мария и Иван",
+        url: "/wedding-social-thumbnail.jpg",
+        width: 1200,
+        height: 630,
+        caption: "Сватба на Ана-Мария и Георги",
       },
     ],
     subEvent: [
@@ -132,7 +132,7 @@ const WeddingStructuredData: React.FC<WeddingStructuredDataProps> = ({
       "София",
       "България",
       "Ана-Мария",
-      "Иван",
+      "Георги",
       "wedding",
       "ceremony",
       "reception",

@@ -60,6 +60,20 @@ export const GuestSchema = z.object({
       }),
     })
     .optional(),
+  menuChoice: z
+    .enum(["fish", "meat", "vegetarian"], {
+      errorMap: () => ({
+        message: "Моля, изберете валидно меню",
+      }),
+    })
+    .optional(),
+  plusOneMenuChoice: z
+    .enum(["fish", "meat", "vegetarian"], {
+      errorMap: () => ({
+        message: "Моля, изберете валидно меню за спътника",
+      }),
+    })
+    .optional(),
   allergies: z
     .string()
     .max(
@@ -82,6 +96,8 @@ export const RSVPFormSchema = z
     plusOneName: GuestSchema.shape.plusOneName,
     childrenCount: GuestSchema.shape.childrenCount,
     dietaryPreference: GuestSchema.shape.dietaryPreference,
+    menuChoice: GuestSchema.shape.menuChoice,
+    plusOneMenuChoice: GuestSchema.shape.plusOneMenuChoice,
     allergies: GuestSchema.shape.allergies,
   })
   .refine(
@@ -111,6 +127,32 @@ export const RSVPFormSchema = z
     {
       message: "Не можете да доведете спътник, ако не присъствате",
       path: ["plusOneAttending"],
+    }
+  )
+  .refine(
+    (data) => {
+      // If attending, menuChoice should be provided
+      if (data.attending && !data.menuChoice) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Моля, изберете меню за себе си",
+      path: ["menuChoice"],
+    }
+  )
+  .refine(
+    (data) => {
+      // If plusOneAttending, plusOneMenuChoice should be provided
+      if (data.plusOneAttending && !data.plusOneMenuChoice) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Моля, изберете меню за спътника си",
+      path: ["plusOneMenuChoice"],
     }
   );
 
@@ -255,5 +297,8 @@ export function sanitizeGuestData(data: RSVPFormData): RSVPFormData {
       ? sanitizeString(data.plusOneName)
       : undefined,
     allergies: data.allergies ? sanitizeString(data.allergies) : undefined,
+    // Menu choices don't need sanitization as they're enum values
+    menuChoice: data.menuChoice,
+    plusOneMenuChoice: data.plusOneMenuChoice,
   };
 }
