@@ -181,4 +181,83 @@
   .container-wedding {
     @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
   }
+
+  /* Sticky header utilities */
+  .scroll-offset {
+    scroll-margin-top: 5rem; /* 80px for sticky header */
+  }
+
+  @media (max-width: 768px) {
+    .scroll-offset {
+      scroll-margin-top: 4rem; /* 64px for mobile header */
+    }
+  }
+
+  /* Enhanced navigation animations */
+  .nav-item-enter {
+    animation: navItemEnter 400ms ease-out forwards;
+  }
+
+  @keyframes navItemEnter {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Floating animation for menu button */
+  .menu-float {
+    animation: menuFloat 3s ease-in-out infinite;
+  }
+
+  @keyframes menuFloat {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-2px);
+    }
+  }
+
+  /* Pulse animation for active navigation items */
+  .nav-pulse {
+    animation: navPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes navPulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .nav-item-enter,
+  .menu-float,
+  .nav-pulse {
+    animation: none !important;
+  }
+
+  .scroll-offset {
+    scroll-behavior: auto;
+  }
 }

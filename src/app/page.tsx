@@ -8,19 +8,26 @@ import {
 } from "@/components/ui/card";
 import { Calendar, MapPin, Users } from "lucide-react";
 import Hero from "@/components/Hero";
+import MainLayout from "@/components/layout/MainLayout";
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
+    <MainLayout>
       {/* Hero Section */}
-      <Hero
-        brideName="Ана-Мария"
-        groomName="Иван"
-        weddingDate="15 юни 2024 г."
-      />
+      <section id="home" className="scroll-offset" aria-label="Заглавна секция">
+        <Hero
+          brideName="Ана-Мария"
+          groomName="Иван"
+          weddingDate="15 септември 2025 г."
+        />
+      </section>
 
       {/* Wedding Details Section */}
-      <section id="wedding-details" className="section-padding bg-background">
+      <section
+        id="details"
+        className="section-padding bg-background scroll-offset"
+        aria-label="Детайли за сватбата"
+      >
         <div className="container-wedding">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 wedding-text-gradient">
@@ -46,13 +53,13 @@ export default function Home() {
                   <div>
                     <p className="font-semibold">Церемония</p>
                     <p className="text-muted-foreground">
-                      15 юни 2024 г. от 16:00 ч.
+                      15 септември 2025 г. от 16:00 ч.
                     </p>
                   </div>
                   <div>
                     <p className="font-semibold">Празненство</p>
                     <p className="text-muted-foreground">
-                      15 юни 2024 г. от 18:00 ч.
+                      15 септември 2025 г. от 18:00 ч.
                     </p>
                   </div>
                 </div>
@@ -111,96 +118,42 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Theme Showcase Section */}
-      <section className="section-padding bg-background/80 backdrop-blur-sm">
+      {/* Gallery Section Placeholder */}
+      <section
+        id="gallery"
+        className="section-padding bg-background/80 backdrop-blur-sm scroll-offset"
+        aria-label="Галерия"
+      >
         <div className="container-wedding">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            Сватбен уебсайт
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Color Palette Card */}
-            <Card className="wedding-shadow">
-              <CardHeader>
-                <CardTitle>Цветова палитра</CardTitle>
-                <CardDescription>Цветовете на нашата сватба</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="text-center">
-                    <div className="w-full h-12 bg-primary rounded-md mb-2"></div>
-                    <p className="text-xs font-medium">Сватбена роза</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="w-full h-12 bg-secondary rounded-md mb-2"></div>
-                    <p className="text-xs font-medium">Шампанско злато</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="w-full h-12 bg-accent rounded-md mb-2"></div>
-                    <p className="text-xs font-medium">Градински зелен</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="w-full h-12 bg-muted rounded-md mb-2"></div>
-                    <p className="text-xs font-medium">Крем</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Typography Card */}
-            <Card className="wedding-shadow">
-              <CardHeader>
-                <CardTitle>Типография</CardTitle>
-                <CardDescription>Елегантни шрифтове</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div>
-                    <h3 className="text-xl font-bold">Заглавия</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Playfair Display
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-base">Основен текст</p>
-                    <p className="text-sm text-muted-foreground">Inter шрифт</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Button Styles Card */}
-            <Card className="wedding-shadow">
-              <CardHeader>
-                <CardTitle>Стилове на бутоните</CardTitle>
-                <CardDescription>Интерактивни елементи</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <Button size="sm" className="w-full">
-                    Основен
-                  </Button>
-                  <Button size="sm" variant="outline" className="w-full">
-                    Контурен
-                  </Button>
-                  <Button size="sm" variant="secondary" className="w-full">
-                    Вторичен
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <h2 className="text-3xl font-bold text-center mb-12">Галерия</h2>
+          <p className="text-center text-muted-foreground">
+            Галерията ще бъде добавена скоро...
+          </p>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-card border-t py-8">
-        <div className="container-wedding text-center">
-          <p className="text-muted-foreground">
-            Сватбен уебсайт на Ана-Мария & Иван
-          </p>
+      {/* RSVP Section */}
+      <section
+        id="rsvp"
+        className="section-padding bg-card scroll-offset"
+        aria-label="RSVP форма"
+      >
+        <div className="container-wedding">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 wedding-text-gradient">
+              RSVP
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Моля, потвърдете присъствието си до 1 септември 2025 г.
+            </p>
+          </div>
+          <div className="max-w-md mx-auto">
+            <p className="text-center text-muted-foreground">
+              RSVP формата ще бъде добавена скоро...
+            </p>
+          </div>
         </div>
-      </footer>
-    </div>
+      </section>
+    </MainLayout>
   );
 }
