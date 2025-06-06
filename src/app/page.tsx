@@ -3,6 +3,7 @@ import WeddingDetails from "@/components/sections/WeddingDetails";
 import { RSVPForm } from "@/components/forms/RSVPForm";
 import MainLayout from "@/components/layout/MainLayout";
 import WeddingStructuredData from "@/components/seo/WeddingStructuredData";
+import GalleryWrapper from "@/components/gallery/GalleryWrapper";
 
 export default function Home() {
   // Wedding date: September 15, 2025 at 14:00 (2:00 PM)
@@ -28,19 +29,8 @@ export default function Home() {
         {/* Wedding Details Section */}
         <WeddingDetails />
 
-        {/* Gallery Section Placeholder */}
-        <section
-          id="gallery"
-          className="section-padding bg-background/80 backdrop-blur-sm scroll-offset"
-          aria-label="Галерия"
-        >
-          <div className="container-wedding">
-            <h2 className="text-3xl font-bold text-center mb-12">Галерия</h2>
-            <p className="text-center text-muted-foreground">
-              Галерията ще бъде добавена скоро...
-            </p>
-          </div>
-        </section>
+        {/* Photo Gallery Section */}
+        <GalleryWrapper />
 
         {/* RSVP Section */}
         <section

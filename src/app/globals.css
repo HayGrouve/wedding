@@ -197,6 +197,42 @@
     transform: translateY(-2px) scale(1.01);
   }
 
+  /* Photo Gallery Grid Layout */
+  .gallery-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr;
+
+    /* Mobile: 1-2 columns */
+    @media (min-width: 480px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+
+    /* Tablet: 2-3 columns */
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    /* Desktop: 3-4 columns */
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    @media (min-width: 1280px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* Gallery item hover effects */
+  .gallery-item {
+    @apply transition-all duration-500 ease-out;
+    @apply hover:scale-[1.02] hover:-translate-y-1;
+    @apply focus-visible:ring-2 focus-visible:ring-wedding-rose/50 focus-visible:ring-offset-2;
+  }
+
   /* Sticky header utilities */
   .scroll-offset {
     scroll-margin-top: 5rem; /* 80px for sticky header */
@@ -353,6 +389,27 @@
   .scroll-animate-hidden {
     opacity: 0;
     transform: translateY(30px);
+  }
+
+  /* Text utility classes */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Screen reader only content */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 }
 
