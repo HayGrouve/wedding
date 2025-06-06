@@ -42,145 +42,155 @@ const WeddingDetails = () => {
           role="region"
           aria-labelledby="wedding-details-heading"
         >
-          {/* Countdown Timer Card */}
-          <AnimatedCard delay={0} animationType="fadeInUp">
-            <Card className="card-wedding group hover:wedding-glow transition-all duration-300">
-              <CardHeader className="text-center">
-                <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 w-fit">
-                  <Heart className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle className="text-xl font-serif">
-                  Обратно Броене
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CountdownTimer targetDate={weddingDate} />
-              </CardContent>
-            </Card>
-          </AnimatedCard>
+          {/* Left Column: Countdown Timer + Important Details */}
+          <div className="space-y-6 md:space-y-8">
+            {/* Countdown Timer Card */}
+            <AnimatedCard delay={0} animationType="fadeInUp">
+              <Card className="card-wedding group hover:wedding-glow transition-all duration-300">
+                <CardHeader className="text-center">
+                  <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 w-fit">
+                    <Heart className="h-6 w-6 text-primary" />
+                  </div>
+                  <CardTitle className="text-xl font-serif">
+                    Обратно Броене
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CountdownTimer targetDate={weddingDate} />
+                </CardContent>
+              </Card>
+            </AnimatedCard>
 
-          {/* Wedding Ceremony Card */}
-          <AnimatedCard delay={150} animationType="fadeInUp">
-            <Card className="card-wedding group hover:wedding-glow transition-all duration-300">
-              <CardHeader className="text-center">
-                <div className="mx-auto mb-4 p-3 rounded-full bg-wedding-gold/10 w-fit">
-                  <Calendar className="h-6 w-6 text-wedding-gold" />
-                </div>
-                <CardTitle className="text-xl font-serif">Венчавка</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <Calendar className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium">15 септември 2025 г.</p>
-                    <p className="text-sm text-muted-foreground">Неделя</p>
+            {/* Important Details Card */}
+            <AnimatedCard delay={600} animationType="fadeInUp">
+              <Card className="card-wedding group hover:wedding-glow transition-all duration-300">
+                <CardHeader className="text-center">
+                  <div className="mx-auto mb-4 p-3 rounded-full bg-wedding-rose/10 w-fit">
+                    <Heart className="h-6 w-6 text-wedding-rose" />
                   </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Clock className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium">14:00 часа</p>
-                    <p className="text-sm text-muted-foreground">
-                      Събиране от 13:30
-                    </p>
+                  <CardTitle className="text-xl font-serif">
+                    Важни Детайли
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                    <div>
+                      <p className="font-medium text-sm text-muted-foreground uppercase tracking-wide">
+                        RSVP до
+                      </p>
+                      <p className="font-medium">1 септември 2025 г.</p>
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm text-muted-foreground uppercase tracking-wide">
+                        Контакт
+                      </p>
+                      <p className="text-sm">За въпроси се свържете с нас</p>
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm text-muted-foreground uppercase tracking-wide">
+                        Подаръци
+                      </p>
+                      <p className="text-sm">
+                        Вашето присъствие е най-ценният подарък
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <MapPin className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium">Къща на Културата</p>
-                    <p className="text-sm text-muted-foreground">
-                      ул. &ldquo;Култура&rdquo; 1, София
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </AnimatedCard>
+                </CardContent>
+              </Card>
+            </AnimatedCard>
+          </div>
 
-          {/* Wedding Reception Card */}
-          <AnimatedCard delay={300} animationType="fadeInUp">
-            <Card className="card-wedding group hover:wedding-glow transition-all duration-300 md:col-span-2 lg:col-span-1">
-              <CardHeader className="text-center">
-                <div className="mx-auto mb-4 p-3 rounded-full bg-wedding-sage/10 w-fit">
-                  <Music className="h-6 w-6 text-wedding-sage" />
-                </div>
-                <CardTitle className="text-xl font-serif">Тържество</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <Clock className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium">18:00 часа</p>
-                    <p className="text-sm text-muted-foreground">
-                      Коктейл и вечеря
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <MapPin className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium">Хотел &ldquo;България&rdquo;</p>
-                    <p className="text-sm text-muted-foreground">
-                      бул. &ldquo;Русия&rdquo; 4, София
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Users className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium">Кодът на дрехите</p>
-                    <p className="text-sm text-muted-foreground">
-                      Официално облекло
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </AnimatedCard>
-
-          {/* Venue Information Card with Google Maps */}
+          {/* Middle Column: Venue Information (Locations) */}
           <AnimatedCard delay={450} animationType="fadeInUp">
             <VenueCard />
           </AnimatedCard>
 
-          {/* Additional Information Card */}
-          <AnimatedCard delay={600} animationType="fadeInUp">
-            <Card className="card-wedding group hover:wedding-glow transition-all duration-300 lg:col-span-1">
-              <CardHeader className="text-center">
-                <div className="mx-auto mb-4 p-3 rounded-full bg-wedding-rose/10 w-fit">
-                  <Heart className="h-6 w-6 text-wedding-rose" />
-                </div>
-                <CardTitle className="text-xl font-serif">
-                  Важни Детайли
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-medium text-sm text-muted-foreground uppercase tracking-wide">
-                      RSVP до
-                    </p>
-                    <p className="font-medium">1 септември 2025 г.</p>
+          {/* Right Column: Reception + Wedding Ceremony */}
+          <div className="space-y-6 md:space-y-8">
+            {/* Wedding Reception Card */}
+            <AnimatedCard delay={300} animationType="fadeInUp">
+              <Card className="card-wedding group hover:wedding-glow transition-all duration-300">
+                <CardHeader className="text-center">
+                  <div className="mx-auto mb-4 p-3 rounded-full bg-wedding-sage/10 w-fit">
+                    <Music className="h-6 w-6 text-wedding-sage" />
                   </div>
-                  <div>
-                    <p className="font-medium text-sm text-muted-foreground uppercase tracking-wide">
-                      Контакт
-                    </p>
-                    <p className="text-sm">За въпроси се свържете с нас</p>
+                  <CardTitle className="text-xl font-serif">
+                    Тържество
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <Clock className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium">18:00 часа</p>
+                      <p className="text-sm text-muted-foreground">
+                        Коктейл и вечеря
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium text-sm text-muted-foreground uppercase tracking-wide">
-                      Подаръци
-                    </p>
-                    <p className="text-sm">
-                      Вашето присъствие е най-ценният подарък
-                    </p>
+                  <div className="flex items-start gap-3">
+                    <MapPin className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium">
+                        Хотел &ldquo;България&rdquo;
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        бул. &ldquo;Русия&rdquo; 4, София
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          </AnimatedCard>
+                  <div className="flex items-start gap-3">
+                    <Users className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium">Кодът на дрехите</p>
+                      <p className="text-sm text-muted-foreground">
+                        Официално облекло
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </AnimatedCard>
+
+            {/* Wedding Ceremony Card */}
+            <AnimatedCard delay={150} animationType="fadeInUp">
+              <Card className="card-wedding group hover:wedding-glow transition-all duration-300">
+                <CardHeader className="text-center">
+                  <div className="mx-auto mb-4 p-3 rounded-full bg-wedding-gold/10 w-fit">
+                    <Calendar className="h-6 w-6 text-wedding-gold" />
+                  </div>
+                  <CardTitle className="text-xl font-serif">Венчавка</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <Calendar className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium">15 септември 2025 г.</p>
+                      <p className="text-sm text-muted-foreground">Неделя</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Clock className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium">14:00 часа</p>
+                      <p className="text-sm text-muted-foreground">
+                        Събиране от 13:30
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <MapPin className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium">Къща на Културата</p>
+                      <p className="text-sm text-muted-foreground">
+                        ул. &ldquo;Култура&rdquo; 1, София
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </AnimatedCard>
+          </div>
         </div>
       </div>
     </section>

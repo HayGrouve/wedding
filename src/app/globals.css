@@ -154,6 +154,35 @@
   h6 {
     @apply font-serif;
   }
+
+  /* Better UX: Cursor pointer for interactive elements */
+  button,
+  [role="button"],
+  [type="button"],
+  [type="submit"],
+  [type="reset"],
+  input[type="file"]::-webkit-file-upload-button,
+  a[href],
+  label[for],
+  select,
+  [tabindex="0"],
+  [onClick],
+  [data-radix-collection-item],
+  .cursor-pointer {
+    @apply cursor-pointer;
+  }
+
+  /* Disabled states should not have pointer cursor */
+  button:disabled,
+  [role="button"]:disabled,
+  [type="button"]:disabled,
+  [type="submit"]:disabled,
+  [type="reset"]:disabled,
+  a[aria-disabled="true"],
+  [disabled],
+  .cursor-not-allowed {
+    @apply cursor-not-allowed;
+  }
 }
 
 @layer components {
