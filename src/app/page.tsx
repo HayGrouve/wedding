@@ -3,7 +3,8 @@ import WeddingDetails from "@/components/sections/WeddingDetails";
 import { RSVPForm } from "@/components/forms/RSVPForm";
 import MainLayout from "@/components/layout/MainLayout";
 import WeddingStructuredData from "@/components/seo/WeddingStructuredData";
-import GalleryWrapper from "@/components/gallery/GalleryWrapper";
+import TimelineGallery from "@/components/timeline/TimelineGallery";
+import { timelineData } from "@/data/timeline-data";
 
 export default function Home() {
   // Wedding date: September 15, 2025 at 14:00 (2:00 PM)
@@ -29,8 +30,14 @@ export default function Home() {
         {/* Wedding Details Section */}
         <WeddingDetails />
 
-        {/* Photo Gallery Section */}
-        <GalleryWrapper />
+        {/* Love Story Timeline Section */}
+        <section
+          id="gallery"
+          className="section-padding bg-background scroll-offset"
+          aria-label="История на любовта"
+        >
+          <TimelineGallery data={timelineData} />
+        </section>
 
         {/* RSVP Section */}
         <section

@@ -125,8 +125,6 @@ export default function Hero({
           aria-label="Scroll to wedding details section"
           style={{
             textShadow: "0 1px 2px rgba(0,0,0,0.1)",
-            boxShadow:
-              "0 10px 25px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.9)",
           }}
         >
           <span className="flex items-center">
