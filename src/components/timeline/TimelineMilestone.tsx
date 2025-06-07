@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { TimelineMilestoneProps } from "@/types/timeline";
+import TimelinePhoto from "./TimelinePhoto";
+import TimelineContent from "./TimelineContent";
 
 /**
  * TimelineMilestone - Individual milestone component for the timeline
@@ -34,41 +35,26 @@ export default function TimelineMilestone({
       <div className="milestone-container">
         {/* Photo Section */}
         <div className="milestone-photo">
-          <div className="photo-wrapper">
-            <Image
-              src={milestone.photo.src}
-              alt={milestone.photo.alt}
-              width={milestone.photo.width}
-              height={milestone.photo.height}
-              className="milestone-image"
-              loading={config.lazyLoading ? "lazy" : "eager"}
-              placeholder="blur"
-              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-              sizes="(max-width: 768px) 100vw, 400px"
-            />
-            {milestone.photo.caption && (
-              <div className="photo-caption">{milestone.photo.caption}</div>
-            )}
-          </div>
+          <TimelinePhoto
+            photo={milestone.photo}
+            priority={index === 0}
+            size="medium"
+            hoverEffect={true}
+            showCaption={true}
+            className="milestone-photo-component"
+          />
         </div>
 
         {/* Content Section */}
         <div className="milestone-content">
-          <div className="content-wrapper">
-            {/* Date */}
-            <div className="milestone-date">{milestone.date}</div>
-
-            {/* Title */}
-            <h3
-              id={`milestone-title-${milestone.id}`}
-              className="milestone-title"
-            >
-              {milestone.title}
-            </h3>
-
-            {/* Description */}
-            <p className="milestone-description">{milestone.description}</p>
-          </div>
+          <TimelineContent
+            date={milestone.date}
+            title={milestone.title}
+            description={milestone.description}
+            alignment={index % 2 === 0 ? "left" : "right"}
+            maxDescriptionLength={200}
+            showExpandButton={true}
+          />
         </div>
       </div>
 
@@ -129,83 +115,19 @@ export default function TimelineMilestone({
         /* Photo styling */
         .milestone-photo {
           position: relative;
-          max-width: 350px;
-        }
-
-        .photo-wrapper {
-          position: relative;
-          border-radius: 12px;
-          overflow: hidden;
-          box-shadow:
-            0 4px 20px rgba(0, 0, 0, 0.1),
-            0 1px 3px rgba(0, 0, 0, 0.08);
-          transition:
-            transform ${config.animationDuration}ms ease,
-            box-shadow ${config.animationDuration}ms ease;
-        }
-
-        .photo-wrapper:hover {
-          transform: translateY(-2px);
-          box-shadow:
-            0 8px 30px rgba(0, 0, 0, 0.15),
-            0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .milestone-image {
+          max-width: 400px;
           width: 100%;
-          height: auto;
-          border-radius: 12px;
-          transition: transform ${config.animationDuration}ms ease;
         }
 
-        .photo-caption {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-          color: white;
-          padding: 1rem;
-          font-size: 0.875rem;
-          text-align: center;
-          font-style: italic;
+        .milestone-photo-component {
+          width: 100%;
         }
 
         /* Content styling */
         .milestone-content {
-          max-width: 350px;
-        }
-
-        .content-wrapper {
-          padding: 1rem;
-        }
-
-        .milestone-date {
-          display: inline-block;
-          background: rgb(var(--wedding-sage) / 0.1);
-          color: rgb(var(--wedding-sage));
-          padding: 0.375rem 0.75rem;
-          border-radius: 6px;
-          font-size: 0.875rem;
-          font-weight: 500;
-          margin-bottom: 0.75rem;
-          border: 1px solid rgb(var(--wedding-sage) / 0.2);
-        }
-
-        .milestone-title {
-          font-family: var(--font-playfair);
-          font-size: 1.5rem;
-          font-weight: 600;
-          color: rgb(var(--wedding-rose));
-          margin-bottom: 0.75rem;
-          line-height: 1.3;
-        }
-
-        .milestone-description {
-          font-size: 1rem;
-          line-height: 1.6;
-          color: rgb(var(--foreground) / 0.8);
-          margin: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         /* Mobile Styles */
@@ -241,18 +163,6 @@ export default function TimelineMilestone({
 
           .milestone-content {
             max-width: none;
-          }
-
-          .content-wrapper {
-            padding: 0.5rem;
-          }
-
-          .milestone-title {
-            font-size: 1.25rem;
-          }
-
-          .milestone-description {
-            font-size: 0.9375rem;
           }
         }
 
