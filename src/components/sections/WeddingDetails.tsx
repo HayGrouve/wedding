@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, Clock, MapPin, Heart, Users, Music } from "lucide-react";
+import { Calendar, Clock, MapPin, Users, Music } from "lucide-react";
 import CountdownTimer from "@/components/ui/CountdownTimer";
 import VenueCard from "@/components/ui/VenueCard";
 import AnimatedCard from "@/components/ui/AnimatedCard";
@@ -13,7 +13,7 @@ const WeddingDetails = () => {
   return (
     <section
       id="details"
-      className="section-padding bg-gradient-to-br from-wedding-cream via-background to-wedding-sage/10 scroll-offset relative overflow-hidden"
+      className="section-padding bg-background scroll-offset relative overflow-hidden"
       aria-label="Детайли за сватбата"
     >
       {/* Subtle background pattern */}
@@ -46,10 +46,10 @@ const WeddingDetails = () => {
           <div className="space-y-6 md:space-y-8">
             {/* Countdown Timer Card */}
             <AnimatedCard delay={0} animationType="fadeInUp">
-              <Card className="card-wedding group hover:wedding-glow transition-all duration-300">
+              <Card className="group transition-all duration-300">
                 <CardHeader className="text-center">
                   <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 w-fit">
-                    <Heart className="h-6 w-6 text-primary" />
+                    <Clock className="h-6 w-6 text-primary" />
                   </div>
                   <CardTitle className="text-xl font-serif">
                     Обратно Броене
@@ -63,10 +63,10 @@ const WeddingDetails = () => {
 
             {/* Important Details Card */}
             <AnimatedCard delay={600} animationType="fadeInUp">
-              <Card className="card-wedding group hover:wedding-glow transition-all duration-300">
+              <Card className="group transition-all duration-300">
                 <CardHeader className="text-center">
-                  <div className="mx-auto mb-4 p-3 rounded-full bg-wedding-rose/10 w-fit">
-                    <Heart className="h-6 w-6 text-wedding-rose" />
+                  <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 w-fit">
+                    <Users className="h-6 w-6 text-primary" />
                   </div>
                   <CardTitle className="text-xl font-serif">
                     Важни Детайли
@@ -109,10 +109,10 @@ const WeddingDetails = () => {
           <div className="space-y-6 md:space-y-8">
             {/* Wedding Reception Card */}
             <AnimatedCard delay={300} animationType="fadeInUp">
-              <Card className="card-wedding group hover:wedding-glow transition-all duration-300">
+              <Card className="group transition-all duration-300">
                 <CardHeader className="text-center">
-                  <div className="mx-auto mb-4 p-3 rounded-full bg-wedding-sage/10 w-fit">
-                    <Music className="h-6 w-6 text-wedding-sage" />
+                  <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 w-fit">
+                    <Music className="h-6 w-6 text-primary" />
                   </div>
                   <CardTitle className="text-xl font-serif">
                     Тържество
@@ -154,10 +154,10 @@ const WeddingDetails = () => {
 
             {/* Wedding Ceremony Card */}
             <AnimatedCard delay={150} animationType="fadeInUp">
-              <Card className="card-wedding group hover:wedding-glow transition-all duration-300">
+              <Card className="group transition-all duration-300">
                 <CardHeader className="text-center">
-                  <div className="mx-auto mb-4 p-3 rounded-full bg-wedding-gold/10 w-fit">
-                    <Calendar className="h-6 w-6 text-wedding-gold" />
+                  <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 w-fit">
+                    <Calendar className="h-6 w-6 text-primary" />
                   </div>
                   <CardTitle className="text-xl font-serif">Венчавка</CardTitle>
                 </CardHeader>

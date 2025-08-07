@@ -43,101 +43,50 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* Wedding-specific color palette */
-  --color-wedding-rose: var(--wedding-rose);
-  --color-wedding-rose-foreground: var(--wedding-rose-foreground);
-  --color-wedding-gold: var(--wedding-gold);
-  --color-wedding-gold-foreground: var(--wedding-gold-foreground);
-  --color-wedding-sage: var(--wedding-sage);
-  --color-wedding-sage-foreground: var(--wedding-sage-foreground);
-  --color-wedding-cream: var(--wedding-cream);
-  --color-wedding-cream-foreground: var(--wedding-cream-foreground);
+
 }
 
 :root {
   /* Base configuration */
-  --radius: 0.75rem;
+  --radius: 0;
   --font-inter: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-playfair: "Playfair Display", Georgia, serif;
 
-  /* Wedding Color Palette - Light Theme */
-  --wedding-rose: oklch(0.85 0.15 15); /* Soft dusty rose */
-  --wedding-rose-foreground: oklch(0.25 0.1 15);
-  --wedding-gold: oklch(0.82 0.12 85); /* Champagne gold */
-  --wedding-gold-foreground: oklch(0.35 0.08 85);
-  --wedding-sage: oklch(0.75 0.08 140); /* Sage green */
-  --wedding-sage-foreground: oklch(0.25 0.05 140);
-  --wedding-cream: oklch(0.96 0.02 85); /* Warm cream */
-  --wedding-cream-foreground: oklch(0.25 0.02 85);
-
-  /* Updated shadcn/ui colors with wedding theme */
-  --background: oklch(0.99 0.005 85); /* Warm white background */
-  --foreground: oklch(0.15 0.005 15); /* Dark rose-brown text */
-  --card: oklch(1 0 0); /* Pure white cards */
-  --card-foreground: oklch(0.15 0.005 15);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0.005 15);
-  --primary: oklch(0.85 0.15 15); /* Wedding rose as primary */
-  --primary-foreground: oklch(0.99 0.005 15);
-  --secondary: oklch(0.82 0.12 85); /* Wedding gold as secondary */
-  --secondary-foreground: oklch(0.25 0.08 85);
-  --muted: oklch(0.96 0.02 85); /* Wedding cream for muted */
-  --muted-foreground: oklch(0.45 0.02 85);
-  --accent: oklch(0.75 0.08 140); /* Wedding sage for accents */
-  --accent-foreground: oklch(0.99 0.005 140);
-  --destructive: oklch(0.65 0.2 15); /* Deeper rose for destructive */
-  --border: oklch(0.9 0.02 85); /* Soft cream borders */
-  --input: oklch(0.95 0.02 85); /* Light cream inputs */
-  --ring: oklch(0.75 0.12 15); /* Rose focus rings */
-  --chart-1: oklch(0.85 0.15 15);
-  --chart-2: oklch(0.82 0.12 85);
-  --chart-3: oklch(0.75 0.08 140);
-  --chart-4: oklch(0.96 0.02 85);
-  --chart-5: oklch(0.65 0.1 45);
-  --sidebar: oklch(0.99 0.005 85);
-  --sidebar-foreground: oklch(0.15 0.005 15);
-  --sidebar-primary: oklch(0.85 0.15 15);
-  --sidebar-primary-foreground: oklch(0.99 0.005 15);
-  --sidebar-accent: oklch(0.96 0.02 85);
-  --sidebar-accent-foreground: oklch(0.15 0.005 15);
-  --sidebar-border: oklch(0.9 0.02 85);
-  --sidebar-ring: oklch(0.75 0.12 15);
+  /* Simplified color scheme - Light gray background and black text */
+  --background: #f8f9fa; /* Very light gray */
+  --foreground: #000000; /* Black text */
+  --card: #ffffff; /* White cards */
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: #6c757d; /* Medium gray for primary actions */
+  --primary-foreground: #ffffff;
+  --secondary: #f8f9fa;
+  --secondary-foreground: #000000;
+  --muted: #f8f9fa;
+  --muted-foreground: #6c757d;
+  --accent: #e9ecef;
+  --accent-foreground: #000000;
+  --destructive: #dc3545;
+  --border: #e9ecef; /* Light gray borders */
+  --input: #ffffff;
+  --ring: #6c757d;
+  --chart-1: #6c757d;
+  --chart-2: #495057;
+  --chart-3: #343a40;
+  --chart-4: #adb5bd;
+  --chart-5: #868e96;
+  --sidebar: #f8f9fa;
+  --sidebar-foreground: #000000;
+  --sidebar-primary: #6c757d;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f8f9fa;
+  --sidebar-accent-foreground: #000000;
+  --sidebar-border: #e9ecef;
+  --sidebar-ring: #6c757d;
 }
 
-.dark {
-  /* Dark theme maintains wedding colors but with darker backgrounds */
-  --background: oklch(0.08 0.005 15);
-  --foreground: oklch(0.96 0.02 85);
-  --card: oklch(0.12 0.005 15);
-  --card-foreground: oklch(0.96 0.02 85);
-  --popover: oklch(0.12 0.005 15);
-  --popover-foreground: oklch(0.96 0.02 85);
-  --primary: oklch(0.75 0.12 15); /* Darker rose */
-  --primary-foreground: oklch(0.96 0.02 85);
-  --secondary: oklch(0.65 0.08 85); /* Darker gold */
-  --secondary-foreground: oklch(0.96 0.02 85);
-  --muted: oklch(0.15 0.005 15);
-  --muted-foreground: oklch(0.65 0.02 85);
-  --accent: oklch(0.65 0.06 140); /* Darker sage */
-  --accent-foreground: oklch(0.96 0.02 85);
-  --destructive: oklch(0.55 0.15 15);
-  --border: oklch(0.2 0.005 15);
-  --input: oklch(0.18 0.005 15);
-  --ring: oklch(0.65 0.1 15);
-  --chart-1: oklch(0.75 0.12 15);
-  --chart-2: oklch(0.65 0.08 85);
-  --chart-3: oklch(0.65 0.06 140);
-  --chart-4: oklch(0.25 0.005 15);
-  --chart-5: oklch(0.55 0.08 45);
-  --sidebar: oklch(0.12 0.005 15);
-  --sidebar-foreground: oklch(0.96 0.02 85);
-  --sidebar-primary: oklch(0.75 0.12 15);
-  --sidebar-primary-foreground: oklch(0.96 0.02 85);
-  --sidebar-accent: oklch(0.15 0.005 15);
-  --sidebar-accent-foreground: oklch(0.96 0.02 85);
-  --sidebar-border: oklch(0.2 0.005 15);
-  --sidebar-ring: oklch(0.65 0.1 15);
-}
+
 
 @layer base {
   * {
@@ -186,22 +135,7 @@
 }
 
 @layer components {
-  /* Wedding-specific utility classes */
-  .wedding-gradient {
-    @apply bg-gradient-to-br from-wedding-rose/20 via-wedding-cream to-wedding-gold/20;
-  }
 
-  .wedding-text-gradient {
-    @apply bg-gradient-to-r from-wedding-rose to-wedding-gold bg-clip-text text-transparent;
-  }
-
-  .wedding-shadow {
-    box-shadow: 0 4px 20px oklch(0.85 0.15 15 / 0.15);
-  }
-
-  .wedding-glow {
-    @apply shadow-lg shadow-wedding-rose/20;
-  }
 
   .section-padding {
     @apply py-16 md:py-24 lg:py-32;
@@ -211,20 +145,7 @@
     @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 
-  /* Wedding-specific card styling */
-  .card-wedding {
-    @apply border-wedding-rose/20 bg-card/95 backdrop-blur-sm;
-    @apply hover:border-wedding-rose/40 hover:shadow-lg;
-    @apply transition-all duration-300 ease-in-out;
-    @apply focus-within:ring-2 focus-within:ring-wedding-rose/20 focus-within:ring-offset-2;
-  }
 
-  /* Enhanced wedding glow effect */
-  .wedding-glow {
-    @apply shadow-xl shadow-wedding-rose/25;
-    @apply border-wedding-rose/30;
-    transform: translateY(-2px) scale(1.01);
-  }
 
   /* Photo Gallery Grid Layout - Fixed 4 images: 2x2 on desktop, 1 column on mobile */
   .gallery-grid {
@@ -247,38 +168,17 @@
     }
   }
 
-  /* Gallery item styling with enhanced borders (static display) */
+  /* Gallery item styling with simplified borders */
   .gallery-item {
     @apply transition-all duration-300 ease-out;
-
-    /* Enhanced decorative border styling */
-    border: 2px solid transparent;
-    background:
-      linear-gradient(
-          145deg,
-          hsl(var(--wedding-cream) / 0.1),
-          hsl(var(--wedding-sage) / 0.05)
-        )
-        padding-box,
-      linear-gradient(
-          145deg,
-          hsl(var(--wedding-rose) / 0.3),
-          hsl(var(--wedding-gold) / 0.2)
-        )
-        border-box;
-    border-radius: 0.75rem;
-    box-shadow:
-      0 4px 6px -1px hsl(var(--wedding-rose) / 0.1),
-      0 2px 4px -1px hsl(var(--wedding-rose) / 0.06),
-      inset 0 1px 0 hsl(var(--wedding-cream) / 0.1);
+    border: 1px solid #e9ecef;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   /* Subtle hover effect for visual feedback only */
   .gallery-item:hover {
-    box-shadow:
-      0 6px 8px -1px hsl(var(--wedding-rose) / 0.12),
-      0 3px 5px -1px hsl(var(--wedding-rose) / 0.08),
-      inset 0 1px 0 hsl(var(--wedding-cream) / 0.12);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
 
   /* Sticky header utilities */

@@ -4,7 +4,6 @@ import { useState } from "react";
 import { toast } from "sonner";
 import {
   Loader2,
-  Heart,
   Users,
   Baby,
   ChefHat,
@@ -145,11 +144,11 @@ export function RSVPForm() {
       <Card className="w-full max-w-2xl mx-auto">
         <CardContent className="pt-6">
           <div className="text-center space-y-6">
-            <div className="mx-auto w-16 h-16 bg-wedding-rose/10 rounded-full flex items-center justify-center">
-              <Heart className="w-8 h-8 text-wedding-rose fill-current" />
+            <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+              <Users className="w-8 h-8 text-primary" />
             </div>
             <div className="space-y-3">
-              <h3 className="text-2xl font-playfair font-semibold text-wedding-rose">
+              <h3 className="text-2xl font-playfair font-semibold text-primary">
                 Благодарим ви за RSVP-то!
               </h3>
               <p className="text-muted-foreground text-lg">
@@ -166,7 +165,7 @@ export function RSVPForm() {
               <Button
                 onClick={handleGoBack}
                 variant="outline"
-                className="border-wedding-rose text-wedding-rose hover:bg-wedding-rose hover:text-white"
+                className="border-primary text-primary hover:bg-primary hover:text-white"
               >
                 Изпрати друго RSVP
               </Button>
@@ -180,7 +179,7 @@ export function RSVPForm() {
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader className="text-center">
-        <CardTitle className="text-3xl font-playfair text-wedding-rose">
+        <CardTitle className="text-3xl font-playfair text-primary">
           RSVP Формуляр
         </CardTitle>
         <CardDescription className="text-lg">
@@ -251,7 +250,7 @@ export function RSVPForm() {
           {/* Attendance */}
           <div className="space-y-3">
             <Label className="flex items-center gap-2">
-              <Heart className="w-4 h-4" />
+              <Users className="w-4 h-4" />
               Ще присъствате ли на сватбата? *
             </Label>
             <RadioGroup
@@ -286,7 +285,7 @@ export function RSVPForm() {
 
           {/* Conditional fields for attending guests */}
           {attending && (
-            <div className="space-y-6 border-l-4 border-wedding-rose/20 pl-4 ml-2">
+            <div className="space-y-6 border-l-4 border-primary/20 pl-4 ml-2">
               {/* Plus One */}
               <div className="flex flex-row items-center justify-between rounded-lg border p-4">
                 <div className="space-y-0.5">
@@ -469,7 +468,7 @@ export function RSVPForm() {
           <div className="pt-4">
             <Button
               type="submit"
-              className="w-full bg-wedding-rose hover:bg-wedding-rose/90 text-white font-medium py-3 text-lg"
+              className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 text-lg"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -479,7 +478,7 @@ export function RSVPForm() {
                 </>
               ) : (
                 <>
-                  <Heart className="mr-2 h-4 w-4 fill-current" />
+                  <Users className="mr-2 h-4 w-4" />
                   {attending
                     ? "Потвърждавам присъствието си"
                     : "Изпращам отговора си"}
@@ -489,9 +488,9 @@ export function RSVPForm() {
           </div>
 
           {/* Info Alert */}
-          <Alert className="border-wedding-sage/20 bg-wedding-sage/5">
-            <Heart className="h-4 w-4 text-wedding-sage" />
-            <AlertDescription className="text-wedding-sage">
+          <Alert className="border-accent/20 bg-accent/5">
+            <AlertTriangle className="h-4 w-4 text-accent-foreground" />
+            <AlertDescription className="text-accent-foreground">
               Вашите данни са в безопасност и ще бъдат използвани само за
               организацията на сватбата. За въпроси можете да се свържете с нас
               директно.

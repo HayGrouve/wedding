@@ -92,11 +92,11 @@ function AdminLoginContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-wedding-cream via-background to-wedding-sage/10 flex items-center justify-center p-4">
+            <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6">
         {/* Page Header */}
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-serif text-wedding-rose">Админ Панел</h1>
+                      <h1 className="text-3xl font-serif text-primary">Админ Панел</h1>
           <p className="text-muted-foreground">
             Ана-Мария & Георги - Сватбена Система
           </p>
@@ -129,7 +129,7 @@ function AdminLoginContent() {
             </p>
             <button
               onClick={() => setIsLoginOpen(true)}
-              className="text-wedding-rose hover:text-wedding-rose/80 underline"
+                              className="text-primary hover:text-primary/80 underline"
             >
               Отвори формата за влизане
             </button>
@@ -157,10 +157,10 @@ export default function AdminLoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-gradient-to-br from-wedding-cream via-background to-wedding-sage/10 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-background flex items-center justify-center p-4">
           <div className="w-full max-w-md space-y-6">
             <div className="text-center space-y-2">
-              <h1 className="text-3xl font-serif text-wedding-rose">
+              <h1 className="text-3xl font-serif text-primary">
                 Админ Панел
               </h1>
               <p className="text-muted-foreground">Зареждане...</p>

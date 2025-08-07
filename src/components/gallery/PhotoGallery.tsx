@@ -37,7 +37,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     return (
       <section
         id="gallery"
-        className={`section-padding bg-gradient-to-br from-wedding-sage/5 via-background to-wedding-cream/10 scroll-offset relative overflow-hidden ${className}`}
+        className={`section-padding bg-background scroll-offset relative overflow-hidden ${className}`}
         aria-label="Галерия със снимки"
       >
         <div className="container-wedding relative">
@@ -52,7 +52,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
   return (
     <section
       id="gallery"
-      className={`section-padding bg-gradient-to-br from-wedding-sage/5 via-background to-wedding-cream/10 scroll-offset relative overflow-hidden ${className}`}
+      className={`section-padding bg-background scroll-offset relative overflow-hidden ${className}`}
       aria-label="Галерия със снимки"
     >
       {/* Subtle background pattern */}
@@ -111,7 +111,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
 
                   {/* Loading placeholder */}
                   <div
-                    className={`absolute inset-0 bg-gradient-to-br from-wedding-cream/20 to-wedding-sage/20 flex items-center justify-center transition-opacity duration-500 ${
+                    className={`absolute inset-0 bg-background/50 flex items-center justify-center transition-opacity duration-500 ${
                       loadedImages.has(image.id)
                         ? "opacity-0 pointer-events-none"
                         : "opacity-100"
@@ -129,7 +129,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                   <div className="absolute top-3 left-3 z-10">
                     <Badge
                       variant="secondary"
-                      className="bg-wedding-rose/90 text-white backdrop-blur-sm hover:bg-wedding-rose border-0 font-medium"
+                      className="bg-primary/90 text-white backdrop-blur-sm hover:bg-primary border-0 font-medium"
                     >
                       {categoryInfo.nameBg}
                     </Badge>
@@ -155,9 +155,9 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
         {/* Empty state for when no images */}
         {filteredImages.length === 0 && (
           <div className="text-center py-16">
-            <div className="mx-auto w-24 h-24 bg-wedding-cream/30 rounded-full flex items-center justify-center mb-6">
+            <div className="mx-auto w-24 h-24 bg-primary/10 flex items-center justify-center mb-6">
               <svg
-                className="w-12 h-12 text-wedding-rose/60"
+                className="w-12 h-12 text-primary/60"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

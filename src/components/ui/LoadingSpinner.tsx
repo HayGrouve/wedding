@@ -30,7 +30,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
       aria-live="polite"
     >
       <div
-        className={`${sizeClasses[size]} animate-spin rounded-full border-2 border-wedding-rose/20 border-t-wedding-rose`}
+        className={`${sizeClasses[size]} animate-spin border-2 border-primary/20 border-t-primary`}
         aria-hidden="true"
       />
       {text && (

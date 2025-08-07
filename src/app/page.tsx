@@ -3,8 +3,8 @@ import WeddingDetails from "@/components/sections/WeddingDetails";
 import { RSVPForm } from "@/components/forms/RSVPForm";
 import MainLayout from "@/components/layout/MainLayout";
 import WeddingStructuredData from "@/components/seo/WeddingStructuredData";
-import TimelineGallery from "@/components/timeline/TimelineGallery";
-import { timelineData } from "@/data/timeline-data";
+import GalleryWrapper from "@/components/gallery/GalleryWrapper";
+
 
 export default function Home() {
   // Wedding date: September 15, 2025 at 14:00 (2:00 PM)
@@ -30,13 +30,13 @@ export default function Home() {
         {/* Wedding Details Section */}
         <WeddingDetails />
 
-        {/* Love Story Timeline Section */}
+        {/* Photo Gallery Section */}
         <section
           id="gallery"
           className="section-padding bg-background scroll-offset"
-          aria-label="История на любовта"
+          aria-label="Галерия"
         >
-          <TimelineGallery data={timelineData} />
+          <GalleryWrapper />
         </section>
 
         {/* RSVP Section */}
@@ -47,7 +47,7 @@ export default function Home() {
         >
           <div className="container-wedding">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 wedding-text-gradient">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
                 RSVP
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

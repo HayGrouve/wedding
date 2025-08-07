@@ -99,9 +99,9 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{LogoutButtonComponent}</AlertDialogTrigger>
-      <AlertDialogContent className="bg-gradient-to-br from-background to-wedding-cream/5 border-wedding-rose/20">
-        <AlertDialogHeader>
-          <AlertDialogTitle className="text-wedding-rose">
+              <AlertDialogContent className="bg-background border-primary/20">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-primary">
             Потвърждение за излизане
           </AlertDialogTitle>
           <AlertDialogDescription>

@@ -125,7 +125,7 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
-        className="max-w-7xl max-h-[95vh] p-0 gap-0 bg-black/95 border-wedding-rose/20 backdrop-blur-md"
+        className="max-w-7xl max-h-[95vh] p-0 gap-0 bg-black/95 border-primary/20 backdrop-blur-md"
         aria-describedby="lightbox-description"
       >
         {/* Header with close button and image info */}
@@ -133,7 +133,7 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
           <div className="flex items-center gap-3">
             <Badge
               variant="secondary"
-              className="bg-wedding-rose/90 text-white border-0 font-medium"
+              className="bg-primary/90 text-white border-0 font-medium"
             >
               {categoryInfo.nameBg}
             </Badge>
@@ -302,7 +302,7 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
                           }}
                           className={`relative w-12 h-12 rounded overflow-hidden transition-all duration-200 ${
                             actualIndex === currentIndex
-                              ? "ring-2 ring-wedding-rose scale-110"
+                              ? "ring-2 ring-primary scale-110"
                               : "opacity-60 hover:opacity-100"
                           }`}
                           aria-label={`Отиди към снимка ${actualIndex + 1}`}

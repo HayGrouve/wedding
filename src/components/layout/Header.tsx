@@ -3,8 +3,7 @@
 import * as React from "react";
 import DesktopNavigation from "@/components/navigation/DesktopNavigation";
 import MobileNavigation from "@/components/navigation/MobileNavigation";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { Heart } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 
 interface HeaderProps {
@@ -51,13 +50,6 @@ export default function Header({ activeSection }: HeaderProps) {
         >
           {/* Logo/Brand */}
           <div className="flex items-center gap-2 flex-shrink-0">
-            <Heart
-              className={cn(
-                "text-primary transition-all duration-200 hover:scale-110",
-                "hover:text-wedding-rose cursor-pointer",
-                isScrolled ? "h-5 w-5 md:h-6 md:w-6" : "h-6 w-6 md:h-7 md:w-7"
-              )}
-            />
             <span
               className={cn(
                 "font-serif font-semibold transition-all duration-200",
@@ -68,13 +60,10 @@ export default function Header({ activeSection }: HeaderProps) {
             </span>
           </div>
 
-          {/* Right side - Navigation and Theme Toggle */}
+          {/* Right side - Navigation */}
           <div className="flex items-center gap-2">
             {/* Desktop Navigation */}
             <DesktopNavigation activeSection={activeSection} />
-
-            {/* Theme Toggle */}
-            <ThemeToggle />
 
             {/* Mobile Navigation */}
             <MobileNavigation activeSection={activeSection} />

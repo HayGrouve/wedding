@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Heart, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 
 interface HeroProps {
@@ -64,13 +64,7 @@ export default function Hero({
 
       {/* Content Overlay Layer */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4 sm:px-6 lg:px-8">
-        {/* Heart Icon */}
-        <div className="mb-6 lg:mb-8">
-          <Heart
-            className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-white/90 animate-pulse drop-shadow-lg"
-            aria-hidden="true"
-          />
-        </div>
+
 
         {/* Main Heading - Bride & Groom Names */}
         <h1 className="hero-title mb-4 lg:mb-6" role="heading" aria-level={1}>
@@ -121,7 +115,7 @@ export default function Hero({
         <Button
           onClick={handleScrollToDetails}
           size="lg"
-          className="hero-cta-button bg-white/95 hover:bg-white text-wedding-rose hover:text-wedding-rose/80 font-semibold px-8 py-4 text-base md:text-lg lg:text-xl rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent border border-white/30 hover:border-white/50 backdrop-blur-sm"
+                      className="hero-cta-button bg-white/95 hover:bg-white text-primary hover:text-primary/80 font-semibold px-8 py-4 text-base md:text-lg lg:text-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent border border-white/30 hover:border-white/50 backdrop-blur-sm"
           aria-label="Scroll to wedding details section"
           style={{
             textShadow: "0 1px 2px rgba(0,0,0,0.1)",

@@ -86,7 +86,7 @@ const VenueCard = () => {
   };
 
   return (
-    <Card className="card-wedding group hover:wedding-glow transition-all duration-300 md:col-span-2">
+            <Card className="group transition-all duration-300 md:col-span-2">
       <CardHeader className="text-center">
         <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 w-fit">
           <MapPin className="h-6 w-6 text-primary" />
@@ -229,7 +229,7 @@ const VenueCard = () => {
           </div>
 
           {/* Distance Information */}
-          <div className="bg-wedding-cream/30 rounded-lg p-4 text-center">
+          <div className="bg-primary/10 rounded-lg p-4 text-center">
             <p className="text-sm text-muted-foreground">
               💡 <strong>Полезна информация:</strong> Двете локации са на около
               5 минути път една от друга.

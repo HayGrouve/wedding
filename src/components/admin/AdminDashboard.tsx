@@ -1245,7 +1245,7 @@ export function AdminDashboard() {
                 return (
                   <Card
                     key={row.id}
-                    className="border-l-4 border-l-wedding-rose/30"
+                    className="border-l-4 border-l-primary/30"
                   >
                     <CardContent className="pt-4">
                       <div className="space-y-3">

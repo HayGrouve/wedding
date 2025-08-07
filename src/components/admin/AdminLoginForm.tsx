@@ -99,12 +99,12 @@ const AdminLoginForm: React.FC<AdminLoginFormProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
-        className="sm:max-w-md bg-white dark:bg-gray-900 border-2 border-wedding-rose/30 shadow-2xl"
+        className="sm:max-w-md bg-white dark:bg-gray-900 border-2 border-primary/30 shadow-2xl"
         aria-describedby="admin-login-description"
       >
         <DialogHeader className="text-center space-y-4 pb-2">
-          <div className="mx-auto mb-2 w-20 h-20 bg-gradient-to-br from-wedding-rose/20 to-wedding-rose/10 rounded-full flex items-center justify-center border-2 border-wedding-rose/20">
-            <Shield className="w-10 h-10 text-wedding-rose" />
+          <div className="mx-auto mb-2 w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center border-2 border-primary/20">
+            <Shield className="w-10 h-10 text-primary" />
           </div>
           <DialogTitle className="text-2xl font-serif text-gray-900 dark:text-gray-100 font-semibold text-center">
             Админ Вход
@@ -177,7 +177,7 @@ const AdminLoginForm: React.FC<AdminLoginFormProps> = ({
                   border-2 border-gray-300 dark:border-gray-600
                   text-gray-900 dark:text-gray-100
                   placeholder:text-gray-500 dark:placeholder:text-gray-400
-                  focus:border-wedding-rose focus:ring-wedding-rose/20 focus:ring-2
+                  focus:border-primary focus:ring-primary/20 focus:ring-2
                   ${errors.accessCode ? "border-red-500 focus:border-red-500" : ""}
                   disabled:opacity-50 disabled:cursor-not-allowed
                 `}
@@ -207,7 +207,7 @@ const AdminLoginForm: React.FC<AdminLoginFormProps> = ({
               disabled={isLoading || isLockedOut}
               className="
                 w-full py-3 text-base font-semibold
-                bg-wedding-rose hover:bg-wedding-rose/90 
+                bg-primary hover:bg-primary/90 
                 text-white border-0
                 shadow-lg hover:shadow-xl
                 transition-all duration-200

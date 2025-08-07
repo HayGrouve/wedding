@@ -15,7 +15,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Shield, Clock, LogOut, ArrowLeft } from "lucide-react";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { AdminDashboard as AdminDashboardComponent } from "@/components/admin/AdminDashboard";
 
 export default async function AdminDashboard() {
@@ -48,7 +47,7 @@ export default async function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-wedding-cream via-background to-wedding-sage/10">
+          <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border/50 bg-background/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
@@ -56,18 +55,18 @@ export default async function AdminDashboard() {
             <div className="flex items-center space-x-4">
               <Link
                 href="/"
-                className="text-muted-foreground hover:text-wedding-rose transition-colors"
+                className="text-muted-foreground hover:text-primary transition-colors"
                 title="Върни се към началната страница"
               >
                 <Button variant="ghost" size="sm" className="h-10 w-10 p-0">
                   <ArrowLeft className="h-5 w-5" />
                 </Button>
               </Link>
-              <div className="w-10 h-10 bg-wedding-rose/10 rounded-full flex items-center justify-center">
-                <Shield className="w-5 h-5 text-wedding-rose" />
+              <div className="w-10 h-10 bg-primary/10 flex items-center justify-center">
+                <Shield className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h1 className="text-2xl font-serif text-wedding-rose">
+                <h1 className="text-2xl font-serif text-primary">
                   Админ Панел
                 </h1>
                 <p className="text-sm text-muted-foreground">
@@ -84,8 +83,6 @@ export default async function AdminDashboard() {
                 <Shield className="w-3 h-3 mr-1" />
                 Автентифициран
               </Badge>
-
-              <ThemeToggle />
 
               <form action="/api/auth/logout?redirect=true" method="POST">
                 <Button
@@ -107,10 +104,10 @@ export default async function AdminDashboard() {
       <main className="container mx-auto px-4 py-8">
         {/* Session Info Card */}
         <div className="mb-6">
-          <Card className="border-wedding-rose/20">
+          <Card className="border-primary/20">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <Clock className="w-5 h-5 text-wedding-rose" />
+                <Clock className="w-5 h-5 text-primary" />
                 <span>Информация за сесията</span>
               </CardTitle>
               <CardDescription>
