@@ -2,20 +2,12 @@
 
 import { ReactNode } from "react";
 import Header from "./Header";
-import { useScrollSpy } from "@/hooks/useScrollSpy";
 
 interface MainLayoutProps {
   children: ReactNode;
 }
 
 export default function MainLayout({ children }: MainLayoutProps) {
-  // Track which section is currently active for navigation highlighting
-  const activeSection = useScrollSpy({
-    sectionIds: ["home", "details", "rsvp"],
-    offset: 100,
-    threshold: 0.5,
-  });
-
   return (
     <>
       {/* Skip to content link for accessibility */}
@@ -37,7 +29,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
           aria-label="Главна навигация"
           className="sticky top-0 z-50 w-full supports-[position:sticky]:sticky"
         >
-          <Header activeSection={activeSection} />
+          <Header />
         </header>
 
         {/* Main content area */}
@@ -61,7 +53,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
               Сватбен уебсайт на Ана-Мария & Георги
             </p>
             <p className="text-sm text-muted-foreground mt-2">
-              15 септември 2025 г. • София, България
+              13 декември 2025 г. • София, България
             </p>
           </div>
         </footer>

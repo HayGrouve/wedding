@@ -32,12 +32,10 @@ const navigationItems = [
 ];
 
 interface MobileNavigationProps {
-  activeSection?: string;
   className?: string;
 }
 
 export default function MobileNavigation({
-  activeSection,
   className,
 }: MobileNavigationProps) {
   const [open, setOpen] = React.useState(false);
@@ -74,8 +72,8 @@ export default function MobileNavigation({
             size="icon"
             className={cn(
               "md:hidden transition-all duration-200",
-              "hover:border-2 hover:border-primary",
-              "hover:bg-primary/10",
+              "border border-gray-300 rounded-md",
+              "hover:shadow-md",
               className
             )}
             aria-label="Отвори навигацията"
@@ -94,25 +92,22 @@ export default function MobileNavigation({
           <SheetDescription>Навигация по уебсайта</SheetDescription>
         </SheetHeader>
 
-        <div className="mt-8 flex flex-col space-y-1">
+                 <div className="mt-8 flex flex-col space-y-1 items-center">
           {navigationItems.map((item, index) => (
             <a
               key={item.id}
               href={item.href}
               onClick={(e) => handleSmoothScroll(e, item.href)}
-              className={cn(
-                "flex items-center px-4 py-3 text-lg font-medium rounded-md",
-                "relative",
-                "transition-all duration-200 ease-in-out",
-                "hover:bg-primary/10 focus:bg-primary/10",
-                "hover:text-primary focus:text-primary focus:outline-none",
-                "hover:border-2 hover:border-primary",
-                "animate-in slide-in-from-right-4 fade-in-0",
-                activeSection === item.id && [
-                  "text-primary bg-primary/10",
-                  "border-2 border-primary",
-                ]
-              )}
+                                                          className={cn(
+                 "flex items-center px-4 py-3 text-lg font-medium rounded-md",
+                 "relative",
+                 "transition-all duration-200 ease-in-out",
+                 "border border-gray-300",
+                 "hover:shadow-md focus:shadow-md",
+                 "hover:text-gray-900 focus:text-gray-900 focus:outline-none",
+                 "animate-in slide-in-from-right-4 fade-in-0",
+                 "w-full max-w-xs justify-center"
+               )}
               style={{
                 animationDelay: `${index * 50}ms`,
                 animationDuration: "400ms",
@@ -127,7 +122,7 @@ export default function MobileNavigation({
         <div className="absolute bottom-8 left-6 right-6">
           <div className="text-center p-4 bg-muted/50 rounded-lg">
             <p className="text-sm font-medium text-muted-foreground">
-              15 септември 2025 г.
+                             13 декември 2025 г.
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               София, България

@@ -6,11 +6,7 @@ import MobileNavigation from "@/components/navigation/MobileNavigation";
 
 import { cn } from "@/lib/utils";
 
-interface HeaderProps {
-  activeSection?: string;
-}
-
-export default function Header({ activeSection }: HeaderProps) {
+export default function Header() {
   const [isScrolled, setIsScrolled] = React.useState(false);
 
   React.useEffect(() => {
@@ -63,10 +59,10 @@ export default function Header({ activeSection }: HeaderProps) {
           {/* Right side - Navigation */}
           <div className="flex items-center gap-2">
             {/* Desktop Navigation */}
-            <DesktopNavigation activeSection={activeSection} />
+            <DesktopNavigation />
 
             {/* Mobile Navigation */}
-            <MobileNavigation activeSection={activeSection} />
+            <MobileNavigation />
           </div>
         </div>
       </div>

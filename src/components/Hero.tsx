@@ -1,9 +1,8 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
-import Image from "next/image";
 
 interface HeroProps {
   brideName?: string;
@@ -15,9 +14,10 @@ interface HeroProps {
 export default function Hero({
   brideName = "Ана-Мария",
   groomName = "Георги",
-  weddingDate = "15 юни 2024",
   onScrollToDetails,
 }: HeroProps) {
+  const [videoLoaded, setVideoLoaded] = useState(false);
+
   const handleScrollToDetails = useCallback(() => {
     if (onScrollToDetails) {
       onScrollToDetails();
@@ -39,16 +39,34 @@ export default function Hero({
       role="banner"
       aria-label="Hero section with wedding announcement"
     >
-      {/* Background Image Layer */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/hero-placeholder.webp"
-          alt="Wedding background"
-          fill
-          className="object-cover"
-          priority
-          sizes="100vw"
-        />
+             {/* Background Video Layer */}
+       <div className="absolute inset-0 z-0">
+         {/* YouTube Video Embed - Using nocookie domain and optimized parameters */}
+         <iframe
+           src="https://www.youtube-nocookie.com/embed/_pkBDiVYarw?autoplay=1&mute=1&loop=1&playlist=_pkBDiVYarw&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&cc_load_policy=0&fs=0&disablekb=1&color=white&origin=https://localhost:3000&enablejsapi=0&widget_referrer=https://localhost:3000"
+           className="w-full h-full object-cover"
+           frameBorder="0"
+           allow="autoplay; encrypted-media; picture-in-picture"
+           allowFullScreen
+           onLoad={() => setVideoLoaded(true)}
+           onError={() => {
+             console.log("YouTube video failed to load, showing fallback image");
+             setVideoLoaded(true);
+           }}
+           title="Wedding background video"
+                       style={{
+              pointerEvents: 'none',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              width: '120vw', /* Slightly larger to ensure full coverage */
+              height: '120vh', /* Slightly larger to ensure full coverage */
+              transform: 'translate(-50%, -50%)',
+              zIndex: -1,
+              objectFit: 'cover',
+              objectPosition: 'center'
+            }}
+         />
 
         {/* Enhanced overlay for better text readability */}
         <div
@@ -60,6 +78,12 @@ export default function Hero({
           className="absolute inset-0 bg-gradient-radial from-transparent via-black/10 to-black/30"
           aria-hidden="true"
         />
+        {/* Video loading indicator */}
+        {!videoLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+            <div className="text-white text-lg">Зареждане на видеото...</div>
+          </div>
+        )}
       </div>
 
       {/* Content Overlay Layer */}
@@ -85,7 +109,7 @@ export default function Hero({
             &
           </span>
           <span
-            className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white drop-shadow-2xl shadow-black/50"
+            className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white drop-shadow-2xl shadow-black/50 mt-[-25px]"
             style={{
               textShadow:
                 "2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5)",
@@ -103,28 +127,17 @@ export default function Hero({
           Ви канят на тяхната сватба
         </p>
 
-        {/* Wedding Date */}
-        <p
-          className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 mb-8 lg:mb-12 font-light drop-shadow-lg"
-          style={{ textShadow: "1px 1px 2px rgba(0,0,0,0.7)" }}
-        >
-          <time dateTime="2024-06-15">{weddingDate}</time>
-        </p>
-
         {/* Professional Call to Action Button */}
         <Button
           onClick={handleScrollToDetails}
           size="lg"
-                      className="hero-cta-button bg-white/95 hover:bg-white text-primary hover:text-primary/80 font-semibold px-8 py-4 text-base md:text-lg lg:text-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent border border-white/30 hover:border-white/50 backdrop-blur-sm"
+          className="bg-white text-black font-semibold px-8 py-4 text-base md:text-lg lg:text-xl focus:outline-none transition-all duration-200 ease-in-out border border-gray-300 rounded-md hover:shadow-md focus:shadow-md hover:bg-gray-100/80 focus:bg-gray-100/80"
           aria-label="Scroll to wedding details section"
           style={{
             textShadow: "0 1px 2px rgba(0,0,0,0.1)",
           }}
         >
-          <span className="flex items-center">
-            Детайли за сватбата
-            <ChevronDown className="ml-2 w-5 h-5 animate-bounce transition-transform duration-200 hover:translate-y-0.5" />
-          </span>
+          Детайли
         </Button>
       </div>
 

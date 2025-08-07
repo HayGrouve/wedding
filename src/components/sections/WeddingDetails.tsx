@@ -165,7 +165,7 @@ const WeddingDetails = () => {
                   <div className="flex items-start gap-3">
                     <Calendar className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="font-medium">15 септември 2025 г.</p>
+                      <p className="font-medium">13 декември 2025 г.</p>
                       <p className="text-sm text-muted-foreground">Неделя</p>
                     </div>
                   </div>

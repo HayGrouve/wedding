@@ -29,12 +29,10 @@ const navigationItems = [
 ];
 
 interface DesktopNavigationProps {
-  activeSection?: string;
   className?: string;
 }
 
 export default function DesktopNavigation({
-  activeSection,
   className,
 }: DesktopNavigationProps) {
   const handleSmoothScroll = (
@@ -69,13 +67,9 @@ export default function DesktopNavigation({
                 navigationMenuTriggerStyle(),
                 "font-medium relative",
                 "transition-all duration-200 ease-in-out",
-                "hover:text-primary focus:text-primary",
-                "hover:bg-primary/10 focus:bg-primary/10",
-                "hover:border-2 hover:border-primary",
-                activeSection === item.id && [
-                  "text-primary bg-primary/10",
-                  "border-2 border-primary",
-                ]
+                "border border-gray-300 rounded-md",
+                "hover:shadow-md focus:shadow-md",
+                "hover:text-gray-900 focus:text-gray-900"
               )}
               onClick={(e) => handleSmoothScroll(e, item.href)}
             >

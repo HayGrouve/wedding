@@ -22,7 +22,7 @@ export default function Home() {
           <Hero
             brideName="Ана-Мария"
             groomName="Георги"
-            weddingDate="15 септември 2025 г."
+            weddingDate="13 декември 2025 г."
           />
         </section>
 
