@@ -25,11 +25,6 @@ const navigationItems = [
     href: "#details",
   },
   {
-    id: "gallery",
-    label: "Галерия",
-    href: "#gallery",
-  },
-  {
     id: "rsvp",
     label: "RSVP",
     href: "#rsvp",
@@ -74,19 +69,19 @@ export default function MobileNavigation({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className={cn(
-            "md:hidden transition-all duration-200",
-            "hover:scale-110 active:scale-90",
-            "hover:bg-primary/10",
-            className
-          )}
-          aria-label="Отвори навигацията"
-        >
-          <Menu className="h-5 w-5 transition-transform duration-200 menu-float" />
-        </Button>
+                  <Button
+            variant="ghost"
+            size="icon"
+            className={cn(
+              "md:hidden transition-all duration-200",
+              "hover:border-2 hover:border-primary",
+              "hover:bg-primary/10",
+              className
+            )}
+            aria-label="Отвори навигацията"
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
       </SheetTrigger>
 
       <SheetContent side="right" className="w-[300px] sm:w-[400px]">
@@ -107,18 +102,15 @@ export default function MobileNavigation({
               onClick={(e) => handleSmoothScroll(e, item.href)}
               className={cn(
                 "flex items-center px-4 py-3 text-lg font-medium rounded-md",
-                "relative overflow-hidden group",
-                "transition-all duration-300 ease-in-out",
+                "relative",
+                "transition-all duration-200 ease-in-out",
                 "hover:bg-primary/10 focus:bg-primary/10",
                 "hover:text-primary focus:text-primary focus:outline-none",
-                "hover:translate-x-2 hover:shadow-md",
-                "before:absolute before:left-0 before:top-0 before:h-full before:w-1",
-                "before:bg-primary before:scale-y-0 before:transition-transform before:duration-300",
-                "before:origin-bottom hover:before:scale-y-100",
+                "hover:border-2 hover:border-primary",
                 "animate-in slide-in-from-right-4 fade-in-0",
                 activeSection === item.id && [
-                  "text-primary bg-primary/10 translate-x-2 shadow-md",
-                  "before:scale-y-100",
+                  "text-primary bg-primary/10",
+                  "border-2 border-primary",
                 ]
               )}
               style={{

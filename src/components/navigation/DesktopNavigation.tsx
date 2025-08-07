@@ -22,11 +22,6 @@ const navigationItems = [
     href: "#details",
   },
   {
-    id: "gallery",
-    label: "Галерия",
-    href: "#gallery",
-  },
-  {
     id: "rsvp",
     label: "RSVP",
     href: "#rsvp",
@@ -72,17 +67,14 @@ export default function DesktopNavigation({
               href={item.href}
               className={cn(
                 navigationMenuTriggerStyle(),
-                "font-medium relative overflow-hidden group",
-                "transition-all duration-300 ease-in-out",
+                "font-medium relative",
+                "transition-all duration-200 ease-in-out",
                 "hover:text-primary focus:text-primary",
                 "hover:bg-primary/10 focus:bg-primary/10",
-                "hover:scale-105 active:scale-95",
-                "before:absolute before:inset-0 before:bg-primary/5",
-                "before:scale-x-0 before:transition-transform before:duration-300",
-                "hover:before:scale-x-100",
+                "hover:border-2 hover:border-primary",
                 activeSection === item.id && [
-                  "text-primary bg-primary/10 scale-105",
-                  "shadow-sm before:scale-x-100",
+                  "text-primary bg-primary/10",
+                  "border-2 border-primary",
                 ]
               )}
               onClick={(e) => handleSmoothScroll(e, item.href)}

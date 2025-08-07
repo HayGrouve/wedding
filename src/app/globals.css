@@ -147,39 +147,7 @@
 
 
 
-  /* Photo Gallery Grid Layout - Fixed 4 images: 2x2 on desktop, 1 column on mobile */
-  .gallery-grid {
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: 1fr;
-    max-width: 800px; /* Constrains the gallery width for better composition */
-    margin: 0 auto; /* Centers the gallery */
 
-    /* Mobile: 1 column with 4 images stacked */
-    @media (max-width: 767px) {
-      grid-template-columns: 1fr;
-      gap: 1.25rem;
-    }
-
-    /* Desktop: 2 columns with 2 images per row (2x2 grid) */
-    @media (min-width: 768px) {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
-    }
-  }
-
-  /* Gallery item styling with simplified borders */
-  .gallery-item {
-    @apply transition-all duration-300 ease-out;
-    border: 1px solid #e9ecef;
-    background: #ffffff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Subtle hover effect for visual feedback only */
-  .gallery-item:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  }
 
   /* Sticky header utilities */
   .scroll-offset {
@@ -208,35 +176,9 @@
     }
   }
 
-  /* Floating animation for menu button */
-  .menu-float {
-    animation: menuFloat 3s ease-in-out infinite;
-  }
 
-  @keyframes menuFloat {
-    0%,
-    100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-2px);
-    }
-  }
 
-  /* Pulse animation for active navigation items */
-  .nav-pulse {
-    animation: navPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
 
-  @keyframes navPulse {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.8;
-    }
-  }
 
   /* Scroll Animation Keyframes */
   @keyframes fadeInUp {

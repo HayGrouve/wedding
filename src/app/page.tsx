@@ -3,7 +3,6 @@ import WeddingDetails from "@/components/sections/WeddingDetails";
 import { RSVPForm } from "@/components/forms/RSVPForm";
 import MainLayout from "@/components/layout/MainLayout";
 import WeddingStructuredData from "@/components/seo/WeddingStructuredData";
-import GalleryWrapper from "@/components/gallery/GalleryWrapper";
 
 
 export default function Home() {
@@ -29,15 +28,6 @@ export default function Home() {
 
         {/* Wedding Details Section */}
         <WeddingDetails />
-
-        {/* Photo Gallery Section */}
-        <section
-          id="gallery"
-          className="section-padding bg-background scroll-offset"
-          aria-label="Галерия"
-        >
-          <GalleryWrapper />
-        </section>
 
         {/* RSVP Section */}
         <section

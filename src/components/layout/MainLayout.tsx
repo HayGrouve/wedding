@@ -11,7 +11,7 @@ interface MainLayoutProps {
 export default function MainLayout({ children }: MainLayoutProps) {
   // Track which section is currently active for navigation highlighting
   const activeSection = useScrollSpy({
-    sectionIds: ["home", "details", "gallery", "rsvp"],
+    sectionIds: ["home", "details", "rsvp"],
     offset: 100,
     threshold: 0.5,
   });
