@@ -33,8 +33,8 @@ export default function Header() {
         "w-full transition-all duration-200 ease-in-out",
         "border-b border-border/50",
         isScrolled
-          ? "bg-background/95 backdrop-blur-md shadow-sm border-border"
-          : "bg-background/60 backdrop-blur-sm"
+          ? "bg-background/90 backdrop-blur-md shadow-sm border-border"
+          : "bg-background/90 backdrop-blur-sm"
       )}
     >
       <div className="container-wedding">
