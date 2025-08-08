@@ -78,7 +78,6 @@ export function RSVPForm() {
     try {
       clientIP = (await getClientIP()) || undefined;
     } catch {
-      // IP detection failure shouldn't block form submission
       clientIP = undefined;
     }
 
@@ -90,14 +89,12 @@ export function RSVPForm() {
       plusOneAttending,
       plusOneName: plusOneName || undefined,
       childrenCount,
-
       menuChoice: menuChoice || undefined,
       plusOneMenuChoice: plusOneMenuChoice || undefined,
       allergies: allergies || undefined,
-      clientIP, // Include detected IP if available
+      clientIP,
     };
 
-    // Validate form data
     const validation = validateRSVPForm(formData);
 
     if (!validation.success) {
@@ -110,22 +107,15 @@ export function RSVPForm() {
     try {
       const response = await fetch("/api/rsvp", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(validation.data),
       });
 
       const result = await response.json();
 
       if (!response.ok || !result.success) {
-        if (result.errors) {
-          setErrors(result.errors);
-        }
-
-        toast.error(
-          result.error || "Възникна грешка при изпращането на формуляра"
-        );
+        if (result.errors) setErrors(result.errors);
+        toast.error(result.error || "Възникна грешка при изпращането на формуляра");
         return;
       }
 
@@ -141,32 +131,22 @@ export function RSVPForm() {
 
   if (submitSuccess) {
     return (
-      <Card className="w-full max-w-2xl mx-auto">
+      <Card className="w-full">
         <CardContent className="pt-6">
           <div className="text-center space-y-6">
             <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
               <Users className="w-8 h-8 text-primary" />
             </div>
             <div className="space-y-3">
-              <h3 className="text-2xl font-serif font-semibold text-primary">
-                Благодарим ви за RSVP-то!
-              </h3>
+              <h3 className="text-2xl font-serif font-semibold text-primary">Благодарим ви за RSVP-то!</h3>
               <p className="text-gray-700 text-lg">
                 {attending
                   ? "Вашият отговор е получен успешно. Очакваме ви с нетърпение!"
                   : "Вашият отговор е получен успешно. Съжаляваме, че няма да можете да присъствате."}
               </p>
-              <p className="text-sm text-gray-600">
-                Ако имате въпроси или трябва да направите промени, моля свържете
-                се с нас директно.
-              </p>
             </div>
             <div className="pt-4">
-              <Button
-                onClick={handleGoBack}
-                variant="outline"
-                className="border-primary text-primary hover:bg-primary hover:text-white"
-              >
+              <Button onClick={handleGoBack} variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white">
                 Изпрати друго RSVP
               </Button>
             </div>
@@ -177,22 +157,17 @@ export function RSVPForm() {
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader className="text-center">
-        <CardTitle className="text-3xl font-serif text-primary">
-          Формуляр
-        </CardTitle>
-        <CardDescription className="text-lg text-gray-600">
-          Моля, потвърдете дали ще присъствате на нашата сватба!
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Guest Name */}
+    <div className="grid gap-6 md:grid-cols-2">
+      {/* Left: Guest & Attendance */}
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle className="text-2xl font-serif">Гост</CardTitle>
+          <CardDescription>Основна информация и потвърждение</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="guestName" className="flex items-center gap-2 text-black font-medium">
-              <Users className="w-4 h-4" />
-              Вашето име *
+              <Users className="w-4 h-4" /> Вашето име *
             </Label>
             <Input
               id="guestName"
@@ -202,12 +177,9 @@ export function RSVPForm() {
               disabled={isSubmitting}
               className={`${errors.guestName ? "border-red-500" : "border-gray-300"} bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20`}
             />
-            {errors.guestName && (
-              <p className="text-sm text-red-500">{errors.guestName}</p>
-            )}
+            {errors.guestName && <p className="text-sm text-red-500">{errors.guestName}</p>}
           </div>
 
-          {/* Email */}
           <div className="space-y-2">
             <Label htmlFor="email" className="text-black font-medium">Email адрес *</Label>
             <Input
@@ -219,98 +191,65 @@ export function RSVPForm() {
               disabled={isSubmitting}
               className={`${errors.email ? "border-red-500" : "border-gray-300"} bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20`}
             />
-            <p className="text-sm text-gray-600">
-              За връзка и организационни въпроси
-            </p>
-            {errors.email && (
-              <p className="text-sm text-red-500">{errors.email}</p>
-            )}
+            {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
           </div>
 
-          {/* Phone */}
           <div className="space-y-2">
             <Label htmlFor="phone" className="text-black font-medium">Телефонен номер</Label>
             <Input
               id="phone"
               type="tel"
-              placeholder="+359 2 XXX XXX или 02 XXX XXX"
+              placeholder="08X XXX XXXX или +359 8X XXX XXXX"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               disabled={isSubmitting}
               className={`${errors.phone ? "border-red-500" : "border-gray-300"} bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20`}
             />
-            <p className="text-sm text-gray-600">
-              Опционално - за свързване при нужда
-            </p>
-            {errors.phone && (
-              <p className="text-sm text-red-500">{errors.phone}</p>
-            )}
+            {errors.phone && <p className="text-sm text-red-500">{errors.phone}</p>}
           </div>
 
-          {/* Attendance */}
           <div className="space-y-3">
             <Label className="flex items-center gap-2 text-black font-medium">
-              <Users className="w-4 h-4" />
-              Ще присъствате ли на сватбата? *
+              <Users className="w-4 h-4" /> Ще присъствате ли на сватбата? *
             </Label>
             <RadioGroup
               value={attending ? "true" : "false"}
-              onValueChange={(value) => setAttending(value === "true")}
-              className="flex flex-col space-y-3"
+              onValueChange={(v) => setAttending(v === "true")}
+              className="grid gap-3 sm:grid-cols-2"
               disabled={isSubmitting}
             >
-              <div className="flex items-center space-x-3 p-3 border border-gray-200 rounded bg-white hover:bg-gray-50 transition-colors">
+              <div className="flex items-center space-x-3 p-3 border border-gray-200 rounded bg-white hover:bg-gray-50">
                 <RadioGroupItem value="true" id="attending-yes" className="text-primary border-gray-300 focus:ring-2 focus:ring-primary/20" />
-                <Label
-                  htmlFor="attending-yes"
-                  className="text-sm font-medium cursor-pointer text-black"
-                >
-                  Да, ще присъствам с удоволствие!
-                </Label>
+                <Label htmlFor="attending-yes" className="text-sm font-medium cursor-pointer text-black">Да, ще присъствам</Label>
               </div>
-              <div className="flex items-center space-x-3 p-3 border border-gray-200 rounded bg-white hover:bg-gray-50 transition-colors">
+              <div className="flex items-center space-x-3 p-3 border border-gray-200 rounded bg-white hover:bg-gray-50">
                 <RadioGroupItem value="false" id="attending-no" className="text-primary border-gray-300 focus:ring-2 focus:ring-primary/20" />
-                <Label
-                  htmlFor="attending-no"
-                  className="text-sm font-medium cursor-pointer text-black"
-                >
-                  За съжаление, няма да мога да присъствам
-                </Label>
+                <Label htmlFor="attending-no" className="text-sm font-medium cursor-pointer text-black">Не, няма да присъствам</Label>
               </div>
             </RadioGroup>
-            {errors.attending && (
-              <p className="text-sm text-red-500">{errors.attending}</p>
-            )}
+            {errors.attending && <p className="text-sm text-red-500">{errors.attending}</p>}
           </div>
+        </CardContent>
+      </Card>
 
-          {/* Conditional fields for attending guests */}
-          {attending && (
-            <div className="space-y-6 border-l-4 border-primary/20 pl-4 ml-2">
-              {/* Plus One */}
-              <div className="flex flex-row items-center justify-between rounded-lg border border-gray-200 p-4 bg-white">
+      {/* Right: Companions & Preferences */}
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle className="text-2xl font-serif">Спътници и предпочитания</CardTitle>
+          <CardDescription>Информация за +1, деца и меню</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {attending ? (
+            <>
+              <div className="flex items-center justify-between rounded-lg border border-gray-200 p-4 bg-white">
                 <div className="space-y-0.5">
-                  <Label className="text-base flex items-center gap-2 text-black">
-                    <Users className="w-4 h-4" />
-                    Ще доведете някого със себе си?
-                  </Label>
-                  <p className="text-sm text-gray-600">
-                    Ще дойдете с партньор или приятел/ка
-                  </p>
+                  <Label className="text-base flex items-center gap-2 text-black"><Users className="w-4 h-4" /> Ще доведете някого със себе си?</Label>
+                  <p className="text-sm text-gray-600">Партньор или приятел/ка</p>
                 </div>
-                <Switch
-                  checked={plusOneAttending}
-                  onCheckedChange={setPlusOneAttending}
-                  disabled={isSubmitting}
-                  className="data-[state=checked]:bg-primary data-[state=unchecked]:bg-gray-300"
-                />
+                <Switch checked={plusOneAttending} onCheckedChange={setPlusOneAttending} disabled={isSubmitting} className="data-[state=checked]:bg-primary data-[state=unchecked]:bg-gray-300" />
               </div>
-              {errors.plusOneAttending && (
-                <p className="text-sm text-red-500">
-                  {errors.plusOneAttending}
-                </p>
-              )}
+              {errors.plusOneAttending && <p className="text-sm text-red-500">{errors.plusOneAttending}</p>}
 
-              {/* Plus One Name */}
               {plusOneAttending && (
                 <div className="space-y-2">
                   <Label htmlFor="plusOneName" className="text-black font-medium">Име на спътника *</Label>
@@ -322,26 +261,14 @@ export function RSVPForm() {
                     disabled={isSubmitting}
                     className={`${errors.plusOneName ? "border-red-500" : "border-gray-300"} bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20`}
                   />
-                  {errors.plusOneName && (
-                    <p className="text-sm text-red-500">{errors.plusOneName}</p>
-                  )}
+                  {errors.plusOneName && <p className="text-sm text-red-500">{errors.plusOneName}</p>}
                 </div>
               )}
 
-              {/* Children Count */}
               <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-black font-medium">
-                  <Baby className="w-4 h-4" />
-                  Брой деца
-                </Label>
-                <Select
-                  value={childrenCount.toString()}
-                  onValueChange={(value) => setChildrenCount(parseInt(value))}
-                  disabled={isSubmitting}
-                >
-                  <SelectTrigger
-                    className={`${errors.childrenCount ? "border-red-500" : "border-gray-300"} bg-white text-black focus:border-primary focus:ring-2 focus:ring-primary/20`}
-                  >
+                <Label className="flex items-center gap-2 text-black font-medium"><Baby className="w-4 h-4" /> Брой деца</Label>
+                <Select value={childrenCount.toString()} onValueChange={(v) => setChildrenCount(parseInt(v))} disabled={isSubmitting}>
+                  <SelectTrigger className={`${errors.childrenCount ? "border-red-500" : "border-gray-300"} bg-white text-black focus:border-primary focus:ring-2 focus:ring-primary/20`}>
                     <SelectValue placeholder="Изберете брой деца" />
                   </SelectTrigger>
                   <SelectContent>
@@ -353,28 +280,13 @@ export function RSVPForm() {
                     <SelectItem value="5">5+ деца</SelectItem>
                   </SelectContent>
                 </Select>
-                <p className="text-sm text-gray-600">
-                  Деца, които ще дойдат с вас на сватбата
-                </p>
-                {errors.childrenCount && (
-                  <p className="text-sm text-red-500">{errors.childrenCount}</p>
-                )}
+                {errors.childrenCount && <p className="text-sm text-red-500">{errors.childrenCount}</p>}
               </div>
 
-              {/* Menu Choice for Primary Guest */}
               <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-black font-medium">
-                  <ChefHat className="w-4 h-4" />
-                  Вашето меню *
-                </Label>
-                <Select
-                  value={menuChoice}
-                  onValueChange={setMenuChoice}
-                  disabled={isSubmitting}
-                >
-                  <SelectTrigger
-                    className={`${errors.menuChoice ? "border-red-500" : "border-gray-300"} bg-white text-black focus:border-primary focus:ring-2 focus:ring-primary/20`}
-                  >
+                <Label className="flex items-center gap-2 text-black font-medium"><ChefHat className="w-4 h-4" /> Вашето меню *</Label>
+                <Select value={menuChoice} onValueChange={setMenuChoice} disabled={isSubmitting}>
+                  <SelectTrigger className={`${errors.menuChoice ? "border-red-500" : "border-gray-300"} bg-white text-black focus:border-primary focus:ring-2 focus:ring-primary/20`}>
                     <SelectValue placeholder="Изберете основно ястие" />
                   </SelectTrigger>
                   <SelectContent>
@@ -382,29 +294,14 @@ export function RSVPForm() {
                     <SelectItem value="vegetarian">🥗 Вегетарианско</SelectItem>
                   </SelectContent>
                 </Select>
-                <p className="text-sm text-gray-600">
-                  Моля, изберете основното ястие за себе си
-                </p>
-                {errors.menuChoice && (
-                  <p className="text-sm text-red-500">{errors.menuChoice}</p>
-                )}
+                {errors.menuChoice && <p className="text-sm text-red-500">{errors.menuChoice}</p>}
               </div>
 
-              {/* Menu Choice for Plus One */}
               {plusOneAttending && (
                 <div className="space-y-2">
-                  <Label className="flex items-center gap-2 text-black font-medium">
-                    <ChefHat className="w-4 h-4" />
-                    Меню за спътника *
-                  </Label>
-                  <Select
-                    value={plusOneMenuChoice}
-                    onValueChange={setPlusOneMenuChoice}
-                    disabled={isSubmitting}
-                  >
-                    <SelectTrigger
-                      className={`${errors.plusOneMenuChoice ? "border-red-500" : "border-gray-300"} bg-white text-black focus:border-primary focus:ring-2 focus:ring-primary/20`}
-                    >
+                  <Label className="flex items-center gap-2 text-black font-medium"><ChefHat className="w-4 h-4" /> Меню за спътника *</Label>
+                  <Select value={plusOneMenuChoice} onValueChange={setPlusOneMenuChoice} disabled={isSubmitting}>
+                    <SelectTrigger className={`${errors.plusOneMenuChoice ? "border-red-500" : "border-gray-300"} bg-white text-black focus:border-primary focus:ring-2 focus:ring-primary/20`}>
                       <SelectValue placeholder="Изберете основно ястие за спътника" />
                     </SelectTrigger>
                     <SelectContent>
@@ -412,23 +309,12 @@ export function RSVPForm() {
                       <SelectItem value="vegetarian">🥗 Вегетарианско</SelectItem>
                     </SelectContent>
                   </Select>
-                  <p className="text-sm text-gray-600">
-                    Моля, изберете основното ястие за вашия спътник
-                  </p>
-                  {errors.plusOneMenuChoice && (
-                    <p className="text-sm text-red-500">
-                      {errors.plusOneMenuChoice}
-                    </p>
-                  )}
+                  {errors.plusOneMenuChoice && <p className="text-sm text-red-500">{errors.plusOneMenuChoice}</p>}
                 </div>
               )}
 
-              {/* Allergies */}
               <div className="space-y-2">
-                <Label htmlFor="allergies" className="flex items-center gap-2 text-black font-medium">
-                  <AlertTriangle className="w-4 h-4" />
-                  Алергии или специални изисквания
-                </Label>
+                <Label htmlFor="allergies" className="flex items-center gap-2 text-black font-medium"><AlertTriangle className="w-4 h-4" /> Алергии или специални изисквания</Label>
                 <Textarea
                   id="allergies"
                   placeholder="Опишете алергии към храна или други специални изисквания..."
@@ -438,49 +324,48 @@ export function RSVPForm() {
                   rows={3}
                   className={`${errors.allergies ? "border-red-500" : "border-gray-300"} bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20`}
                 />
-                <p className="text-sm text-gray-600">
-                  Опционално - помогнете ни да направим сватбата комфортна за
-                  всички
-                </p>
-                {errors.allergies && (
-                  <p className="text-sm text-red-500">{errors.allergies}</p>
-                )}
+                {errors.allergies && <p className="text-sm text-red-500">{errors.allergies}</p>}
               </div>
-            </div>
+            </>
+          ) : (
+            <p className="text-sm text-gray-600">Ако няма да присъствате, не е необходимо да попълвате допълнителни данни.</p>
           )}
+        </CardContent>
+      </Card>
 
-          {/* Submit Button */}
-          <div className="pt-4">
-            <Button
-              type="submit"
-              className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 text-lg"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Изпращане...
-                </>
-              ) : (
-                <>
-                  <Users className="mr-2 h-4 w-4" />
-                  Изпрати отговор
-                </>
-              )}
-            </Button>
-          </div>
+      {/* Submit & info section under both cards */}
+      <div className="md:col-span-2 space-y-4">
+        <Button
+          type="submit"
+          form="rsvp-form"
+          className="hidden"
+        />
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            void handleSubmit(e);
+          }}
+          className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 text-lg"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Изпращане...
+            </>
+          ) : (
+            <>
+              <Users className="mr-2 h-4 w-4" /> Изпрати отговор
+            </>
+          )}
+        </Button>
 
-          {/* Info Alert */}
-          <Alert className="border-gray-200 bg-gray-50">
-            <AlertTriangle className="h-4 w-4 text-gray-600" />
-            <AlertDescription className="text-gray-700">
-              Вашите данни са в безопасност и ще бъдат използвани само за
-              организацията на сватбата. За въпроси можете да се свържете с нас
-              директно.
-            </AlertDescription>
-          </Alert>
-        </form>
-      </CardContent>
-    </Card>
+        <Alert className="border-gray-200 bg-gray-50">
+          <AlertTriangle className="h-4 w-4 text-gray-600" />
+          <AlertDescription className="text-gray-700">
+            Вашите данни са в безопасност и ще бъдат използвани само за организацията на сватбата. За въпроси можете да се свържете с нас директно.
+          </AlertDescription>
+        </Alert>
+      </div>
+    </div>
   );
 }

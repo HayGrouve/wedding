@@ -41,7 +41,7 @@ export default function Home() {
                 Потвърждение за присъствие
               </h2>
             </div>
-            <div className="max-w-md mx-auto">
+            <div className="max-w-5xl mx-auto">
               <RSVPForm />
             </div>
           </div>
