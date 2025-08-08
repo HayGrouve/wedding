@@ -38,6 +38,7 @@ export default function DesktopNavigation({ className }: DesktopNavigationProps)
     const targetId = href.replace("#", "");
     if (targetId === "home") {
       window.scrollTo({ top: 0, behavior: "smooth" });
+      e.currentTarget.blur();
       return;
     }
 
@@ -49,6 +50,8 @@ export default function DesktopNavigation({ className }: DesktopNavigationProps)
       const offsetPosition = Math.max(0, elementTop - headerHeight + extra);
 
       window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+      // Remove focus to avoid lingering focus styles
+      e.currentTarget.blur();
     }
   };
 
@@ -68,8 +71,8 @@ export default function DesktopNavigation({ className }: DesktopNavigationProps)
                   "transition-all duration-200 ease-in-out",
                   "border rounded-md",
                   isActive ? "border-primary text-gray-900 shadow-md" : "border-gray-300",
-                  "hover:shadow-md focus:shadow-md",
-                  "hover:text-gray-900 focus:text-gray-900"
+                  "hover:shadow-md focus-visible:shadow-md",
+                  "hover:text-gray-900 focus-visible:text-gray-900"
                 )}
                 onClick={(e) => handleSmoothScroll(e, item.href)}
               >

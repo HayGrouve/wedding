@@ -148,7 +148,7 @@ export function RSVPForm() {
               <Users className="w-8 h-8 text-primary" />
             </div>
             <div className="space-y-3">
-              <h3 className="text-2xl font-playfair font-semibold text-primary">
+              <h3 className="text-2xl font-serif font-semibold text-primary">
                 Благодарим ви за RSVP-то!
               </h3>
               <p className="text-gray-700 text-lg">
@@ -179,8 +179,8 @@ export function RSVPForm() {
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader className="text-center">
-        <CardTitle className="text-3xl font-playfair text-primary">
-           Формуляр
+        <CardTitle className="text-3xl font-serif text-primary">
+          Формуляр
         </CardTitle>
         <CardDescription className="text-lg text-gray-600">
           Моля, потвърдете дали ще присъствате на нашата сватба!
@@ -464,9 +464,7 @@ export function RSVPForm() {
               ) : (
                 <>
                   <Users className="mr-2 h-4 w-4" />
-                  {attending
-                    ? "Потвърждавам присъствието си"
-                    : "Изпращам отговора си"}
+                  Изпращам отговора си
                 </>
               )}
             </Button>

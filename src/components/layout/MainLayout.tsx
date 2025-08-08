@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import Header from "./Header";
+import Link from "next/link";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -53,6 +54,16 @@ export default function MainLayout({ children }: MainLayoutProps) {
             <p className="text-sm text-muted-foreground mt-2">
               13 декември 2025 г. • София, България
             </p>
+            {/* Subtle admin link */}
+            <div className="mt-4">
+              <Link
+                href="/admin"
+                className="text-xs text-muted-foreground/60 hover:text-muted-foreground focus:text-muted-foreground underline-offset-2 hover:underline focus:underline transition-colors"
+                aria-label="Админ достъп"
+              >
+                ©
+              </Link>
+            </div>
           </div>
         </footer>
       </div>

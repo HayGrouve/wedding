@@ -42,6 +42,7 @@ export default function MobileNavigation({ className }: MobileNavigationProps) {
     const targetId = href.replace("#", "");
     if (targetId === "home") {
       window.scrollTo({ top: 0, behavior: "smooth" });
+      (e.currentTarget as HTMLAnchorElement).blur();
       setOpen(false);
       return;
     }
@@ -54,6 +55,7 @@ export default function MobileNavigation({ className }: MobileNavigationProps) {
       const offsetPosition = Math.max(0, elementTop - headerHeight + extra);
 
       window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+      (e.currentTarget as HTMLAnchorElement).blur();
       setOpen(false);
     }
   };
@@ -101,8 +103,8 @@ export default function MobileNavigation({ className }: MobileNavigationProps) {
                   "transition-all duration-200 ease-in-out",
                   "border",
                   isActive ? "border-primary text-gray-900 shadow-md" : "border-gray-300",
-                  "hover:shadow-md focus:shadow-md",
-                  "hover:text-gray-900 focus:text-gray-900 focus:outline-none",
+                  "hover:shadow-md focus-visible:shadow-md",
+                  "hover:text-gray-900 focus-visible:text-gray-900 focus-visible:outline-none",
                   "animate-in slide-in-from-right-4 fade-in-0",
                   "w-full max-w-xs justify-center"
                 )}
