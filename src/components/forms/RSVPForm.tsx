@@ -180,10 +180,10 @@ export function RSVPForm() {
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader className="text-center">
         <CardTitle className="text-3xl font-playfair text-primary">
-          RSVP Формуляр
+           Формуляр
         </CardTitle>
         <CardDescription className="text-lg text-gray-600">
-          Моля, потвърдете дали ще присъствате на нашата сватба
+          Моля, потвърдете дали ще присъствате на нашата сватба!
         </CardDescription>
       </CardHeader>
       <CardContent>

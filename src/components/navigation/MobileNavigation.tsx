@@ -15,30 +15,21 @@ import { cn } from "@/lib/utils";
 import useActiveSection from "@/hooks/useActiveSection";
 
 const navigationItems = [
-  {
-    id: "home",
-    label: "Начало",
-    href: "#home",
-  },
-  {
-    id: "details",
-    label: "Детайли",
-    href: "#details",
-  },
-  {
-    id: "rsvp",
-    label: "RSVP",
-    href: "#rsvp",
-  },
+  { id: "home", label: "Начало", href: "#home" },
+  { id: "details", label: "Детайли", href: "#details" },
+  { id: "rsvp", label: "RSVP", href: "#rsvp" },
 ];
+
+function getHeaderHeight(): number {
+  const el = document.querySelector<HTMLElement>('header[role="banner"]');
+  return el?.offsetHeight ?? 80;
+}
 
 interface MobileNavigationProps {
   className?: string;
 }
 
-export default function MobileNavigation({
-  className,
-}: MobileNavigationProps) {
+export default function MobileNavigation({ className }: MobileNavigationProps) {
   const [open, setOpen] = React.useState(false);
   const activeId = useActiveSection(navigationItems.map((n) => n.id), "home");
 
@@ -49,19 +40,20 @@ export default function MobileNavigation({
     e.preventDefault();
 
     const targetId = href.replace("#", "");
+    if (targetId === "home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setOpen(false);
+      return;
+    }
+
     const targetElement = document.getElementById(targetId);
-
     if (targetElement) {
-      const headerHeight = 80; // Account for sticky header
-      const elementPosition = targetElement.offsetTop;
-      const offsetPosition = elementPosition - headerHeight;
+      const headerHeight = getHeaderHeight();
+      const extra = 18;
+      const elementTop = targetElement.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = Math.max(0, elementTop - headerHeight + extra);
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
-
-      // Close the mobile menu after navigation
+      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
       setOpen(false);
     }
   };

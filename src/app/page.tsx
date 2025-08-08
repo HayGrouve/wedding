@@ -40,9 +40,6 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
                 RSVP
               </h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Потвърждение за присъствие на сватбата
-              </p>
             </div>
             <div className="max-w-md mx-auto">
               <RSVPForm />

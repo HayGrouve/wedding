@@ -12,30 +12,21 @@ import { cn } from "@/lib/utils";
 import useActiveSection from "@/hooks/useActiveSection";
 
 const navigationItems = [
-  {
-    id: "home",
-    label: "Начало",
-    href: "#home",
-  },
-  {
-    id: "details",
-    label: "Детайли",
-    href: "#details",
-  },
-  {
-    id: "rsvp",
-    label: "RSVP",
-    href: "#rsvp",
-  },
+  { id: "home", label: "Начало", href: "#home" },
+  { id: "details", label: "Детайли", href: "#details" },
+  { id: "rsvp", label: "RSVP", href: "#rsvp" },
 ];
+
+function getHeaderHeight(): number {
+  const el = document.querySelector<HTMLElement>('header[role="banner"]');
+  return el?.offsetHeight ?? 80;
+}
 
 interface DesktopNavigationProps {
   className?: string;
 }
 
-export default function DesktopNavigation({
-  className,
-}: DesktopNavigationProps) {
+export default function DesktopNavigation({ className }: DesktopNavigationProps) {
   const activeId = useActiveSection(navigationItems.map((n) => n.id), "home");
 
   const handleSmoothScroll = (
@@ -45,17 +36,19 @@ export default function DesktopNavigation({
     e.preventDefault();
 
     const targetId = href.replace("#", "");
+    if (targetId === "home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
     const targetElement = document.getElementById(targetId);
-
     if (targetElement) {
-      const headerHeight = 80; // Account for sticky header
-      const elementPosition = targetElement.offsetTop;
-      const offsetPosition = elementPosition - headerHeight;
+      const headerHeight = getHeaderHeight();
+      const extra = 18; // slight additional offset to avoid any gap
+      const elementTop = targetElement.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = Math.max(0, elementTop - headerHeight + extra);
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
+      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
     }
   };
 
@@ -74,9 +67,7 @@ export default function DesktopNavigation({
                   "font-medium relative",
                   "transition-all duration-200 ease-in-out",
                   "border rounded-md",
-                  isActive
-                    ? "border-primary text-gray-900 shadow-md"
-                    : "border-gray-300",
+                  isActive ? "border-primary text-gray-900 shadow-md" : "border-gray-300",
                   "hover:shadow-md focus:shadow-md",
                   "hover:text-gray-900 focus:text-gray-900"
                 )}

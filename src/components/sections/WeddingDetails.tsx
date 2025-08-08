@@ -18,16 +18,15 @@ const WeddingDetails = () => {
           >
             Детайли
           </h2>
+          <hr className="border-border" />
         </div>
 
         {/* Notes */}
         <div className="space-y-16 max-w-4xl mx-auto text-center leading-relaxed">
           {/* Where */}
           <div>
-            <div className="font-serif text-2xl md:text-3xl text-foreground mb-4">
-              PASAREL LAKE CLUB, с.ДОЛНИ ПАСАРЕЛ
-            </div>
-            <div className="grid gap-6 md:gap-12 md:grid-cols-2 items-center text-left">
+            <h3 className="font-serif text-3xl md:text-4xl text-foreground mb-4">Къде?</h3>
+            <div className="grid gap-6 md:gap-12 md:grid-cols-2 items-center text-left pt-2">
               <div className="flex justify-center md:justify-start">
                 <Image
                   src="/images/wedding-place-removebg-preview.png"
@@ -38,6 +37,9 @@ const WeddingDetails = () => {
                 />
               </div>
               <div>
+                <div className="font-serif text-2xl md:text-3xl text-foreground mb-4">
+                  PASAREL LAKE CLUB, с.ДОЛНИ ПАСАРЕЛ
+                </div>
                 <p className="text-lg text-muted-foreground">
                   Сгушен между висока борова гора и приказния язовир Пасарел, Pasarel Lake Club
                   предлага неповторима атмосфера и е само на 15 км от София. Клубът се намира на
