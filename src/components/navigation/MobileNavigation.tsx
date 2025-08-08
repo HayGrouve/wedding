@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
+import useActiveSection from "@/hooks/useActiveSection";
 
 const navigationItems = [
   {
@@ -39,6 +40,7 @@ export default function MobileNavigation({
   className,
 }: MobileNavigationProps) {
   const [open, setOpen] = React.useState(false);
+  const activeId = useActiveSection(navigationItems.map((n) => n.id), "home");
 
   const handleSmoothScroll = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -67,19 +69,19 @@ export default function MobileNavigation({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-                  <Button
-            variant="ghost"
-            size="icon"
-            className={cn(
-              "md:hidden transition-all duration-200",
-              "border border-gray-300 rounded-md",
-              "hover:shadow-md",
-              className
-            )}
-            aria-label="Отвори навигацията"
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn(
+            "md:hidden transition-all duration-200",
+            "border border-gray-300 rounded-md",
+            "hover:shadow-md",
+            className
+          )}
+          aria-label="Отвори навигацията"
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
       </SheetTrigger>
 
       <SheetContent side="right" className="w-[300px] sm:w-[400px]">
@@ -92,41 +94,42 @@ export default function MobileNavigation({
           <SheetDescription>Навигация по уебсайта</SheetDescription>
         </SheetHeader>
 
-                 <div className="mt-8 flex flex-col space-y-1 items-center">
-          {navigationItems.map((item, index) => (
-            <a
-              key={item.id}
-              href={item.href}
-              onClick={(e) => handleSmoothScroll(e, item.href)}
-                                                          className={cn(
-                 "flex items-center px-4 py-3 text-lg font-medium rounded-md",
-                 "relative",
-                 "transition-all duration-200 ease-in-out",
-                 "border border-gray-300",
-                 "hover:shadow-md focus:shadow-md",
-                 "hover:text-gray-900 focus:text-gray-900 focus:outline-none",
-                 "animate-in slide-in-from-right-4 fade-in-0",
-                 "w-full max-w-xs justify-center"
-               )}
-              style={{
-                animationDelay: `${index * 50}ms`,
-                animationDuration: "400ms",
-              }}
-            >
-              {item.label}
-            </a>
-          ))}
+        <div className="mt-8 flex flex-col space-y-1 items-center">
+          {navigationItems.map((item, index) => {
+            const isActive = activeId === item.id;
+            return (
+              <a
+                key={item.id}
+                href={item.href}
+                onClick={(e) => handleSmoothScroll(e, item.href)}
+                aria-current={isActive ? "page" : undefined}
+                className={cn(
+                  "flex items-center px-4 py-3 text-lg font-medium rounded-md",
+                  "relative",
+                  "transition-all duration-200 ease-in-out",
+                  "border",
+                  isActive ? "border-primary text-gray-900 shadow-md" : "border-gray-300",
+                  "hover:shadow-md focus:shadow-md",
+                  "hover:text-gray-900 focus:text-gray-900 focus:outline-none",
+                  "animate-in slide-in-from-right-4 fade-in-0",
+                  "w-full max-w-xs justify-center"
+                )}
+                style={{
+                  animationDelay: `${index * 50}ms`,
+                  animationDuration: "400ms",
+                }}
+              >
+                {item.label}
+              </a>
+            );
+          })}
         </div>
 
         {/* Wedding date info */}
         <div className="absolute bottom-8 left-6 right-6">
           <div className="text-center p-4 bg-muted/50 rounded-lg">
-            <p className="text-sm font-medium text-muted-foreground">
-                             13 декември 2025 г.
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              София, България
-            </p>
+            <p className="text-sm font-medium text-muted-foreground">13 декември 2025 г.</p>
+            <p className="text-xs text-muted-foreground mt-1">София, България</p>
           </div>
         </div>
       </SheetContent>

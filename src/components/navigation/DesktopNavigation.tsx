@@ -9,6 +9,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import useActiveSection from "@/hooks/useActiveSection";
 
 const navigationItems = [
   {
@@ -35,6 +36,8 @@ interface DesktopNavigationProps {
 export default function DesktopNavigation({
   className,
 }: DesktopNavigationProps) {
+  const activeId = useActiveSection(navigationItems.map((n) => n.id), "home");
+
   const handleSmoothScroll = (
     e: React.MouseEvent<HTMLAnchorElement>,
     href: string
@@ -59,24 +62,31 @@ export default function DesktopNavigation({
   return (
     <NavigationMenu className={cn("hidden md:flex", className)}>
       <NavigationMenuList>
-        {navigationItems.map((item) => (
-          <NavigationMenuItem key={item.id}>
-            <NavigationMenuLink
-              href={item.href}
-              className={cn(
-                navigationMenuTriggerStyle(),
-                "font-medium relative",
-                "transition-all duration-200 ease-in-out",
-                "border border-gray-300 rounded-md",
-                "hover:shadow-md focus:shadow-md",
-                "hover:text-gray-900 focus:text-gray-900"
-              )}
-              onClick={(e) => handleSmoothScroll(e, item.href)}
-            >
-              {item.label}
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-        ))}
+        {navigationItems.map((item) => {
+          const isActive = activeId === item.id;
+          return (
+            <NavigationMenuItem key={item.id}>
+              <NavigationMenuLink
+                href={item.href}
+                aria-current={isActive ? "page" : undefined}
+                className={cn(
+                  navigationMenuTriggerStyle(),
+                  "font-medium relative",
+                  "transition-all duration-200 ease-in-out",
+                  "border rounded-md",
+                  isActive
+                    ? "border-primary text-gray-900 shadow-md"
+                    : "border-gray-300",
+                  "hover:shadow-md focus:shadow-md",
+                  "hover:text-gray-900 focus:text-gray-900"
+                )}
+                onClick={(e) => handleSmoothScroll(e, item.href)}
+              >
+                {item.label}
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          );
+        })}
       </NavigationMenuList>
     </NavigationMenu>
   );
