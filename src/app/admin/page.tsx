@@ -51,8 +51,8 @@ export default async function AdminDashboard() {
       {/* Header */}
       <header className="border-b border-border/50 bg-background/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-3 flex-wrap">
               <Link
                 href="/"
                 className="text-muted-foreground hover:text-primary transition-colors"
@@ -62,18 +62,18 @@ export default async function AdminDashboard() {
                   <ArrowLeft className="h-5 w-5" />
                 </Button>
               </Link>
-              <div className="w-10 h-10 bg-primary/10 flex items-center justify-center">
+              <div className="w-10 h-10 bg-primary/10 flex items-center justify-center rounded">
                 <Shield className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h1 className="text-2xl font-serif text-primary">
+                <h1 className="text-xl sm:text-2xl font-serif text-primary">
                   Админ Панел
                 </h1>
-                <p className="text-sm text-muted-foreground">Анна-Мария & Георги - Сватбена Система</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Анна-Мария & Георги - Сватбена Система</p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center gap-2 flex-wrap justify-end">
               <Badge
                 variant="secondary"
                 className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"

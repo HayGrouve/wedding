@@ -32,6 +32,10 @@ import {
   WifiOff,
   Edit,
   Trash2,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
 } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -318,14 +322,14 @@ export function AdminDashboard() {
           </Button>
         ),
         cell: ({ row }) => (
-          <div className="font-medium">{row.getValue("guestName")}</div>
+          <div className="font-medium break-words max-w-[180px] md:max-w-none">{row.getValue("guestName")}</div>
         ),
       },
       {
         accessorKey: "email",
         header: "Email",
         cell: ({ row }) => (
-          <div className="text-sm">{row.getValue("email")}</div>
+          <div className="text-sm break-words max-w-[200px] md:max-w-none">{row.getValue("email")}</div>
         ),
       },
       {
@@ -334,9 +338,9 @@ export function AdminDashboard() {
         cell: ({ row }) => {
           const phone = row.getValue("phone") as string | undefined;
           return (
-            <div className="text-sm">
-              {phone || <span className="text-muted-foreground">—</span>}
-            </div>
+            <div className="text-sm">{
+              phone || <span className="text-muted-foreground">—</span>
+            }</div>
           );
         },
       },
@@ -385,7 +389,7 @@ export function AdminDashboard() {
                 <div>
                   <Badge variant="outline">Да</Badge>
                   {plusOneName && (
-                    <div className="mt-1 text-xs text-muted-foreground">
+                    <div className="mt-1 text-xs text-muted-foreground break-words max-w-[180px] md:max-w-none">
                       {plusOneName}
                     </div>
                   )}
@@ -485,7 +489,7 @@ export function AdminDashboard() {
                 </div>
               )}
               {allergies && (
-                <div className="text-xs text-muted-foreground">
+                <div className="text-xs text-muted-foreground break-words max-w-[220px] md:max-w-none">
                   Алергии: {allergies}
                 </div>
               )}
@@ -527,7 +531,7 @@ export function AdminDashboard() {
         id: "actions",
         header: "Действия",
         cell: ({ row }) => (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <Button
               variant="ghost"
               size="sm"
@@ -945,12 +949,12 @@ export function AdminDashboard() {
       {/* Filters and Search */}
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <CardTitle className="flex items-center gap-2">
               <Filter className="h-5 w-5" />
               Филтри и търсене
             </CardTitle>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               {/* Connection Status */}
               <div className="flex items-center gap-1 text-sm">
                 {isOnline ? (
@@ -1076,7 +1080,7 @@ export function AdminDashboard() {
           </div>
 
           {/* Clear Filters */}
-          <div className="mt-4 flex items-center justify-between">
+          <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div className="text-sm text-muted-foreground">
               {(() => {
                 const activeFilters = [
@@ -1206,7 +1210,7 @@ export function AdminDashboard() {
                           {row.getVisibleCells().map((cell) => (
                             <TableCell
                               key={cell.id}
-                              className="whitespace-nowrap"
+                              className="whitespace-nowrap align-top"
                             >
                               {flexRender(
                                 cell.column.columnDef.cell,
@@ -1245,8 +1249,8 @@ export function AdminDashboard() {
                     <CardContent className="pt-4">
                       <div className="space-y-3">
                         {/* Guest Name and Status */}
-                        <div className="flex items-center justify-between">
-                          <h3 className="font-semibold text-lg">
+                        <div className="flex items-center justify-between gap-3">
+                          <h3 className="font-semibold text-lg break-words">
                             {guest.guestName}
                           </h3>
                           <Badge
@@ -1260,14 +1264,14 @@ export function AdminDashboard() {
 
                         {/* Contact Info */}
                         <div className="space-y-1 text-sm">
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 break-words">
                             <span className="font-medium">Email:</span>
                             <span className="text-muted-foreground">
                               {guest.email}
                             </span>
                           </div>
                           {guest.phone && (
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 break-words">
                               <span className="font-medium">Телефон:</span>
                               <span className="text-muted-foreground">
                                 {guest.phone}
@@ -1289,7 +1293,7 @@ export function AdminDashboard() {
                                       Да
                                     </Badge>
                                     {guest.plusOneName && (
-                                      <div className="text-xs text-muted-foreground">
+                                      <div className="text-xs text-muted-foreground break-words">
                                         {guest.plusOneName}
                                       </div>
                                     )}
@@ -1349,7 +1353,7 @@ export function AdminDashboard() {
                                       </div>
                                     )}
                                   {guest.allergies && (
-                                    <div className="text-xs text-muted-foreground mt-1">
+                                    <div className="text-xs text-muted-foreground mt-1 break-words">
                                       Алергии: {guest.allergies}
                                     </div>
                                   )}
@@ -1383,23 +1387,18 @@ export function AdminDashboard() {
           {/* Pagination */}
           <div className="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 sm:space-x-2 py-4">
             <div className="flex items-center space-x-2">
-              <div className="text-sm text-muted-foreground">
+              <div className="text-xs text-muted-foreground block sm:hidden">
+                Стр {table.getState().pagination.pageIndex + 1}/{table.getPageCount()}
+              </div>
+              <div className="hidden sm:block text-sm text-muted-foreground">
                 Показване на{" "}
-                {table.getState().pagination.pageIndex *
-                  table.getState().pagination.pageSize +
-                  1}{" "}
+                {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}{" "}
                 до{" "}
-                {Math.min(
-                  (table.getState().pagination.pageIndex + 1) *
-                    table.getState().pagination.pageSize,
-                  filteredData.length
-                )}{" "}
+                {Math.min((table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize, filteredData.length)}{" "}
                 от {filteredData.length} резултата
               </div>
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-muted-foreground">
-                  Редове на страница:
-                </span>
+                <span className="hidden sm:inline text-sm text-muted-foreground">Редове на страница:</span>
                 <Select
                   value={table.getState().pagination.pageSize.toString()}
                   onValueChange={(value) => {
@@ -1418,42 +1417,39 @@ export function AdminDashboard() {
                 </Select>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => table.setPageIndex(0)}
-                disabled={!table.getCanPreviousPage()}
-              >
-                Първа
+
+            {/* Mobile icon-only controls */}
+            <div className="flex items-center gap-2 sm:hidden">
+              <Button variant="outline" size="icon" onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()} aria-label="Първа страница">
+                <ChevronsLeft className="h-4 w-4" />
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-              >
-                Предишна
+              <Button variant="outline" size="icon" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} aria-label="Предишна страница">
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} aria-label="Следваща страница">
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon" onClick={() => table.setPageIndex(table.getPageCount() - 1)} disabled={!table.getCanNextPage()} aria-label="Последна страница">
+                <ChevronsRight className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {/* Desktop text buttons with icons */}
+            <div className="hidden sm:flex items-center gap-2">
+              <Button variant="outline" size="sm" onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()}>
+                <ChevronsLeft className="h-4 w-4 mr-1" /> Първа
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+                <ChevronLeft className="h-4 w-4 mr-1" /> Предишна
               </Button>
               <div className="text-sm text-muted-foreground">
-                Страница {table.getState().pagination.pageIndex + 1} от{" "}
-                {table.getPageCount()}
+                Страница {table.getState().pagination.pageIndex + 1} от {table.getPageCount()}
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-              >
-                Следваща
+              <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+                Следваща <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                disabled={!table.getCanNextPage()}
-              >
-                Последна
+              <Button variant="outline" size="sm" onClick={() => table.setPageIndex(table.getPageCount() - 1)} disabled={!table.getCanNextPage()}>
+                Последна <ChevronsRight className="h-4 w-4 ml-1" />
               </Button>
             </div>
           </div>
