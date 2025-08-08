@@ -1,151 +1,14 @@
-import Papa from "papaparse";
 import * as XLSX from "xlsx";
 import { GuestRecord } from "@/types/admin";
 
 export interface ExportOptions {
-  delimiter?: string;
-  includeHeaders?: boolean;
-  filename?: string;
   dateFormat?: "iso" | "readable";
 }
 
-export interface CSVExportConfig extends ExportOptions {
-  fields?: string[];
-  customHeaders?: Record<string, string>;
-}
-
-// Default field mapping for CSV export
-const DEFAULT_CSV_FIELDS = [
-  "guestName",
-  "email",
-  "phone",
-  "attending",
-  "plusOneAttending",
-  "plusOneName",
-  "childrenCount",
-  "dietaryPreference",
-  "allergies",
-  "submissionDate",
-  "ipAddress",
-];
-
-// Human-readable headers for CSV
-const DEFAULT_CSV_HEADERS: Record<string, string> = {
-  guestName: "Guest Name",
-  email: "Email",
-  phone: "Phone",
-  attending: "Attending",
-  plusOneAttending: "Plus One Attending",
-  plusOneName: "Plus One Name",
-  childrenCount: "Number of Children",
-  dietaryPreference: "Dietary Preference",
-  allergies: "Allergies",
-  submissionDate: "Submission Date",
-  ipAddress: "IP Address",
-};
-
-/**
- * Formats a guest record for CSV export
- */
-function formatGuestForCSV(
-  guest: GuestRecord,
-  options: CSVExportConfig = {}
-): Record<string, string | number> {
-  const { dateFormat = "readable" } = options;
-
-  const formatted: Record<string, string | number> = {
-    guestName: guest.guestName,
-    email: guest.email,
-    phone: guest.phone || "",
-    attending: guest.attending ? "Yes" : "No",
-    plusOneAttending: guest.plusOneAttending ? "Yes" : "No",
-    plusOneName: guest.plusOneName || "",
-    childrenCount: guest.childrenCount,
-    dietaryPreference: guest.dietaryPreference || "",
-    allergies: guest.allergies || "",
-    submissionDate:
-      dateFormat === "iso"
-        ? guest.submissionDate
-        : new Date(guest.submissionDate).toLocaleString("bg-BG"),
-    ipAddress: guest.ipAddress || "",
-  };
-
-  return formatted;
-}
-
-/**
- * Exports guest data to CSV format
- */
-export function exportGuestsToCSV(
-  guests: GuestRecord[],
-  config: CSVExportConfig = {}
-): string {
-  const {
-    delimiter = ",",
-    includeHeaders = true,
-    fields = DEFAULT_CSV_FIELDS,
-    customHeaders = DEFAULT_CSV_HEADERS,
-    dateFormat = "readable",
-  } = config;
-
-  if (guests.length === 0) {
-    throw new Error("No guest data to export");
-  }
-
-  // Format guest data
-  const formattedGuests = guests.map((guest) =>
-    formatGuestForCSV(guest, { dateFormat })
-  );
-
-  // Filter fields if specified
-  const filteredData = formattedGuests.map((guest) => {
-    const filtered: Record<string, string | number> = {};
-    fields.forEach((field) => {
-      if (guest.hasOwnProperty(field)) {
-        const headerKey = customHeaders[field] || field;
-        filtered[headerKey] = guest[field];
-      }
-    });
-    return filtered;
-  });
-
-  // Generate CSV
-  const csv = Papa.unparse(filteredData, {
-    delimiter,
-    header: includeHeaders,
-    skipEmptyLines: true,
-  });
-
-  return csv;
-}
-
-/**
- * Downloads CSV data as a file
- */
-export function downloadCSV(
-  csvData: string,
-  filename: string = "guests.csv"
-): void {
-  try {
-    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute("href", url);
-      link.setAttribute("download", filename);
-      link.style.visibility = "hidden";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    } else {
-      throw new Error("Browser does not support file downloads");
-    }
-  } catch (error) {
-    console.error("Error downloading CSV:", error);
-    throw new Error("Failed to download CSV file");
-  }
+// Typed helper for setting worksheet column widths without using 'any'
+type SheetWithCols = XLSX.WorkSheet & { [K in '!cols']?: XLSX.ColInfo[] };
+function setColumnWidths(sheet: XLSX.WorkSheet, cols: XLSX.ColInfo[]): void {
+  (sheet as unknown as SheetWithCols)["!cols"] = cols;
 }
 
 /**
@@ -184,13 +47,8 @@ export function validateGuestDataForExport(guests: GuestRecord[]): {
     }
 
     // Check submission date
-    if (
-      !guest.submissionDate ||
-      isNaN(new Date(guest.submissionDate).getTime())
-    ) {
-      warnings.push(
-        `Guest "${guest.guestName}" has an invalid submission date`
-      );
+    if (!guest.submissionDate || isNaN(new Date(guest.submissionDate).getTime())) {
+      warnings.push(`Guest "${guest.guestName}" has an invalid submission date`);
     }
 
     // Check children count
@@ -204,76 +62,6 @@ export function validateGuestDataForExport(guests: GuestRecord[]): {
     errors,
     warnings,
   };
-}
-
-/**
- * Creates a summary export with attendance statistics
- */
-export function exportAttendanceSummaryToCSV(guests: GuestRecord[]): string {
-  const totalGuests = guests.length;
-  const attendingGuests = guests.filter((g) => g.attending);
-  const notAttendingGuests = guests.filter((g) => !g.attending);
-  const totalPlusOnes = attendingGuests.filter(
-    (g) => g.plusOneAttending
-  ).length;
-  const totalChildren = attendingGuests.reduce(
-    (sum, g) => sum + g.childrenCount,
-    0
-  );
-
-  // Dietary preferences breakdown
-  const dietaryBreakdown = attendingGuests.reduce(
-    (acc, guest) => {
-      if (guest.dietaryPreference) {
-        acc[guest.dietaryPreference] = (acc[guest.dietaryPreference] || 0) + 1;
-      }
-      return acc;
-    },
-    {} as Record<string, number>
-  );
-
-  const summaryData = [
-    { Metric: "Total Guests", Count: totalGuests },
-    { Metric: "Attending", Count: attendingGuests.length },
-    { Metric: "Not Attending", Count: notAttendingGuests.length },
-    { Metric: "Plus Ones", Count: totalPlusOnes },
-    { Metric: "Total Children", Count: totalChildren },
-    ...Object.entries(dietaryBreakdown).map(([pref, count]) => ({
-      Metric: `Dietary - ${pref}`,
-      Count: count,
-    })),
-  ];
-
-  return Papa.unparse(summaryData, {
-    header: true,
-    skipEmptyLines: true,
-  });
-}
-
-/**
- * Creates an email list export for communication
- */
-export function exportEmailListToCSV(
-  guests: GuestRecord[],
-  attendingOnly: boolean = false
-): string {
-  let filteredGuests = guests;
-
-  if (attendingOnly) {
-    filteredGuests = guests.filter((g) => g.attending);
-  }
-
-  const emailData = filteredGuests.map((guest) => ({
-    Name: guest.guestName,
-    Email: guest.email,
-    Status: guest.attending ? "Attending" : "Not Attending",
-    "Plus One": guest.plusOneAttending ? guest.plusOneName || "Yes" : "No",
-  }));
-
-  return Papa.unparse(emailData, {
-    header: true,
-    skipEmptyLines: true,
-  });
 }
 
 // Excel Export Interfaces and Configuration
@@ -293,20 +81,17 @@ function formatGuestForExcel(
   const { dateFormat = "readable" } = options;
 
   const formatted: Record<string, string | number | Date> = {
-    "Guest Name": guest.guestName,
-    Email: guest.email,
-    Phone: guest.phone || "",
-    Attending: guest.attending ? "Yes" : "No",
-    "Plus One Attending": guest.plusOneAttending ? "Yes" : "No",
-    "Plus One Name": guest.plusOneName || "",
-    "Number of Children": guest.childrenCount,
-    "Dietary Preference": guest.dietaryPreference || "",
-    Allergies: guest.allergies || "",
-    "Submission Date":
-      dateFormat === "iso"
-        ? new Date(guest.submissionDate)
-        : new Date(guest.submissionDate),
-    "IP Address": guest.ipAddress || "",
+    "Име": guest.guestName,
+    "Имейл": guest.email,
+    "Телефон": guest.phone || "",
+    "Присъства": guest.attending ? "Да" : "Не",
+    "+1": guest.plusOneAttending ? "Да" : "Не",
+    "Име на +1": guest.plusOneName || "",
+    "Брой деца": guest.childrenCount,
+    "Хранителни предпочитания": guest.dietaryPreference || "",
+    "Алергии": guest.allergies || "",
+    "Дата на изпращане": dateFormat === "iso" ? new Date(guest.submissionDate) : new Date(guest.submissionDate),
+    "IP адрес": guest.ipAddress || "",
   };
 
   return formatted;
@@ -319,11 +104,7 @@ export function exportGuestsToExcel(
   guests: GuestRecord[],
   config: ExcelExportConfig = {}
 ): ArrayBuffer {
-  const {
-    sheetName = "Guest List",
-    includeMetadata = true,
-    dateFormat = "readable",
-  } = config;
+  const { sheetName = "Списък с гости", includeMetadata = true, dateFormat = "readable" } = config;
 
   if (guests.length === 0) {
     throw new Error("No guest data to export");
@@ -333,191 +114,50 @@ export function exportGuestsToExcel(
   const workbook = XLSX.utils.book_new();
 
   // Format guest data for Excel
-  const formattedGuests = guests.map((guest) =>
-    formatGuestForExcel(guest, { dateFormat })
-  );
+  const formattedGuests = guests.map((guest) => formatGuestForExcel(guest, { dateFormat }));
 
   // Create worksheet from data
   const worksheet = XLSX.utils.json_to_sheet(formattedGuests);
 
   // Set column widths for better readability
-  const columnWidths = [
-    { wch: 20 }, // Guest Name
-    { wch: 25 }, // Email
-    { wch: 15 }, // Phone
-    { wch: 12 }, // Attending
-    { wch: 15 }, // Plus One Attending
-    { wch: 20 }, // Plus One Name
-    { wch: 12 }, // Number of Children
-    { wch: 18 }, // Dietary Preference
-    { wch: 25 }, // Allergies
-    { wch: 20 }, // Submission Date
-    { wch: 15 }, // IP Address
+  const columnWidths: XLSX.ColInfo[] = [
+    { wch: 20 }, // Име
+    { wch: 25 }, // Имейл
+    { wch: 15 }, // Телефон
+    { wch: 12 }, // Присъства
+    { wch: 8 },  // +1
+    { wch: 20 }, // Име на +1
+    { wch: 12 }, // Брой деца
+    { wch: 24 }, // Хранителни предпочитания
+    { wch: 18 }, // Алергии
+    { wch: 22 }, // Дата на изпращане
+    { wch: 15 }, // IP адрес
   ];
-  worksheet["!cols"] = columnWidths;
+  setColumnWidths(worksheet, columnWidths);
+
+  // Add main data sheet FIRST so Excel opens to the list by default
+  XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
 
   // Add metadata sheet if requested
   if (includeMetadata) {
-    const totalGuests = guests.length;
+    const totalChildrenAll = guests.reduce((sum, g) => sum + g.childrenCount, 0);
+    const totalGuestsInclKids = guests.length + totalChildrenAll;
     const attendingGuests = guests.filter((g) => g.attending);
     const notAttendingGuests = guests.filter((g) => !g.attending);
-    const totalPlusOnes = attendingGuests.filter(
-      (g) => g.plusOneAttending
-    ).length;
-    const totalChildren = attendingGuests.reduce(
-      (sum, g) => sum + g.childrenCount,
-      0
-    );
+    const totalPlusOnes = attendingGuests.filter((g) => g.plusOneAttending).length;
 
     const metadataData = [
-      { Metric: "Total Guests", Count: totalGuests },
-      { Metric: "Attending", Count: attendingGuests.length },
-      { Metric: "Not Attending", Count: notAttendingGuests.length },
-      { Metric: "Plus Ones", Count: totalPlusOnes },
-      { Metric: "Total Children", Count: totalChildren },
-      { Metric: "Export Date", Count: new Date().toLocaleString("bg-BG") },
+      { "Показател": "Общ брой гости", "Брой": totalGuestsInclKids },
+      { "Показател": "Присъстващи", "Брой": attendingGuests.length },
+      { "Показател": "Неприсъстващи", "Брой": notAttendingGuests.length },
+      { "Показател": "+1", "Брой": totalPlusOnes },
+      { "Показател": "Общо деца", "Брой": totalChildrenAll },
+      { "Показател": "Дата на експорт", "Брой": new Date().toLocaleString("bg-BG") },
     ];
 
     const metadataSheet = XLSX.utils.json_to_sheet(metadataData);
-    metadataSheet["!cols"] = [{ wch: 20 }, { wch: 15 }];
-    XLSX.utils.book_append_sheet(workbook, metadataSheet, "Summary");
-  }
-
-  // Add main data sheet
-  XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-
-  // Generate Excel file buffer
-  const excelBuffer = XLSX.write(workbook, {
-    bookType: "xlsx",
-    type: "array",
-    cellDates: true,
-    cellStyles: true,
-  });
-
-  return excelBuffer;
-}
-
-/**
- * Downloads Excel data as a file
- */
-export function downloadExcel(
-  excelBuffer: ArrayBuffer,
-  filename: string = "guests.xlsx"
-): void {
-  try {
-    const blob = new Blob([excelBuffer], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
-    const link = document.createElement("a");
-
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute("href", url);
-      link.setAttribute("download", filename);
-      link.style.visibility = "hidden";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    } else {
-      throw new Error("Browser does not support file downloads");
-    }
-  } catch (error) {
-    console.error("Error downloading Excel:", error);
-    throw new Error("Failed to download Excel file");
-  }
-}
-
-/**
- * Creates an Excel attendance summary with multiple sheets
- */
-export function exportAttendanceSummaryToExcel(
-  guests: GuestRecord[]
-): ArrayBuffer {
-  const workbook = XLSX.utils.book_new();
-
-  // Summary statistics
-  const totalGuests = guests.length;
-  const attendingGuests = guests.filter((g) => g.attending);
-  const notAttendingGuests = guests.filter((g) => !g.attending);
-  const totalPlusOnes = attendingGuests.filter(
-    (g) => g.plusOneAttending
-  ).length;
-  const totalChildren = attendingGuests.reduce(
-    (sum, g) => sum + g.childrenCount,
-    0
-  );
-
-  // Dietary preferences breakdown
-  const dietaryBreakdown = attendingGuests.reduce(
-    (acc, guest) => {
-      if (guest.dietaryPreference) {
-        acc[guest.dietaryPreference] = (acc[guest.dietaryPreference] || 0) + 1;
-      }
-      return acc;
-    },
-    {} as Record<string, number>
-  );
-
-  // Summary sheet
-  const summaryData = [
-    { Metric: "Total Guests", Count: totalGuests },
-    { Metric: "Attending", Count: attendingGuests.length },
-    { Metric: "Not Attending", Count: notAttendingGuests.length },
-    { Metric: "Plus Ones", Count: totalPlusOnes },
-    { Metric: "Total Children", Count: totalChildren },
-    ...Object.entries(dietaryBreakdown).map(([pref, count]) => ({
-      Metric: `Dietary - ${pref}`,
-      Count: count,
-    })),
-  ];
-
-  const summarySheet = XLSX.utils.json_to_sheet(summaryData);
-  summarySheet["!cols"] = [{ wch: 25 }, { wch: 15 }];
-  XLSX.utils.book_append_sheet(workbook, summarySheet, "Summary");
-
-  // Attending guests sheet
-  if (attendingGuests.length > 0) {
-    const attendingData = attendingGuests.map((guest) =>
-      formatGuestForExcel(guest)
-    );
-    const attendingSheet = XLSX.utils.json_to_sheet(attendingData);
-    attendingSheet["!cols"] = [
-      { wch: 20 },
-      { wch: 25 },
-      { wch: 15 },
-      { wch: 12 },
-      { wch: 15 },
-      { wch: 20 },
-      { wch: 12 },
-      { wch: 18 },
-      { wch: 25 },
-      { wch: 20 },
-      { wch: 15 },
-    ];
-    XLSX.utils.book_append_sheet(workbook, attendingSheet, "Attending");
-  }
-
-  // Not attending guests sheet
-  if (notAttendingGuests.length > 0) {
-    const notAttendingData = notAttendingGuests.map((guest) =>
-      formatGuestForExcel(guest)
-    );
-    const notAttendingSheet = XLSX.utils.json_to_sheet(notAttendingData);
-    notAttendingSheet["!cols"] = [
-      { wch: 20 },
-      { wch: 25 },
-      { wch: 15 },
-      { wch: 12 },
-      { wch: 15 },
-      { wch: 20 },
-      { wch: 12 },
-      { wch: 18 },
-      { wch: 25 },
-      { wch: 20 },
-      { wch: 15 },
-    ];
-    XLSX.utils.book_append_sheet(workbook, notAttendingSheet, "Not Attending");
+    setColumnWidths(metadataSheet, [{ wch: 25 }, { wch: 15 }]);
+    XLSX.utils.book_append_sheet(workbook, metadataSheet, "Обобщение");
   }
 
   // Generate Excel file buffer
@@ -545,26 +185,26 @@ export function exportEmailListToExcel(
   }
 
   const emailData = filteredGuests.map((guest) => ({
-    Name: guest.guestName,
-    Email: guest.email,
-    Status: guest.attending ? "Attending" : "Not Attending",
-    "Plus One": guest.plusOneAttending ? guest.plusOneName || "Yes" : "No",
-    Phone: guest.phone || "",
+    "Име": guest.guestName,
+    "Имейл": guest.email,
+    "Статус": guest.attending ? "Присъства" : "Не присъства",
+    "+1": guest.plusOneAttending ? guest.plusOneName || "Да" : "Не",
+    "Телефон": guest.phone || "",
   }));
 
   const workbook = XLSX.utils.book_new();
   const worksheet = XLSX.utils.json_to_sheet(emailData);
 
   // Set column widths
-  worksheet["!cols"] = [
-    { wch: 25 }, // Name
-    { wch: 30 }, // Email
-    { wch: 15 }, // Status
-    { wch: 20 }, // Plus One
-    { wch: 15 }, // Phone
-  ];
+  setColumnWidths(worksheet, [
+    { wch: 25 }, // Име
+    { wch: 30 }, // Имейл
+    { wch: 15 }, // Статус
+    { wch: 10 }, // +1
+    { wch: 15 }, // Телефон
+  ]);
 
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Email List");
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Имейл списък");
 
   // Generate Excel file buffer
   const excelBuffer = XLSX.write(workbook, {

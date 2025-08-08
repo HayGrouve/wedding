@@ -30,7 +30,7 @@ export const GuestSchema = z.object({
     .optional()
     .refine(
       (phone) => !phone || BULGARIAN_PHONE_REGEX.test(phone),
-      "Невалиден български телефонен номер (използвайте формат: 0877311601, 087 731 1601, +359 87 731 1601 или подобни)"
+      "Невалиден български телефонен номер (използвайте формат: 08XXXXXXXX, 08X XXX XXXX, +359 8X XXX XXXX или подобни)"
     ),
   attending: z.boolean({
     required_error: "Моля, посочете дали ще присъствате",

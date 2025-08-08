@@ -1,15 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Download,
-  FileSpreadsheet,
-  FileText,
-  Users,
-  Mail,
-  BarChart3,
-  Loader2,
-} from "lucide-react";
+import { Download, FileSpreadsheet, Users, Mail, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -22,16 +14,24 @@ import {
 import { toast } from "sonner";
 import { GuestRecord } from "@/types/admin";
 import {
-  exportGuestsToCSV,
-  downloadCSV,
   exportGuestsToExcel,
-  downloadExcel,
-  exportAttendanceSummaryToCSV,
-  exportAttendanceSummaryToExcel,
-  exportEmailListToCSV,
   exportEmailListToExcel,
   validateGuestDataForExport,
 } from "@/lib/export";
+
+function downloadExcel(buffer: ArrayBuffer, filename: string) {
+  const blob = new Blob([buffer], {
+    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
 
 interface ExportDropdownProps {
   guests: GuestRecord[];
@@ -47,8 +47,7 @@ export function ExportDropdown({
   const [isExporting, setIsExporting] = useState(false);
 
   const handleExport = async (
-    exportType: "csv" | "excel",
-    dataType: "all" | "filtered" | "summary" | "email",
+    dataType: "all" | "filtered" | "email",
     emailAttendingOnly: boolean = false
   ) => {
     setIsExporting(true);
@@ -71,76 +70,43 @@ export function ExportDropdown({
 
       // Generate filename with timestamp
       const timestamp = new Date().toISOString().split("T")[0];
-      const baseFilename = `wedding-guests-${timestamp}`;
+      const baseFilename = `гости-${timestamp}`;
 
-      if (exportType === "csv") {
-        let csvData: string;
-        let filename: string;
+      // Excel only
+      let excelBuffer: ArrayBuffer;
+      let filename: string;
 
-        switch (dataType) {
-          case "summary":
-            csvData = exportAttendanceSummaryToCSV(dataToExport);
-            filename = `${baseFilename}-summary.csv`;
-            break;
-          case "email":
-            csvData = exportEmailListToCSV(dataToExport, emailAttendingOnly);
-            filename = `${baseFilename}-email-list.csv`;
-            break;
-          default:
-            csvData = exportGuestsToCSV(dataToExport);
-            filename = `${baseFilename}${isFiltered && dataType === "filtered" ? "-filtered" : ""}.csv`;
-        }
-
-        downloadCSV(csvData, filename);
-      } else {
-        let excelBuffer: ArrayBuffer;
-        let filename: string;
-
-        switch (dataType) {
-          case "summary":
-            excelBuffer = exportAttendanceSummaryToExcel(dataToExport);
-            filename = `${baseFilename}-summary.xlsx`;
-            break;
-          case "email":
-            excelBuffer = exportEmailListToExcel(
-              dataToExport,
-              emailAttendingOnly
-            );
-            filename = `${baseFilename}-email-list.xlsx`;
-            break;
-          default:
-            excelBuffer = exportGuestsToExcel(dataToExport, {
-              sheetName:
-                isFiltered && dataType === "filtered"
-                  ? "Filtered Guests"
-                  : "Guest List",
-              includeMetadata: true,
-            });
-            filename = `${baseFilename}${isFiltered && dataType === "filtered" ? "-filtered" : ""}.xlsx`;
-        }
-
-        downloadExcel(excelBuffer, filename);
+      switch (dataType) {
+        case "email":
+          excelBuffer = exportEmailListToExcel(dataToExport, emailAttendingOnly);
+          filename = `${baseFilename}-имейли.xlsx`;
+          break;
+        default:
+          excelBuffer = exportGuestsToExcel(dataToExport, {
+            sheetName:
+              isFiltered && dataType === "filtered"
+                ? "Филтрирани гости"
+                : "Списък с гости",
+            includeMetadata: true,
+          });
+          filename = `${baseFilename}${isFiltered && dataType === "filtered" ? "-филтрирани" : ""}.xlsx`;
       }
+
+      downloadExcel(excelBuffer, filename);
 
       // Success message
       const exportedCount = dataToExport.length;
       const dataTypeLabel =
         dataType === "all"
-          ? "all guests"
+          ? "всички гости"
           : dataType === "filtered"
-            ? "filtered guests"
-            : dataType === "summary"
-              ? "attendance summary"
-              : "email list";
+            ? "филтрирани гости"
+            : "списък с имейли";
 
-      toast.success(
-        `Successfully exported ${exportedCount} ${dataTypeLabel} as ${exportType.toUpperCase()}`
-      );
+      toast.success(`Успешно експортирани ${exportedCount} записа (${dataTypeLabel}) като Excel`);
     } catch (error) {
       console.error("Export error:", error);
-      toast.error(
-        `Export failed: ${error instanceof Error ? error.message : "Unknown error"}`
-      );
+      toast.error(`Неуспешен експорт: ${error instanceof Error ? error.message : "Неизвестна грешка"}`);
     } finally {
       setIsExporting(false);
     }
@@ -148,55 +114,39 @@ export function ExportDropdown({
 
   const exportOptions = [
     {
-      label: "All Guests",
-      description: `Export all ${guests.length} guests`,
+      label: "Всички гости",
+      description: `Експортване на всички ${guests.length} гости`,
       icon: Users,
       actions: [
-        { label: "CSV", action: () => handleExport("csv", "all") },
-        { label: "Excel", action: () => handleExport("excel", "all") },
+        { label: "Excel", action: () => handleExport("all") },
       ],
     },
     ...(isFiltered
       ? [
           {
-            label: "Filtered Results",
-            description: `Export ${filteredGuests.length} filtered guests`,
+            label: "Филтрирани резултати",
+            description: `Експортване на ${filteredGuests.length} филтрирани гости`,
             icon: Users,
             actions: [
-              { label: "CSV", action: () => handleExport("csv", "filtered") },
-              {
-                label: "Excel",
-                action: () => handleExport("excel", "filtered"),
-              },
+              { label: "Excel", action: () => handleExport("filtered") },
             ],
           },
         ]
       : []),
     {
-      label: "Attendance Summary",
-      description: "Export statistics and breakdown",
-      icon: BarChart3,
+      label: "Списък с имейли (Всички)",
+      description: "Експорт на контакти",
+      icon: Mail,
       actions: [
-        { label: "CSV", action: () => handleExport("csv", "summary") },
-        { label: "Excel", action: () => handleExport("excel", "summary") },
+        { label: "Excel", action: () => handleExport("email", false) },
       ],
     },
     {
-      label: "Email List (All)",
-      description: "Export contact information",
+      label: "Списък с имейли (Присъстващи)",
+      description: "Експорт само на присъстващи",
       icon: Mail,
       actions: [
-        { label: "CSV", action: () => handleExport("csv", "email", false) },
-        { label: "Excel", action: () => handleExport("excel", "email", false) },
-      ],
-    },
-    {
-      label: "Email List (Attending)",
-      description: "Export attending guests only",
-      icon: Mail,
-      actions: [
-        { label: "CSV", action: () => handleExport("csv", "email", true) },
-        { label: "Excel", action: () => handleExport("excel", "email", true) },
+        { label: "Excel", action: () => handleExport("email", true) },
       ],
     },
   ];
@@ -214,11 +164,11 @@ export function ExportDropdown({
           ) : (
             <Download className="h-4 w-4" />
           )}
-          {isExporting ? "Exporting..." : "Export"}
+          {isExporting ? "Експортване..." : "Експорт"}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64">
-        <DropdownMenuLabel>Export Options</DropdownMenuLabel>
+        <DropdownMenuLabel>Опции за експорт</DropdownMenuLabel>
         <DropdownMenuSeparator />
 
         {exportOptions.map((option, index) => (
@@ -241,11 +191,7 @@ export function ExportDropdown({
                     disabled={isExporting}
                     className="h-7 px-2 text-xs flex items-center gap-1"
                   >
-                    {action.label === "CSV" ? (
-                      <FileText className="h-3 w-3" />
-                    ) : (
-                      <FileSpreadsheet className="h-3 w-3" />
-                    )}
+                    <FileSpreadsheet className="h-3 w-3" />
                     {action.label}
                   </Button>
                 ))}
