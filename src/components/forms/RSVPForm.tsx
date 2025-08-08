@@ -464,7 +464,7 @@ export function RSVPForm() {
               ) : (
                 <>
                   <Users className="mr-2 h-4 w-4" />
-                  Изпращам отговора си
+                  Изпрати отговор
                 </>
               )}
             </Button>

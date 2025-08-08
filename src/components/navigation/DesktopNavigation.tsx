@@ -14,7 +14,7 @@ import useActiveSection from "@/hooks/useActiveSection";
 const navigationItems = [
   { id: "home", label: "Начало", href: "#home" },
   { id: "details", label: "Детайли", href: "#details" },
-  { id: "rsvp", label: "RSVP", href: "#rsvp" },
+  { id: "rsvp", label: "Присъствие", href: "#rsvp" },
 ];
 
 function getHeaderHeight(): number {

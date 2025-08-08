@@ -17,7 +17,7 @@ import useActiveSection from "@/hooks/useActiveSection";
 const navigationItems = [
   { id: "home", label: "Начало", href: "#home" },
   { id: "details", label: "Детайли", href: "#details" },
-  { id: "rsvp", label: "RSVP", href: "#rsvp" },
+  { id: "rsvp", label: "Присъствие", href: "#rsvp" },
 ];
 
 function getHeaderHeight(): number {
@@ -106,7 +106,7 @@ export default function MobileNavigation({ className }: MobileNavigationProps) {
                   "hover:shadow-md focus-visible:shadow-md",
                   "hover:text-gray-900 focus-visible:text-gray-900 focus-visible:outline-none",
                   "animate-in slide-in-from-right-4 fade-in-0",
-                  "w-full max-w-xs justify-center"
+                  "w-full max-w-46 justify-center"
                 )}
                 style={{
                   animationDelay: `${index * 50}ms`,

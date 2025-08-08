@@ -13,11 +13,14 @@ const WeddingDetails = () => {
         {/* Heading */}
         <div className="text-center mb-12 md:mb-16">
           <h2
-            className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-foreground mb-4"
+            className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-foreground mb-2"
             id="wedding-details-heading"
           >
             Детайли
           </h2>
+          <p className="text-base md:text-lg text-muted-foreground mb-4">
+            13 декември 2025 г.
+          </p>
           <hr className="border-border" />
         </div>
 
