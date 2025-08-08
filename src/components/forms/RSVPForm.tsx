@@ -291,10 +291,10 @@ export function RSVPForm() {
                 <div className="space-y-0.5">
                   <Label className="text-base flex items-center gap-2 text-black">
                     <Users className="w-4 h-4" />
-                    Ще доведете спътник?
+                    Ще доведете някого със себе си?
                   </Label>
                   <p className="text-sm text-gray-600">
-                    Ако ще дойдете с партньор/а или приятел/ка
+                    Ще дойдете с партньор или приятел/ка
                   </p>
                 </div>
                 <Switch
@@ -378,15 +378,8 @@ export function RSVPForm() {
                     <SelectValue placeholder="Изберете основно ястие" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="fish">
-                      🐟 Риба - морска бяла риба с билки
-                    </SelectItem>
-                    <SelectItem value="meat">
-                      🥩 Месо - пилешко филе със зеленчуци
-                    </SelectItem>
-                    <SelectItem value="vegetarian">
-                      🥗 Вегетарианско - гратин с тиквички
-                    </SelectItem>
+                    <SelectItem value="meat">🥩 Месно</SelectItem>
+                    <SelectItem value="vegetarian">🥗 Вегетарианско</SelectItem>
                   </SelectContent>
                 </Select>
                 <p className="text-sm text-gray-600">
@@ -415,15 +408,8 @@ export function RSVPForm() {
                       <SelectValue placeholder="Изберете основно ястие за спътника" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="fish">
-                        🐟 Риба - морска бяла риба с билки
-                      </SelectItem>
-                      <SelectItem value="meat">
-                        🥩 Месо - пилешко филе със зеленчуци
-                      </SelectItem>
-                      <SelectItem value="vegetarian">
-                        🥗 Вегетарианско - гратин с тиквички
-                      </SelectItem>
+                      <SelectItem value="meat">🥩 Месно</SelectItem>
+                      <SelectItem value="vegetarian">🥗 Вегетарианско</SelectItem>
                     </SelectContent>
                   </Select>
                   <p className="text-sm text-gray-600">

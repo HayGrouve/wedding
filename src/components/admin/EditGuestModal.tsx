@@ -46,8 +46,8 @@ const editGuestSchema = z.object({
     .number()
     .min(0, "Броя деца не може да бъде отрицателен")
     .max(10, "Твърде много деца"),
-  menuChoice: z.enum(["fish", "meat", "vegetarian"]).optional(),
-  plusOneMenuChoice: z.enum(["fish", "meat", "vegetarian"]).optional(),
+  menuChoice: z.enum(["meat", "vegetarian"]).optional(),
+  plusOneMenuChoice: z.enum(["meat", "vegetarian"]).optional(),
   allergies: z.string().optional(),
 });
 
@@ -78,8 +78,8 @@ export function EditGuestModal({
       plusOneAttending: false,
       plusOneName: "",
       childrenCount: 0,
-      menuChoice: "fish",
-      plusOneMenuChoice: "fish",
+      menuChoice: "meat",
+      plusOneMenuChoice: "meat",
       allergies: "",
     },
   });
@@ -97,17 +97,14 @@ export function EditGuestModal({
         childrenCount: guest.childrenCount,
 
         menuChoice:
-          guest.menuChoice === "fish" ||
-          guest.menuChoice === "meat" ||
-          guest.menuChoice === "vegetarian"
+          guest.menuChoice === "meat" || guest.menuChoice === "vegetarian"
             ? guest.menuChoice
-            : "fish",
+            : "meat",
         plusOneMenuChoice:
-          guest.plusOneMenuChoice === "fish" ||
           guest.plusOneMenuChoice === "meat" ||
           guest.plusOneMenuChoice === "vegetarian"
             ? guest.plusOneMenuChoice
-            : "fish",
+            : "meat",
         allergies: guest.allergies || "",
       });
     }
@@ -344,15 +341,8 @@ export function EditGuestModal({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="fish">
-                            🐟 Риба - морска бяла риба с билки
-                          </SelectItem>
-                          <SelectItem value="meat">
-                            🥩 Месо - пилешко филе със зеленчуци
-                          </SelectItem>
-                          <SelectItem value="vegetarian">
-                            🥗 Вегетарианско - гратин с тиквички
-                          </SelectItem>
+                          <SelectItem value="meat">🥩 Месно</SelectItem>
+                          <SelectItem value="vegetarian">🥗 Вегетарианско</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -379,15 +369,8 @@ export function EditGuestModal({
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="fish">
-                              🐟 Риба - морска бяла риба с билки
-                            </SelectItem>
-                            <SelectItem value="meat">
-                              🥩 Месо - пилешко филе със зеленчуци
-                            </SelectItem>
-                            <SelectItem value="vegetarian">
-                              🥗 Вегетарианско - гратин с тиквички
-                            </SelectItem>
+                            <SelectItem value="meat">🥩 Месно</SelectItem>
+                            <SelectItem value="vegetarian">🥗 Вегетарианско</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />

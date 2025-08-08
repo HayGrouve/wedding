@@ -134,7 +134,7 @@ export default function RootLayout({
         <meta name="twitter:image:height" content="630" />
       </head>
       <body
-        className={`${playfairDisplay.variable} ${inter.variable} font-sans antialiased`}
+        className={`${inter.variable} ${playfairDisplay.variable} font-sans antialiased`}
       >
         {children}
       </body>

@@ -53,22 +53,16 @@ export const GuestSchema = z.object({
     .min(0, "Броят деца не може да бъде отрицателен")
     .max(10, "Броят деца не може да бъде повече от 10")
     .default(0),
-  dietaryPreference: z
-    .enum(["standard", "vegetarian"], {
-      errorMap: () => ({
-        message: "Моля, изберете валидно хранително предпочитание",
-      }),
-    })
-    .optional(),
+  dietaryPreference: z.enum(["standard", "vegetarian"]).optional(),
   menuChoice: z
-    .enum(["fish", "meat", "vegetarian"], {
+    .enum(["meat", "vegetarian"], {
       errorMap: () => ({
         message: "Моля, изберете валидно меню",
       }),
     })
     .optional(),
   plusOneMenuChoice: z
-    .enum(["fish", "meat", "vegetarian"], {
+    .enum(["meat", "vegetarian"], {
       errorMap: () => ({
         message: "Моля, изберете валидно меню за спътника",
       }),

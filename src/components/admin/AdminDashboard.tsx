@@ -461,10 +461,8 @@ export function AdminDashboard() {
 
           const getMenuLabel = (choice: string | undefined) => {
             switch (choice) {
-              case "fish":
-                return "🐟 Риба";
               case "meat":
-                return "🥩 Месо";
+                return "🥩 Месно";
               case "vegetarian":
                 return "🥗 Вегетарианско";
               default:
@@ -659,7 +657,7 @@ export function AdminDashboard() {
       if (guest.menuChoice) {
         if (guest.menuChoice === "vegetarian") {
           vegetarianCount++;
-        } else if (guest.menuChoice === "fish" || guest.menuChoice === "meat") {
+        } else if (guest.menuChoice === "meat") {
           standardCount++;
         }
       }
@@ -668,10 +666,7 @@ export function AdminDashboard() {
       if (guest.plusOneAttending && guest.plusOneMenuChoice) {
         if (guest.plusOneMenuChoice === "vegetarian") {
           vegetarianCount++;
-        } else if (
-          guest.plusOneMenuChoice === "fish" ||
-          guest.plusOneMenuChoice === "meat"
-        ) {
+        } else if (guest.plusOneMenuChoice === "meat") {
           standardCount++;
         }
       }
@@ -1329,10 +1324,8 @@ export function AdminDashboard() {
                                   {guest.menuChoice && (
                                     <div className="flex items-center gap-2">
                                       <Badge variant="outline">
-                                        {guest.menuChoice === "fish" &&
-                                          "🐟 Риба"}
                                         {guest.menuChoice === "meat" &&
-                                          "🥩 Месо"}
+                                          "🥩 Месно"}
                                         {guest.menuChoice === "vegetarian" &&
                                           "🥗 Вегетарианско"}
                                       </Badge>
@@ -1345,10 +1338,8 @@ export function AdminDashboard() {
                                     guest.plusOneAttending && (
                                       <div className="flex items-center gap-2">
                                         <Badge variant="outline">
-                                          {guest.plusOneMenuChoice === "fish" &&
-                                            "🐟 Риба"}
                                           {guest.plusOneMenuChoice === "meat" &&
-                                            "🥩 Месо"}
+                                            "🥩 Месно"}
                                           {guest.plusOneMenuChoice ===
                                             "vegetarian" && "🥗 Вегетарианско"}
                                         </Badge>
