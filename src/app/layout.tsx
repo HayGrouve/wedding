@@ -15,7 +15,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://wedding-ana-maria-georgi.vercel.app"),
+  metadataBase: new URL("https://wedding-delta-drab.vercel.app"),
   title: "Сватба на Ана-Мария и Георги",
       description:
       "Присъединете се към нас за сватбата на Ана-Мария и Георги на 13 декември 2025 г. в София. RSVP и детайли за церемонията и празненството.",
@@ -50,14 +50,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Сватба на Ана-Мария и Георги",
     description:
-      "Присъединете се към нас за нашия специален ден! Венчавка в Къща на Културата и тържество в Хотел България, София.",
+      "Присъединете се към нас за сватбата на Ана-Мария и Георги на 13 декември 2025 г. в София.",
     type: "website",
     locale: "bg_BG",
-    url: "https://wedding-ana-maria-georgi.vercel.app",
+    url: "https://wedding-delta-drab.vercel.app",
     siteName: "Сватба на Ана-Мария и Георги",
     images: [
       {
-        url: "/images/thumbnail.jpg",
+        url: "https://wedding-delta-drab.vercel.app/images/thumbnail.jpg",
         width: 1200,
         height: 630,
         alt: "Сватба на Ана-Мария и Георги - 13 декември 2025",
@@ -68,13 +68,13 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Сватба на Ана-Мария и Георги",
-    description: "Присъединете се към нас за нашия специален ден! Венчавка в Къща на Културата и тържество в Хотел България, София.",
-    images: ["/images/thumbnail.jpg"],
+    description: "Присъединете се към нас за сватбата на Ана-Мария и Георги на 13 декември 2025 г. в София.",
+    images: ["https://wedding-delta-drab.vercel.app/images/thumbnail.jpg"],
     creator: "@wedding",
     site: "@wedding",
   },
   alternates: {
-    canonical: "https://wedding-ana-maria-georgi.vercel.app",
+    canonical: "https://wedding-delta-drab.vercel.app",
   },
   other: {
     "theme-color": "#6c757d",
@@ -89,11 +89,11 @@ export const metadata: Metadata = {
     "og:image:width": "1200",
     "og:image:height": "630",
     "og:image:type": "image/jpeg",
-          "og:image:alt": "Сватба на Ана-Мария и Георги - 13 декември 2025",
+    "og:image:alt": "Сватба на Ана-Мария и Георги - 13 декември 2025",
     // WhatsApp specific
-    "og:image:secure_url": "https://wedding-ana-maria-georgi.vercel.app/images/thumbnail.jpg",
+    "og:image:secure_url": "https://wedding-delta-drab.vercel.app/images/thumbnail.jpg",
     // LinkedIn specific
-    "og:image:url": "https://wedding-ana-maria-georgi.vercel.app/images/thumbnail.jpg",
+    "og:image:url": "https://wedding-delta-drab.vercel.app/images/thumbnail.jpg",
   },
   category: "event",
 };
@@ -122,10 +122,10 @@ export default function RootLayout({
         <meta property="og:image:height" content="630" />
         <meta property="og:image:type" content="image/jpeg" />
         <meta property="og:image:alt" content="Сватба на Ана-Мария и Георги - 13 декември 2025" />
-        <meta property="og:image:secure_url" content="https://wedding-ana-maria-georgi.vercel.app/images/thumbnail.jpg" />
-        <meta property="og:image:url" content="https://wedding-ana-maria-georgi.vercel.app/images/thumbnail.jpg" />
+        <meta property="og:image:secure_url" content="https://wedding-delta-drab.vercel.app/images/thumbnail.jpg" />
+        <meta property="og:image:url" content="https://wedding-delta-drab.vercel.app/images/thumbnail.jpg" />
         {/* WhatsApp specific */}
-        <meta property="og:image" content="https://wedding-ana-maria-georgi.vercel.app/images/thumbnail.jpg" />
+        <meta property="og:image" content="https://wedding-delta-drab.vercel.app/images/thumbnail.jpg" />
         {/* Pinterest specific */}
         <meta name="pinterest-rich-pin" content="true" />
         {/* Additional Twitter Card meta tags */}
