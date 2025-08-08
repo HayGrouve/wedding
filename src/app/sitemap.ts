@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://wedding-ana-maria-ivan.vercel.app";
+  const baseUrl = "https://wedding-delta-drab.vercel.app";
   const lastModified = new Date();
 
   return [
