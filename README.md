@@ -1,10 +1,10 @@
-# 💒 Ана-Мария & Иван - Wedding Website
+# 💒 Анна-Мария & Иван - Wedding Website
 
 A beautiful, responsive wedding website built with modern web technologies, featuring Bulgarian language support and elegant design.
 
 ## 👰🤵 Wedding Details
 
-- **Bride:** Ана-Мария (Ana-Maria)
+- **Bride:** Анна-Мария (Ana-Maria)
 - **Groom:** Иван (Ivan)
 - **Language:** Bulgarian (България)
 - **Theme:** Rose Gold & Sage Green
@@ -153,8 +153,8 @@ This is a personal wedding website. For similar projects:
 
 ## 📄 License
 
-This project is for personal use for Ana-Maria & Ivan's wedding.
+This project is for personal use for Anna-Maria & Ivan's wedding.
 
 ---
 
-**Built with 💖 for Ana-Maria & Ivan's special day**
+**Built with 💖 for Anna-Maria & Ivan's special day**

@@ -52,7 +52,7 @@ export default function Header() {
                 isScrolled ? "text-lg md:text-xl" : "text-xl md:text-2xl"
               )}
             >
-              Ана-Мария & Георги
+              Анна-Мария & Георги
             </span>
           </div>
 

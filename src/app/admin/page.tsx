@@ -69,9 +69,7 @@ export default async function AdminDashboard() {
                 <h1 className="text-2xl font-serif text-primary">
                   Админ Панел
                 </h1>
-                <p className="text-sm text-muted-foreground">
-                  Ана-Мария & Георги - Сватбена Система
-                </p>
+                <p className="text-sm text-muted-foreground">Анна-Мария & Георги - Сватбена Система</p>
               </div>
             </div>
 

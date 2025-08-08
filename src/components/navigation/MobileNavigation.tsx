@@ -86,7 +86,7 @@ export default function MobileNavigation({
         <SheetHeader className="text-left">
           <div className="flex items-center justify-between">
             <SheetTitle className="flex items-center gap-2">
-              <span className="font-serif">Ана-Мария & Георги</span>
+              <span className="font-serif">Анна-Мария & Георги</span>
             </SheetTitle>
           </div>
           <SheetDescription>Навигация по уебсайта</SheetDescription>

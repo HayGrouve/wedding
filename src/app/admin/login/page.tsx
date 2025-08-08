@@ -97,9 +97,7 @@ function AdminLoginContent() {
         {/* Page Header */}
         <div className="text-center space-y-2">
                       <h1 className="text-3xl font-serif text-primary">Админ Панел</h1>
-          <p className="text-muted-foreground">
-            Ана-Мария & Георги - Сватбена Система
-          </p>
+          <p className="text-muted-foreground">Анна-Мария & Георги - Сватбена Система</p>
         </div>
 
         {/* Status Messages */}

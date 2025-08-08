@@ -49,9 +49,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
           className="bg-card border-t py-8 mt-auto"
         >
           <div className="container-wedding text-center">
-            <p className="text-muted-foreground">
-              Сватбен уебсайт на Ана-Мария & Георги
-            </p>
+            <p className="text-muted-foreground">Сватбен уебсайт на Анна-Мария & Георги</p>
             <p className="text-sm text-muted-foreground mt-2">
               13 декември 2025 г. • София, България
             </p>

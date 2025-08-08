@@ -20,7 +20,7 @@ export default function Home() {
           aria-label="Заглавна секция"
         >
           <Hero
-            brideName="Ана-Мария"
+            brideName="Анна-Мария"
             groomName="Георги"
             weddingDate="13 декември 2025 г."
           />

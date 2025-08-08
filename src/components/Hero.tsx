@@ -12,7 +12,7 @@ interface HeroProps {
 }
 
 export default function Hero({
-  brideName = "Ана-Мария",
+  brideName = "Анна-Мария",
   groomName = "Георги",
   onScrollToDetails,
 }: HeroProps) {
