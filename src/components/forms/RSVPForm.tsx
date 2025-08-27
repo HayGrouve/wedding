@@ -235,7 +235,7 @@ export function RSVPForm() {
       {/* Right: Companions & Preferences */}
       <Card className="w-full">
         <CardHeader>
-          <CardTitle className="text-2xl font-serif">Спътници и предпочитания</CardTitle>
+          <CardTitle className="text-2xl font-serif">Допълнителна информация</CardTitle>
           <CardDescription>Информация за +1, деца и меню</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -252,10 +252,10 @@ export function RSVPForm() {
 
               {plusOneAttending && (
                 <div className="space-y-2">
-                  <Label htmlFor="plusOneName" className="text-black font-medium">Име на спътника *</Label>
+                  <Label htmlFor="plusOneName" className="text-black font-medium">Име на гост *</Label>
                   <Input
                     id="plusOneName"
-                    placeholder="Въведете името на вашия спътник"
+                    placeholder="Въведете името на госта"
                     value={plusOneName}
                     onChange={(e) => setPlusOneName(e.target.value)}
                     disabled={isSubmitting}
@@ -299,10 +299,10 @@ export function RSVPForm() {
 
               {plusOneAttending && (
                 <div className="space-y-2">
-                  <Label className="flex items-center gap-2 text-black font-medium"><ChefHat className="w-4 h-4" /> Меню за спътника *</Label>
+                  <Label className="flex items-center gap-2 text-black font-medium"><ChefHat className="w-4 h-4" /> Избор на меню за гост *</Label>
                   <Select value={plusOneMenuChoice} onValueChange={setPlusOneMenuChoice} disabled={isSubmitting}>
                     <SelectTrigger className={`${errors.plusOneMenuChoice ? "border-red-500" : "border-gray-300"} bg-white text-black focus:border-primary focus:ring-2 focus:ring-primary/20`}>
-                      <SelectValue placeholder="Изберете основно ястие за спътника" />
+                      <SelectValue placeholder="Изберете основно ястие за госта" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="meat">🥩 Месно</SelectItem>
