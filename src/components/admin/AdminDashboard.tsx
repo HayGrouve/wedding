@@ -639,6 +639,15 @@ export function AdminDashboard() {
       .filter((guest) => guest.attending)
       .reduce((sum, guest) => sum + guest.childrenCount, 0);
 
+    // Calculate kids menu count (<12) based on provided children details
+    const kidsMenuCount = filteredData
+      .filter((guest) => guest.attending)
+      .reduce(
+        (sum, guest) =>
+          sum + (guest.childrenDetails?.filter((c) => c.age < 12).length || 0),
+        0
+      );
+
     // Calculate total plus ones (only for attending guests)
     const totalPlusOnes = filteredData.filter(
       (guest) => guest.attending && guest.plusOneAttending
@@ -689,6 +698,7 @@ export function AdminDashboard() {
       attendingCount: attendingRSVPs,
       notAttendingCount: notAttendingRSVPs,
       totalChildrenCount,
+      kidsMenuCount,
       totalPlusOnes,
       vegetarianCount,
       standardCount,
@@ -798,6 +808,18 @@ export function AdminDashboard() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Детски менюта (&lt;12)</CardTitle>
+            <Baby className="h-4 w-4 text-purple-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-purple-600">
+              {dynamicStats.kidsMenuCount}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Ще присъстват</CardTitle>
             <UserCheck className="h-4 w-4 text-green-600" />
           </CardHeader>
@@ -822,17 +844,7 @@ export function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Общо деца</CardTitle>
-            <Baby className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {dynamicStats.totalChildrenCount}
-            </div>
-          </CardContent>
-        </Card>
+        {/* Removed "Общо деца" card per request */}
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -1152,9 +1164,15 @@ export function AdminDashboard() {
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-purple-600">
-                  {filteredData.reduce((sum, g) => sum + g.childrenCount, 0)}
+                  {filteredData
+                    .filter((g) => g.attending)
+                    .reduce(
+                      (sum, g) =>
+                        sum + (g.childrenDetails?.filter((c) => c.age < 12).length || 0),
+                      0
+                    )}
                 </div>
-                <div className="text-sm text-muted-foreground">Общо деца</div>
+                <div className="text-sm text-muted-foreground">Детски менюта (&lt;12)</div>
               </div>
             </div>
           </CardContent>

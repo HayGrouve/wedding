@@ -89,6 +89,21 @@ export const RSVPFormSchema = z
     plusOneAttending: GuestSchema.shape.plusOneAttending,
     plusOneName: GuestSchema.shape.plusOneName,
     childrenCount: GuestSchema.shape.childrenCount,
+    childrenDetails: z
+      .array(
+        z.object({
+          name: z
+            .string()
+            .min(1, "Името на детето е задължително")
+            .max(100, "Името на детето не може да съдържа повече от 100 символа"),
+          age: z
+            .number()
+            .int("Възрастта трябва да е цяло число")
+            .min(0, "Възрастта не може да бъде отрицателна")
+            .max(17, "Моля, въведете валидна възраст за дете")
+        })
+      )
+      .optional(),
     dietaryPreference: GuestSchema.shape.dietaryPreference,
     menuChoice: GuestSchema.shape.menuChoice,
     plusOneMenuChoice: GuestSchema.shape.plusOneMenuChoice,
@@ -121,6 +136,21 @@ export const RSVPFormSchema = z
     {
       message: "Не можете да доведете спътник, ако не присъствате",
       path: ["plusOneAttending"],
+    }
+  )
+  .refine(
+    (data) => {
+      // If attending and childrenCount > 0, childrenDetails must exist and match count
+      if (data.attending && data.childrenCount > 0) {
+        if (!data.childrenDetails || data.childrenDetails.length < data.childrenCount) {
+          return false;
+        }
+      }
+      return true;
+    },
+    {
+      message: "Моля, въведете име и възраст за всяко дете",
+      path: ["childrenDetails"],
     }
   )
   .refine(

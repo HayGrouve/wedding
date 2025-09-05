@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
 
     // Log successful submission (for monitoring)
     console.log(
-      `RSVP submission successful: ${sanitizedData.guestName} (${sanitizedData.email}) - Attending: ${sanitizedData.attending}`
+      `RSVP submission successful: ${sanitizedData.guestName} (${sanitizedData.email}) - Attending: ${sanitizedData.attending} - Children: ${sanitizedData.childrenCount}`
     );
 
     return createSuccessResponse(

@@ -10,6 +10,7 @@ export interface GuestRecord {
   plusOneAttending: boolean;
   plusOneName?: string;
   childrenCount: number;
+  childrenDetails?: { name: string; age: number }[];
   dietaryPreference?: string;
   allergies?: string;
   submissionDate: string; // ISO string

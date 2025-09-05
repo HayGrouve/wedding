@@ -1,3 +1,8 @@
+export interface ChildDetail {
+  name: string;
+  age: number;
+}
+
 export interface GuestRecord {
   id: string;
   guestName: string;
@@ -7,6 +12,7 @@ export interface GuestRecord {
   plusOneAttending: boolean;
   plusOneName?: string;
   childrenCount: number;
+  childrenDetails?: ChildDetail[];
   dietaryPreference?: string;
   menuChoice?: string;
   plusOneMenuChoice?: string;

@@ -88,6 +88,9 @@ function formatGuestForExcel(
     "+1": guest.plusOneAttending ? "Да" : "Не",
     "Име на +1": guest.plusOneName || "",
     "Брой деца": guest.childrenCount,
+    "Деца (име/възраст)": (guest.childrenDetails && guest.childrenDetails.length > 0)
+      ? guest.childrenDetails.map(c => `${c.name} (${c.age})`).join(", ")
+      : "",
     "Хранителни предпочитания": guest.dietaryPreference || "",
     "Алергии": guest.allergies || "",
     "Дата на изпращане": dateFormat === "iso" ? new Date(guest.submissionDate) : new Date(guest.submissionDate),
@@ -128,6 +131,7 @@ export function exportGuestsToExcel(
     { wch: 8 },  // +1
     { wch: 20 }, // Име на +1
     { wch: 12 }, // Брой деца
+    { wch: 28 }, // Деца (име/възраст)
     { wch: 24 }, // Хранителни предпочитания
     { wch: 18 }, // Алергии
     { wch: 22 }, // Дата на изпращане
@@ -141,6 +145,7 @@ export function exportGuestsToExcel(
   // Add metadata sheet if requested
   if (includeMetadata) {
     const totalChildrenAll = guests.reduce((sum, g) => sum + g.childrenCount, 0);
+    const kidsMenuCount = guests.reduce((sum, g) => sum + (g.childrenDetails?.filter(c => c.age < 12).length || 0), 0);
     const totalGuestsInclKids = guests.length + totalChildrenAll;
     const attendingGuests = guests.filter((g) => g.attending);
     const notAttendingGuests = guests.filter((g) => !g.attending);
@@ -152,6 +157,7 @@ export function exportGuestsToExcel(
       { "Показател": "Неприсъстващи", "Брой": notAttendingGuests.length },
       { "Показател": "+1", "Брой": totalPlusOnes },
       { "Показател": "Общо деца", "Брой": totalChildrenAll },
+      { "Показател": "Меню за деца (<12)", "Брой": kidsMenuCount },
       { "Показател": "Дата на експорт", "Брой": new Date().toLocaleString("bg-BG") },
     ];
 

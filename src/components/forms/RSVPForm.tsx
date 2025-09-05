@@ -50,6 +50,7 @@ export function RSVPForm() {
   const [plusOneFirstName, setPlusOneFirstName] = useState("");
   const [plusOneLastName, setPlusOneLastName] = useState("");
   const [childrenCount, setChildrenCount] = useState(0);
+  const [childrenUi, setChildrenUi] = useState<{ first: string; last: string; age: string }[]>([]);
   const [menuChoice, setMenuChoice] = useState<string>("");
   const [plusOneMenuChoice, setPlusOneMenuChoice] = useState<string>("");
   const [allergies, setAllergies] = useState("");
@@ -65,12 +66,24 @@ export function RSVPForm() {
     setPlusOneFirstName("");
     setPlusOneLastName("");
     setChildrenCount(0);
+    setChildrenUi([]);
     setMenuChoice("");
     setPlusOneMenuChoice("");
     setAllergies("");
     setSubmitSuccess(false);
     setErrors({});
   };
+
+  // Sync children UI array length with childrenCount
+  if (childrenUi.length !== childrenCount) {
+    const next: { first: string; last: string; age: string }[] = Array.from({ length: childrenCount }, (_, i) => ({
+      first: childrenUi[i]?.first || "",
+      last: childrenUi[i]?.last || "",
+      age: childrenUi[i]?.age || "",
+    }));
+    // Avoid setState during render by scheduling microtask
+    Promise.resolve().then(() => setChildrenUi(next));
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,12 +123,28 @@ export function RSVPForm() {
         localErrors.plusOneLastName = "Моля, въведете фамилия на госта";
       }
     }
+    // Validate children details
+    if (attending && childrenCount > 0) {
+      const slice = childrenUi.slice(0, childrenCount);
+      const incomplete = slice.some((c) => !c?.first?.trim() || !c?.last?.trim() || c.age === "" || isNaN(parseInt(c.age)));
+      if (incomplete) {
+        localErrors.childrenDetails = "Моля, въведете име и възраст за всяко дете";
+      }
+    }
+
     if (Object.keys(localErrors).length > 0) {
       setErrors(localErrors);
       setIsSubmitting(false);
       toast.error("Моля, коригирайте грешките във формуляра");
       return;
     }
+
+    const parsedChildren = (attending && childrenCount > 0)
+      ? childrenUi.slice(0, childrenCount).map((c) => ({
+          name: `${c.first} ${c.last}`.trim().replace(/\s+/g, " "),
+          age: Number.isFinite(parseInt(c.age)) ? parseInt(c.age) : 0,
+        }))
+      : undefined;
 
     const formData = {
       guestName: composedGuestName,
@@ -125,6 +154,7 @@ export function RSVPForm() {
       plusOneAttending,
       plusOneName: composedPlusOneName,
       childrenCount,
+      childrenDetails: parsedChildren,
       menuChoice: menuChoice || undefined,
       plusOneMenuChoice: plusOneMenuChoice || undefined,
       allergies: allergies || undefined,
@@ -350,6 +380,63 @@ export function RSVPForm() {
                 </Select>
                 {errors.childrenCount && <p className="text-sm text-red-500">{errors.childrenCount}</p>}
               </div>
+
+              {attending && childrenCount > 0 && (
+                <div className="space-y-4">
+                  <Label className="text-black font-medium">Деца - имена и възраст</Label>
+                  <div className="space-y-3">
+                    {Array.from({ length: childrenCount }).map((_, index) => (
+                      <div key={index} className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="space-y-1">
+                          <Input
+                            placeholder={`Име #${index + 1}`}
+                            value={childrenUi[index]?.first || ""}
+                            onChange={(e) => {
+                              const next = [...childrenUi];
+                              next[index] = { ...(next[index] || { first: "", last: "", age: "" }), first: e.target.value };
+                              setChildrenUi(next);
+                            }}
+                            disabled={isSubmitting}
+                            className="bg-white text-black placeholder:text-gray-500 border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <Input
+                            placeholder="Фамилия"
+                            value={childrenUi[index]?.last || ""}
+                            onChange={(e) => {
+                              const next = [...childrenUi];
+                              next[index] = { ...(next[index] || { first: "", last: "", age: "" }), last: e.target.value };
+                              setChildrenUi(next);
+                            }}
+                            disabled={isSubmitting}
+                            className="bg-white text-black placeholder:text-gray-500 border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <Input
+                            type="number"
+                            min={0}
+                            max={17}
+                            placeholder="Възраст"
+                            value={childrenUi[index]?.age || ""}
+                            onChange={(e) => {
+                              const next = [...childrenUi];
+                              next[index] = { ...(next[index] || { first: "", last: "", age: "" }), age: e.target.value };
+                              setChildrenUi(next);
+                            }}
+                            disabled={isSubmitting}
+                            className="bg-white text-black placeholder:text-gray-500 border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {errors.childrenDetails && (
+                    <p className="text-sm text-red-500">{errors.childrenDetails}</p>
+                  )}
+                </div>
+              )}
 
               <div className="space-y-2">
                 <Label className="flex items-center gap-2 text-black font-medium"><ChefHat className="w-4 h-4" /> Вашето меню *</Label>
