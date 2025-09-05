@@ -56,7 +56,7 @@ export default function Header() {
             <a href="#home" aria-label="Начало" onClick={handleHomeClick} className="focus:outline-none">
               <span
                 className={cn(
-                  "font-serif font-semibold transition-all duration-200",
+                  "font-semibold transition-all duration-200",
                   isScrolled ? "text-lg md:text-xl" : "text-xl md:text-2xl"
                 )}
               >

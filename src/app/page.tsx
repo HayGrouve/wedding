@@ -1,6 +1,7 @@
 import Hero from "@/components/Hero";
 import WeddingDetails from "@/components/sections/WeddingDetails";
 import WeddingInvitation from "@/components/sections/WeddingInvitation";
+import ScheduleTimeline from "@/components/sections/ScheduleTimeline";
 import { RSVPForm } from "@/components/forms/RSVPForm";
 import MainLayout from "@/components/layout/MainLayout";
 import WeddingStructuredData from "@/components/seo/WeddingStructuredData";
@@ -24,6 +25,9 @@ export default function Home() {
             weddingDate="13.12.2025"
           />
         </section>
+
+        {/* Schedule Timeline */}
+        <ScheduleTimeline />
 
         {/* Wedding Invitation Section */}
         <WeddingInvitation />

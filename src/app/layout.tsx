@@ -1,31 +1,11 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter, Great_Vibes, Source_Serif_4 } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-
-const playfairDisplay = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin", "cyrillic"],
-  display: "swap",
-});
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin", "cyrillic"],
   display: "swap",
-});
-
-const greatVibes = Great_Vibes({
-  variable: "--font-great-vibes",
-  subsets: ["latin"],
-  display: "swap",
-  weight: "400",
-});
-
-const sourceSerif4 = Source_Serif_4({
-  variable: "--font-source-serif",
-  subsets: ["latin", "cyrillic"],
-  display: "swap",
-  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -148,7 +128,7 @@ export default function RootLayout({
         <meta name="twitter:image:height" content="630" />
       </head>
       <body
-        className={`${inter.variable} ${playfairDisplay.variable} ${greatVibes.variable} ${sourceSerif4.variable} font-sans antialiased`}
+        className={`${inter.variable} font-sans antialiased`}
       >
         {children}
       </body>

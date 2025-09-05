@@ -66,7 +66,7 @@ export default async function AdminDashboard() {
                 <Shield className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h1 className="text-xl sm:text-2xl font-serif text-primary">
+                <h1 className="text-xl sm:text-2xl text-primary">
                   Админ Панел
                 </h1>
                 <p className="text-xs sm:text-sm text-muted-foreground">Анна-Мария & Георги - Сватбена Система</p>

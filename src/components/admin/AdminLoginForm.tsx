@@ -106,7 +106,7 @@ const AdminLoginForm: React.FC<AdminLoginFormProps> = ({
           <div className="mx-auto mb-2 w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center border-2 border-primary/20">
             <Shield className="w-10 h-10 text-primary" />
           </div>
-          <DialogTitle className="text-2xl font-serif text-gray-900 dark:text-gray-100 font-semibold text-center">
+          <DialogTitle className="text-2xl text-gray-900 dark:text-gray-100 font-semibold text-center">
             Админ Вход
           </DialogTitle>
           <DialogDescription

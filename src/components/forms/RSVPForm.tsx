@@ -204,7 +204,7 @@ export function RSVPForm() {
               <Users className="w-8 h-8 text-primary" />
             </div>
             <div className="space-y-3">
-              <h3 className="text-2xl font-serif font-semibold text-primary">Благодарим ви за RSVP-то!</h3>
+              <h3 className="text-2xl font-semibold text-primary">Благодарим ви за RSVP-то!</h3>
               <p className="text-gray-700 text-lg">
                 {attending
                   ? "Вашият отговор е получен успешно. Очакваме ви с нетърпение!"
@@ -227,7 +227,7 @@ export function RSVPForm() {
       {/* Left: Guest & Attendance */}
       <Card className="w-full">
         <CardHeader>
-          <CardTitle className="text-2xl font-serif">Гост</CardTitle>
+          <CardTitle className="text-2xl">Гост</CardTitle>
           <CardDescription>Основна информация и потвърждение</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -316,7 +316,7 @@ export function RSVPForm() {
       {/* Right: Companions & Preferences */}
       <Card className="w-full">
         <CardHeader>
-          <CardTitle className="text-2xl font-serif">Допълнителна информация</CardTitle>
+          <CardTitle className="text-2xl">Допълнителна информация</CardTitle>
           <CardDescription>Информация за +1, деца и меню</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">

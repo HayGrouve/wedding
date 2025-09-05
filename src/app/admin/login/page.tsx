@@ -96,7 +96,7 @@ function AdminLoginContent() {
       <div className="w-full max-w-md space-y-6">
         {/* Page Header */}
         <div className="text-center space-y-2">
-                      <h1 className="text-3xl font-serif text-primary">Админ Панел</h1>
+                      <h1 className="text-3xl text-primary">Админ Панел</h1>
           <p className="text-muted-foreground">Анна-Мария & Георги - Сватбена Система</p>
         </div>
 
@@ -158,7 +158,7 @@ export default function AdminLoginPage() {
         <div className="min-h-screen bg-background flex items-center justify-center p-4">
           <div className="w-full max-w-md space-y-6">
             <div className="text-center space-y-2">
-              <h1 className="text-3xl font-serif text-primary">
+              <h1 className="text-3xl text-primary">
                 Админ Панел
               </h1>
               <p className="text-muted-foreground">Зареждане...</p>

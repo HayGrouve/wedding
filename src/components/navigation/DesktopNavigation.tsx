@@ -13,6 +13,7 @@ import useActiveSection from "@/hooks/useActiveSection";
 
 const navigationItems = [
   { id: "home", label: "Начало", href: "#home" },
+  { id: "schedule", label: "Програма", href: "#schedule" },
   { id: "details", label: "Детайли", href: "#details" },
   { id: "rsvp", label: "Присъствие", href: "#rsvp" },
 ];

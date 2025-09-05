@@ -13,7 +13,7 @@ const WeddingDetails = () => {
         {/* Heading */}
         <div className="text-center mb-12 md:mb-16">
           <h2
-            className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-foreground mb-2"
+            className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-2"
             id="wedding-details-heading"
           >
             Детайли
@@ -24,7 +24,7 @@ const WeddingDetails = () => {
         <div className="space-y-16 max-w-4xl mx-auto text-center leading-relaxed">
           {/* Where */}
           <div>
-            <h3 className="font-serif text-3xl md:text-4xl text-foreground mb-4">Къде?</h3>
+            <h3 className="text-3xl md:text-4xl text-foreground mb-4">Къде?</h3>
             <div className="grid gap-6 md:gap-12 md:grid-cols-2 items-center text-left pt-2">
               <div className="flex justify-center md:justify-start">
                 <Image
@@ -36,7 +36,7 @@ const WeddingDetails = () => {
                 />
               </div>
               <div>
-                <div className="font-serif text-2xl md:text-3xl text-foreground mb-4">
+                <div className="text-2xl md:text-3xl text-foreground mb-4">
                   PASAREL LAKE CLUB, с.ДОЛНИ ПАСАРЕЛ
                 </div>
                 <p className="text-lg text-muted-foreground">
@@ -50,22 +50,22 @@ const WeddingDetails = () => {
           </div>
 
           <div>
-            <h3 className="font-serif text-3xl md:text-4xl text-foreground mb-4">Дрескод</h3>
+            <h3 className="text-3xl md:text-4xl text-foreground mb-4">Дрескод</h3>
             <p className="text-lg text-muted-foreground">
               Няма задължителен дрескод на събитието. Молим Ви единствено да вземете предвид
               минусовите температури и да предвидите връхна дреха.
             </p>
           </div>
 
-          <div>
-            <h3 className="font-serif text-3xl md:text-4xl text-foreground mb-4">Цветя</h3>
+          <div className="mt-10 md:mt-12">
+            <h3 className="text-3xl md:text-4xl text-foreground mb-4">Цветя</h3>
             <p className="text-lg text-muted-foreground">
               Молим ви да не купувате цветя, тъй като сме предвидили достатъчно.
             </p>
           </div>
 
-          <div>
-            <h3 className="font-serif text-3xl md:text-4xl text-foreground mb-4">Транспорт</h3>
+          <div className="mt-10 md:mt-12">
+            <h3 className="text-3xl md:text-4xl text-foreground mb-4">Транспорт</h3>
             <div className="space-y-6">
               <p className="text-lg text-muted-foreground">
                 Pasarel Lake Club е достъпен чрез следните начини на транспорт от София: Yellow taxi,
@@ -73,7 +73,7 @@ const WeddingDetails = () => {
                 собствен автомобил.
               </p>
               <div className="space-y-3">
-                <h4 className="font-serif text-xl md:text-2xl text-foreground">Контакти:</h4>
+                <h4 className="text-xl md:text-2xl text-foreground">Контакти:</h4>
                 <p className="text-lg text-muted-foreground">
                   Lucky Drink &amp; Drive - тел: <a href="tel:0884116464" className="underline">0884116464</a>
                   {" "}/ Фиксирана тарифа до всички точки на гр. София - 85 лв. за един курс/

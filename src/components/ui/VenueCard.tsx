@@ -91,7 +91,7 @@ const VenueCard = () => {
         <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 w-fit">
           <MapPin className="h-6 w-6 text-primary" />
         </div>
-        <CardTitle className="text-xl font-serif">Локации</CardTitle>
+        <CardTitle className="text-xl">Локации</CardTitle>
         <p className="text-sm text-muted-foreground">
           Информация за венчавката и тържеството
         </p>
@@ -119,7 +119,7 @@ const VenueCard = () => {
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-2 flex-1">
               <div className="flex items-center gap-2">
-                <h3 className="font-serif font-medium text-lg">
+                <h3 className="font-medium text-lg">
                   {selectedVenue.name}
                 </h3>
                 <Badge variant="secondary" className="text-xs">
