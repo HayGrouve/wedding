@@ -41,12 +41,14 @@ export function RSVPForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Form state
-  const [guestName, setGuestName] = useState("");
+  const [guestFirstName, setGuestFirstName] = useState("");
+  const [guestLastName, setGuestLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [attending, setAttending] = useState(true);
   const [plusOneAttending, setPlusOneAttending] = useState(false);
-  const [plusOneName, setPlusOneName] = useState("");
+  const [plusOneFirstName, setPlusOneFirstName] = useState("");
+  const [plusOneLastName, setPlusOneLastName] = useState("");
   const [childrenCount, setChildrenCount] = useState(0);
   const [menuChoice, setMenuChoice] = useState<string>("");
   const [plusOneMenuChoice, setPlusOneMenuChoice] = useState<string>("");
@@ -54,12 +56,14 @@ export function RSVPForm() {
 
   const handleGoBack = () => {
     // Reset form to initial state
-    setGuestName("");
+    setGuestFirstName("");
+    setGuestLastName("");
     setEmail("");
     setPhone("");
     setAttending(true);
     setPlusOneAttending(false);
-    setPlusOneName("");
+    setPlusOneFirstName("");
+    setPlusOneLastName("");
     setChildrenCount(0);
     setMenuChoice("");
     setPlusOneMenuChoice("");
@@ -81,13 +85,45 @@ export function RSVPForm() {
       clientIP = undefined;
     }
 
+    const composedGuestName = `${guestFirstName} ${guestLastName}`
+      .trim()
+      .replace(/\s+/g, " ");
+    const composedPlusOneName = plusOneAttending
+      ? `${plusOneFirstName} ${plusOneLastName}`
+          .trim()
+          .replace(/\s+/g, " ")
+      : undefined;
+
+    // Client-side field-level validation to ensure both first and last are provided
+    const localErrors: Record<string, string> = {};
+    if (!guestFirstName.trim()) {
+      localErrors.guestFirstName = "Моля, въведете собствено име";
+    }
+    if (!guestLastName.trim()) {
+      localErrors.guestLastName = "Моля, въведете фамилия";
+    }
+    if (plusOneAttending) {
+      if (!plusOneFirstName.trim()) {
+        localErrors.plusOneFirstName = "Моля, въведете име на госта";
+      }
+      if (!plusOneLastName.trim()) {
+        localErrors.plusOneLastName = "Моля, въведете фамилия на госта";
+      }
+    }
+    if (Object.keys(localErrors).length > 0) {
+      setErrors(localErrors);
+      setIsSubmitting(false);
+      toast.error("Моля, коригирайте грешките във формуляра");
+      return;
+    }
+
     const formData = {
-      guestName,
+      guestName: composedGuestName,
       email,
       phone: phone || undefined,
       attending,
       plusOneAttending,
-      plusOneName: plusOneName || undefined,
+      plusOneName: composedPlusOneName,
       childrenCount,
       menuChoice: menuChoice || undefined,
       plusOneMenuChoice: plusOneMenuChoice || undefined,
@@ -165,20 +201,35 @@ export function RSVPForm() {
           <CardDescription>Основна информация и потвърждение</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="guestName" className="flex items-center gap-2 text-black font-medium">
-              <Users className="w-4 h-4" /> Вашето име *
-            </Label>
-            <Input
-              id="guestName"
-              placeholder="Въведете вашето пълно име"
-              value={guestName}
-              onChange={(e) => setGuestName(e.target.value)}
-              disabled={isSubmitting}
-              className={`${errors.guestName ? "border-red-500" : "border-gray-300"} bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20`}
-            />
-            {errors.guestName && <p className="text-sm text-red-500">{errors.guestName}</p>}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="guestFirstName" className="flex items-center gap-2 text-black font-medium">
+                <Users className="w-4 h-4" /> Собствено име *
+              </Label>
+              <Input
+                id="guestFirstName"
+                placeholder="Име"
+                value={guestFirstName}
+                onChange={(e) => setGuestFirstName(e.target.value)}
+                disabled={isSubmitting}
+                className={`${(errors.guestFirstName || errors.guestName) ? "border-red-500" : "border-gray-300"} bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20`}
+              />
+              {errors.guestFirstName && <p className="text-sm text-red-500">{errors.guestFirstName}</p>}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="guestLastName" className="text-black font-medium">Фамилия *</Label>
+              <Input
+                id="guestLastName"
+                placeholder="Фамилия"
+                value={guestLastName}
+                onChange={(e) => setGuestLastName(e.target.value)}
+                disabled={isSubmitting}
+                className={`${(errors.guestLastName || errors.guestName) ? "border-red-500" : "border-gray-300"} bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20`}
+              />
+              {errors.guestLastName && <p className="text-sm text-red-500">{errors.guestLastName}</p>}
+            </div>
           </div>
+          {errors.guestName && <p className="text-sm text-red-500">{errors.guestName}</p>}
 
           <div className="space-y-2">
             <Label htmlFor="email" className="text-black font-medium">Email адрес *</Label>
@@ -251,18 +302,35 @@ export function RSVPForm() {
               {errors.plusOneAttending && <p className="text-sm text-red-500">{errors.plusOneAttending}</p>}
 
               {plusOneAttending && (
-                <div className="space-y-2">
-                  <Label htmlFor="plusOneName" className="text-black font-medium">Име на гост *</Label>
-                  <Input
-                    id="plusOneName"
-                    placeholder="Въведете името на госта"
-                    value={plusOneName}
-                    onChange={(e) => setPlusOneName(e.target.value)}
-                    disabled={isSubmitting}
-                    className={`${errors.plusOneName ? "border-red-500" : "border-gray-300"} bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20`}
-                  />
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="plusOneFirstName" className="text-black font-medium">Име на гост *</Label>
+                      <Input
+                        id="plusOneFirstName"
+                        placeholder="Име"
+                        value={plusOneFirstName}
+                        onChange={(e) => setPlusOneFirstName(e.target.value)}
+                        disabled={isSubmitting}
+                        className={`${(errors.plusOneFirstName || errors.plusOneName) ? "border-red-500" : "border-gray-300"} bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20`}
+                      />
+                      {errors.plusOneFirstName && <p className="text-sm text-red-500">{errors.plusOneFirstName}</p>}
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="plusOneLastName" className="text-black font-medium">Фамилия *</Label>
+                      <Input
+                        id="plusOneLastName"
+                        placeholder="Фамилия"
+                        value={plusOneLastName}
+                        onChange={(e) => setPlusOneLastName(e.target.value)}
+                        disabled={isSubmitting}
+                        className={`${(errors.plusOneLastName || errors.plusOneName) ? "border-red-500" : "border-gray-300"} bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20`}
+                      />
+                      {errors.plusOneLastName && <p className="text-sm text-red-500">{errors.plusOneLastName}</p>}
+                    </div>
+                  </div>
                   {errors.plusOneName && <p className="text-sm text-red-500">{errors.plusOneName}</p>}
-                </div>
+                </>
               )}
 
               <div className="space-y-2">
