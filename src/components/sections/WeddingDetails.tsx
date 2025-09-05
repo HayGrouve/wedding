@@ -18,10 +18,6 @@ const WeddingDetails = () => {
           >
             Детайли
           </h2>
-          <p className="text-base md:text-lg text-muted-foreground mb-4">
-            13 декември 2025 г.
-          </p>
-          <hr className="border-border" />
         </div>
 
         {/* Notes */}

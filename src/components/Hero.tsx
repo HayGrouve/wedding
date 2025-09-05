@@ -1,11 +1,10 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { Volume2, VolumeX } from "lucide-react";
 
 interface HeroProps {
-  brideName?: string;
-  groomName?: string;
   weddingDate?: string;
   onScrollToDetails?: () => void;
 }
@@ -16,11 +15,12 @@ function getHeaderHeight(): number {
 }
 
 export default function Hero({
-  brideName = "Анна-Мария",
-  groomName = "Георги",
+  weddingDate = "13.12.2025",
   onScrollToDetails,
 }: HeroProps) {
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const handleScrollToDetails = useCallback(() => {
     if (onScrollToDetails) {
@@ -28,14 +28,31 @@ export default function Hero({
     } else {
       const detailsSection = document.getElementById("details");
       if (detailsSection) {
-        const headerHeight = getHeaderHeight();
         const extra = 18;
         const elementTop = detailsSection.getBoundingClientRect().top + window.pageYOffset;
-        const offset = Math.max(0, elementTop - headerHeight + extra);
+        const offset = Math.max(0, elementTop - getHeaderHeight() + extra);
         window.scrollTo({ top: offset, behavior: "smooth" });
       }
     }
   }, [onScrollToDetails]);
+
+  // Send a command to the YouTube iframe without reloading the video
+  const postToYouTubePlayer = (funcName: string, args: unknown[] = []) => {
+    const iframeWindow = iframeRef.current?.contentWindow;
+    if (!iframeWindow) return;
+    const message = JSON.stringify({ event: "command", func: funcName, args });
+    // Use wildcard targetOrigin for compatibility; YouTube validates origin internally
+    iframeWindow.postMessage(message, "*");
+  };
+
+  const toggleMute = () => {
+    setIsMuted((prev) => {
+      const nextMuted = !prev;
+      // Use YouTube IFrame API command so playback is not restarted
+      postToYouTubePlayer(nextMuted ? "mute" : "unMute");
+      return nextMuted;
+    });
+  };
 
   return (
     <section
@@ -47,7 +64,8 @@ export default function Hero({
       <div className="absolute inset-0 z-0">
         {/* YouTube Video Embed - Using nocookie domain and optimized parameters */}
         <iframe
-          src="https://www.youtube-nocookie.com/embed/_pkBDiVYarw?autoplay=1&mute=1&loop=1&playlist=_pkBDiVYarw&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&cc_load_policy=0&fs=0&disablekb=1&color=white&origin=https://localhost:3000&enablejsapi=0&widget_referrer=https://localhost:3000"
+          ref={iframeRef}
+          src="https://www.youtube-nocookie.com/embed/_pkBDiVYarw?autoplay=1&mute=1&loop=1&playlist=_pkBDiVYarw&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&cc_load_policy=0&fs=0&disablekb=1&color=white&enablejsapi=1"
           className="w-full h-full object-cover"
           frameBorder="0"
           allow="autoplay; encrypted-media; picture-in-picture"
@@ -90,58 +108,55 @@ export default function Hero({
         )}
       </div>
 
-      {/* Content Overlay Layer */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4 sm:px-6 lg:px-8">
-
-        {/* Main Heading - Bride & Groom Names */}
-        <h1 className="hero-title mb-4 lg:mb-6" role="heading" aria-level={1}>
-          <span
-            className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white drop-shadow-2xl shadow-black/50"
-            style={{
-              textShadow:
-                "2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5)",
-            }}
-          >
-            {brideName}
-          </span>
-          <span
-            className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light text-white/90 my-2 lg:my-4 drop-shadow-xl"
-            aria-hidden="true"
-            style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.7)" }}
-          >
-            &
-          </span>
-          <span
-            className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white drop-shadow-2xl shadow-black/50 mt-[-25px]"
-            style={{
-              textShadow:
-                "2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5)",
-            }}
-          >
-            {groomName}
-          </span>
-        </h1>
-
-        {/* Wedding Subtitle */}
-        <p
-          className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/90 mb-2 lg:mb-4 font-light tracking-wide drop-shadow-lg"
-          style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.8)" }}
-        >
-          Ви канят на сватба
-        </p>
-
-        {/* Professional Call to Action Button */}
+      {/* Sound Control Button - Top Right Corner */}
+      <div className="absolute top-6 right-6 z-20">
         <Button
-          onClick={handleScrollToDetails}
-          size="lg"
-          className="bg-white text-black font-semibold px-8 py-4 mt-2 text-base md:text-lg lg:text-xl focus:outline-none transition-all duration-200 ease-in-out border border-gray-300 rounded-md hover:shadow-md focus:shadow-md hover:bg-gray-100/80 focus:bg-gray-100/80"
-          aria-label="Scroll to wedding details section"
-          style={{
-            textShadow: "0 1px 2px rgba(0,0,0,0.1)",
-          }}
+          onClick={toggleMute}
+          variant="ghost"
+          size="sm"
+          className="text-white bg-black/30 focus-visible:bg-black/30 border border-white/50 backdrop-blur-sm transition-all duration-200 focus-visible:ring-2 focus-visible:ring-white/80 ring-offset-2 ring-offset-black/30"
+          aria-label={isMuted ? "Unmute video" : "Mute video"}
         >
-          Детайли
+          {isMuted ? (
+            <VolumeX className="w-5 h-5" />
+          ) : (
+            <Volume2 className="w-5 h-5" />
+          )}
         </Button>
+      </div>
+
+      {/* Content Overlay Layer - Restructured for top and bottom positioning */}
+      <div className="relative z-10 flex flex-col justify-between h-full px-4 sm:px-6 lg:px-8">
+        
+        {/* Top Section - Wedding Date */}
+        <div className="flex justify-center pt-32 md:pt-28 lg:pt-32">
+          <h1 className="hero-title text-center" role="heading" aria-level={1}>
+            <span
+              className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white drop-shadow-2xl shadow-black/50"
+              style={{
+                textShadow:
+                  "2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5)",
+              }}
+            >
+              {weddingDate}
+            </span>
+          </h1>
+        </div>
+
+        {/* Bottom Section - Details Button */}
+        <div className="flex justify-center pb-42">
+          <Button
+            onClick={handleScrollToDetails}
+            size="lg"
+            className="bg-white text-black font-semibold px-8 py-4 text-base md:text-lg lg:text-xl focus:outline-none transition-all duration-200 ease-in-out border border-gray-300 rounded-md hover:shadow-md focus:shadow-md hover:bg-gray-100/80 focus:bg-gray-100/80"
+            aria-label="Scroll to wedding details section"
+            style={{
+              textShadow: "0 1px 2px rgba(0,0,0,0.1)",
+            }}
+          >
+            Детайли
+          </Button>
+        </div>
       </div>
     </section>
   );

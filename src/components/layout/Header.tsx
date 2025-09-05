@@ -3,6 +3,7 @@
 import * as React from "react";
 import DesktopNavigation from "@/components/navigation/DesktopNavigation";
 import MobileNavigation from "@/components/navigation/MobileNavigation";
+import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 
@@ -27,6 +28,12 @@ export default function Header() {
     };
   }, []);
 
+  const handleHomeClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    e.currentTarget.blur();
+  };
+
   return (
     <div
       className={cn(
@@ -40,24 +47,39 @@ export default function Header() {
       <div className="container-wedding">
         <div
           className={cn(
-            "flex items-center justify-between transition-all duration-200",
+            "grid grid-cols-3 items-center transition-all duration-200",
             isScrolled ? "h-14 md:h-16" : "h-16 md:h-18"
           )}
         >
-          {/* Logo/Brand */}
+          {/* Left brand text */}
           <div className="flex items-center gap-2 flex-shrink-0">
-            <span
-              className={cn(
-                "font-serif font-semibold transition-all duration-200",
-                isScrolled ? "text-lg md:text-xl" : "text-xl md:text-2xl"
-              )}
-            >
-              Анна-Мария & Георги
-            </span>
+            <a href="#home" aria-label="Начало" onClick={handleHomeClick} className="focus:outline-none">
+              <span
+                className={cn(
+                  "font-serif font-semibold transition-all duration-200",
+                  isScrolled ? "text-lg md:text-xl" : "text-xl md:text-2xl"
+                )}
+              >
+                Анна-Мария & Георги
+              </span>
+            </a>
+          </div>
+
+          {/* Center logo */}
+          <div className="flex items-center justify-center">
+            <a href="#home" aria-label="Начало">
+              <Image
+                src="/logo.png"
+                alt="Лого Анна-Мария и Георги"
+                width={isScrolled ? 44 : 56}
+                height={isScrolled ? 44 : 56}
+                priority
+              />
+            </a>
           </div>
 
           {/* Right side - Navigation */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-end gap-2">
             {/* Desktop Navigation */}
             <DesktopNavigation />
 

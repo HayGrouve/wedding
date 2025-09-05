@@ -51,6 +51,9 @@
   /* Base configuration */
   --radius: 0;
   --font-inter: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-playfair: "Playfair Display", Georgia, serif;
+  --font-great-vibes: "Great Vibes", cursive;
+  --font-source-serif: "Source Serif 4", Georgia, serif;
 
   /* Simplified color scheme - Light gray background and black text */
   --background: #f8f9fa; /* Very light gray */
@@ -102,6 +105,15 @@
   h5,
   h6 {
     font-family: var(--font-playfair), var(--font-inter), Georgia, serif;
+  }
+
+  /* Font utility classes */
+  .font-great-vibes {
+    font-family: var(--font-great-vibes), cursive;
+  }
+  
+  .font-source-serif {
+    font-family: var(--font-source-serif), Georgia, serif;
   }
 
 
