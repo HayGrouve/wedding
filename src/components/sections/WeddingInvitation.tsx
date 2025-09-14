@@ -22,17 +22,17 @@ export default function WeddingInvitation() {
             </p>
 
             {/* Couple Names */}
-            <div className="space-y-2">
+            <div className="space-y-2 ">
               <h2 
                 id="invitation-heading"
-                className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-gray-900 leading-tight"
+                className="font-great-vibes text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-gray-900 leading-tight"
               >
                 Анна-Мария
               </h2>
-              <p className="text-2xl md:text-3xl lg:text-4xl text-gray-700">
+              <p className="font-great-vibes text-2xl md:text-3xl lg:text-4xl text-gray-700">
                 и
               </p>
-              <h3 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-gray-900 leading-tight">
+              <h3 className="font-great-vibes text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-gray-900 leading-tight">
                 Георги
               </h3>
             </div>

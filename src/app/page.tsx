@@ -43,11 +43,11 @@ export default function Home() {
         >
           <div className="container-wedding">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+              <h2 className="font-great-vibes text-3xl md:text-5xl font-bold mb-4">
                 Потвърди присъствие
               </h2>
               {/* add a message that users have to cinfirm their presence */}
-              <p className="text-sm text-muted-foreground">
+              <p>
                 Моля, потвърдете присъствието си, до <b>31.10.2025г!</b>
               </p>
             </div>

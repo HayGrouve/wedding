@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Source_Serif_4, Great_Vibes } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const sourceSerif = Source_Serif_4({
+  variable: "--font-source-serif",
   subsets: ["latin", "cyrillic"],
+  display: "swap",
+});
+
+const greatVibes = Great_Vibes({
+  variable: "--font-great-vibes",
+  subsets: ["latin"],
+  weight: "400",
   display: "swap",
 });
 
@@ -128,7 +135,7 @@ export default function RootLayout({
         <meta name="twitter:image:height" content="630" />
       </head>
       <body
-        className={`${inter.variable} font-sans antialiased`}
+        className={`${sourceSerif.variable} ${greatVibes.variable} font-sans antialiased`}
       >
         {children}
       </body>

@@ -47,16 +47,16 @@ export default function Header() {
       <div className="container-wedding">
         <div
           className={cn(
-            "grid grid-cols-3 items-center transition-all duration-200",
+            "grid grid-cols-3 items-center transition-all duration-200 relative",
             isScrolled ? "h-14 md:h-16" : "h-16 md:h-18"
           )}
         >
-          {/* Left brand text */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+          {/* Left brand text (hide on small screens to avoid wrapping) */}
+          <div className="hidden md:flex items-center gap-2 flex-shrink-0">
             <a href="#home" aria-label="Начало" onClick={handleHomeClick} className="focus:outline-none">
               <span
                 className={cn(
-                  "font-semibold transition-all duration-200",
+                  "font-great-vibes font-semibold transition-all duration-200",
                   isScrolled ? "text-lg md:text-xl" : "text-xl md:text-2xl"
                 )}
               >
@@ -65,8 +65,8 @@ export default function Header() {
             </a>
           </div>
 
-          {/* Center logo */}
-          <div className="flex items-center justify-center">
+          {/* Center logo (absolute centered on mobile, grid-centered on md+) */}
+          <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center md:static">
             <a href="#home" aria-label="Начало">
               <Image
                 src="/logo.png"
@@ -79,7 +79,7 @@ export default function Header() {
           </div>
 
           {/* Right side - Navigation */}
-          <div className="flex items-center justify-end gap-2">
+          <div className="absolute right-0 flex items-center justify-end gap-2 md:static">
             {/* Desktop Navigation */}
             <DesktopNavigation />
 
