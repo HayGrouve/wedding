@@ -7,7 +7,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-source-serif);
+  --font-sans: var(--font-inter);
   --font-serif: var(--font-source-serif);
   --font-script: var(--font-great-vibes);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -43,8 +43,6 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-
-
 }
 
 :root {
@@ -53,7 +51,7 @@
   --font-inter: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-playfair: var(--font-inter);
   --font-great-vibes: "Great Vibes", cursive;
-  --font-source-serif: "Source Serif 4", serif;
+  --font-source-serif: var(--font-inter);
 
   /* Simplified color scheme - Light gray background and black text */
   --background: #f8f9fa; /* Very light gray */
@@ -89,17 +87,17 @@
   --sidebar-ring: #6c757d;
 }
 
-
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground font-sans;
-    font-family: var(--font-source-serif), serif;
+    font-family: var(--font-inter), sans-serif;
   }
-  h1 { font-family: var(--font-great-vibes), cursive; }
+  h1 {
+    font-family: var(--font-great-vibes), cursive;
+  }
   h2,
   h3,
   h4,
@@ -109,9 +107,12 @@
   }
 
   /* Font utility classes */
-  .font-great-vibes { font-family: var(--font-great-vibes), cursive; }
-  .font-source-serif { font-family: var(--font-source-serif), serif; }
-
+  .font-great-vibes {
+    font-family: var(--font-great-vibes), cursive;
+  }
+  .font-source-serif {
+    font-family: var(--font-source-serif), serif;
+  }
 
   /* Better UX: Cursor pointer for interactive elements */
   button,
@@ -144,8 +145,6 @@
 }
 
 @layer components {
-
-
   .section-padding {
     @apply py-16 md:py-24 lg:py-32;
   }
@@ -153,10 +152,6 @@
   .container-wedding {
     @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
   }
-
-
-
-
 
   /* Sticky header utilities */
   .scroll-offset {
@@ -184,10 +179,6 @@
       transform: translateX(0);
     }
   }
-
-
-
-
 
   /* Scroll Animation Keyframes */
   @keyframes fadeInUp {
