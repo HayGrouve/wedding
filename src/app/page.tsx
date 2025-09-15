@@ -6,7 +6,6 @@ import { RSVPForm } from "@/components/forms/RSVPForm";
 import MainLayout from "@/components/layout/MainLayout";
 import WeddingStructuredData from "@/components/seo/WeddingStructuredData";
 
-
 export default function Home() {
   // Wedding date: December 13, 2025
   const weddingDate = new Date("2025-12-13T14:00:00");
@@ -21,16 +20,14 @@ export default function Home() {
           className="scroll-offset"
           aria-label="Заглавна секция"
         >
-          <Hero
-            weddingDate="13.12.2025"
-          />
+          <Hero weddingDate="13.12.2025" />
         </section>
-
-        {/* Schedule Timeline */}
-        <ScheduleTimeline />
 
         {/* Wedding Invitation Section */}
         <WeddingInvitation />
+
+        {/* Schedule Timeline */}
+        <ScheduleTimeline />
 
         {/* Wedding Details Section */}
         <WeddingDetails />
@@ -48,7 +45,7 @@ export default function Home() {
               </h2>
               {/* add a message that users have to cinfirm their presence */}
               <p>
-                Моля, потвърдете присъствието си, до <b>31.10.2025г!</b>
+                Моля, потвърдете присъствието си до <b>31.10.2025г!</b>
               </p>
             </div>
             <div className="max-w-5xl mx-auto">
