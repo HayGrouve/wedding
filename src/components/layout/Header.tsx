@@ -53,7 +53,12 @@ export default function Header() {
         >
           {/* Left brand text (hide on small screens to avoid wrapping) */}
           <div className="hidden md:flex items-center gap-2 flex-shrink-0">
-            <a href="#home" aria-label="Начало" onClick={handleHomeClick} className="focus:outline-none">
+            <a
+              href="#home"
+              aria-label="Начало"
+              onClick={handleHomeClick}
+              className="focus:outline-none"
+            >
               <span
                 className={cn(
                   "font-great-vibes font-semibold transition-all duration-200",
@@ -66,7 +71,7 @@ export default function Header() {
           </div>
 
           {/* Center logo (absolute centered on mobile, grid-centered on md+) */}
-          <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center md:static">
+          <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center md:relative">
             <a href="#home" aria-label="Начало">
               <Image
                 src="/logo.png"

@@ -20,7 +20,7 @@ const items: TimelineItem[] = [
   {
     time: "13:00",
     title: "ЦЪРКОВЕН БРАК",
-    locationName: "Лозенски манастир \"Свети Апостоли Петър и Павел\"",
+    locationName: 'Лозенски манастир "Свети Апостоли Петър и Павел"',
     mapsUrl:
       "https://www.google.com/maps/search/?api=1&query=" +
       encodeURIComponent("Лозенски манастир Свети Апостоли Петър и Павел"),
@@ -71,7 +71,10 @@ export default function ScheduleTimeline() {
           <div className="hidden md:block md:col-start-2 md:row-span-full bg-gray-300" />
 
           {items.map((item, index) => (
-            <li key={index} className="grid grid-cols-1 md:grid-cols-subgrid md:col-span-4 items-center">
+            <li
+              key={index}
+              className="grid grid-cols-1 md:grid-cols-subgrid md:col-span-4 items-center"
+            >
               {/* Left: Time + Title with wreath */}
               <div className="flex items-center gap-4">
                 <div className="relative w-28 h-28 md:w-32 md:h-32 shrink-0 mx-auto md:mx-0">
@@ -82,10 +85,12 @@ export default function ScheduleTimeline() {
                     aria-hidden="true"
                   />
                   <div className="relative w-full h-full flex items-center justify-center">
-                    <time className="text-3xl md:text-4xl text-foreground">{item.time}</time>
+                    <time className="text-xl md:text-2xl text-foreground">
+                      {item.time}
+                    </time>
                   </div>
                 </div>
-                <div className="text-center md:text-left">
+                <div className="text-center">
                   <div className="text-sm md:text-base lg:text-lg tracking-[0.2em] uppercase whitespace-pre-line text-foreground">
                     {item.title}
                   </div>
@@ -93,22 +98,17 @@ export default function ScheduleTimeline() {
               </div>
 
               {/* Middle: tick on the vertical line (md+) */}
-              <div className="hidden md:flex items-center justify-center">
-                <div className="w-10 h-px bg-gray-400" />
-              </div>
+              <div className="hidden md:flex items-center justify-center"></div>
 
               {/* Right: Location */}
-              <div className="text-center md:text-left flex items-center md:items-start">
-                {/* Right-side tick to mirror the picture */}
-                <div className="hidden md:block w-10 h-px bg-gray-400 mr-4" />
+              <div className="text-center flex items-center ">
                 <div className="text-sm md:text-base text-muted-foreground italic">
                   {item.locationName}
                 </div>
               </div>
 
               {/* Far Right: Google Maps link pinned to the edge */}
-              <div className="hidden md:flex md:flex-col md:items-end">
-                <MapPin className="h-4 w-4 text-muted-foreground" />
+              <div className="hidden md:flex  md:items-end">
                 <a
                   href={item.mapsUrl}
                   target="_blank"
@@ -118,6 +118,7 @@ export default function ScheduleTimeline() {
                 >
                   Google maps
                 </a>
+                <MapPin className="h-4 w-4 ml-1 text-muted-foreground" />
               </div>
             </li>
           ))}
