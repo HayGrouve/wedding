@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useRef } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Volume2, VolumeX } from "lucide-react";
 
@@ -21,6 +21,48 @@ export default function Hero({
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [playerSize, setPlayerSize] = useState<{
+    width: number;
+    height: number;
+  }>({ width: 0, height: 0 });
+
+  // Compute iframe size. On mobile: contain 16:9 inside viewport (white bars, no crop).
+  // On md+ desktops: cover viewport (no bars, may crop edges slightly).
+  useEffect(() => {
+    const updateSize = () => {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const ratio = 16 / 9;
+      const viewportRatio = vw / vh;
+      const isDesktop = vw >= 768;
+      if (!isDesktop) {
+        // Mobile: contain (show full frame, white bars where needed)
+        if (viewportRatio < ratio) {
+          const width = vw;
+          const height = Math.ceil(width / ratio);
+          setPlayerSize({ width, height });
+        } else {
+          const height = vh;
+          const width = Math.ceil(height * ratio);
+          setPlayerSize({ width, height });
+        }
+      } else {
+        // Desktop: cover (fill viewport, allow slight crop)
+        if (viewportRatio < ratio) {
+          const height = vh;
+          const width = Math.ceil(height * ratio);
+          setPlayerSize({ width, height });
+        } else {
+          const width = vw;
+          const height = Math.ceil(width / ratio);
+          setPlayerSize({ width, height });
+        }
+      }
+    };
+    updateSize();
+    window.addEventListener("resize", updateSize, { passive: true });
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
 
   const handleScrollToDetails = useCallback(() => {
     if (onScrollToDetails) {
@@ -29,7 +71,8 @@ export default function Hero({
       const detailsSection = document.getElementById("details");
       if (detailsSection) {
         const extra = 18;
-        const elementTop = detailsSection.getBoundingClientRect().top + window.pageYOffset;
+        const elementTop =
+          detailsSection.getBoundingClientRect().top + window.pageYOffset;
         const offset = Math.max(0, elementTop - getHeaderHeight() + extra);
         window.scrollTo({ top: offset, behavior: "smooth" });
       }
@@ -56,7 +99,7 @@ export default function Hero({
 
   return (
     <section
-      className="hero-section relative w-full h-screen min-h-[70vh] md:min-h-[80vh] lg:h-screen overflow-hidden"
+      className="hero-section relative w-full h-screen min-h-[70vh] md:min-h-[80vh] lg:h-screen overflow-hidden bg-white"
       role="banner"
       aria-label="Hero section with wedding announcement"
     >
@@ -66,7 +109,7 @@ export default function Hero({
         <iframe
           ref={iframeRef}
           src="https://www.youtube-nocookie.com/embed/_pkBDiVYarw?autoplay=1&mute=1&loop=1&playlist=_pkBDiVYarw&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&cc_load_policy=0&fs=0&disablekb=1&color=white&enablejsapi=1"
-          className="w-full h-full object-cover"
+          className="object-contain md:object-cover bg-white"
           frameBorder="0"
           allow="autoplay; encrypted-media; picture-in-picture"
           allowFullScreen
@@ -77,27 +120,25 @@ export default function Hero({
           }}
           title="Wedding background video"
           style={{
-            pointerEvents: 'none',
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            width: '120vw', /* Slightly larger to ensure full coverage */
-            height: '120vh', /* Slightly larger to ensure full coverage */
-            transform: 'translate(-50%, -50%)',
+            pointerEvents: "none",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            width: playerSize.width ? `${playerSize.width}px` : "120vw",
+            height: playerSize.height ? `${playerSize.height}px` : "120vh",
+            transform: "translate(-50%, -50%)",
             zIndex: -1,
-            objectFit: 'cover',
-            objectPosition: 'center'
           }}
         />
 
-        {/* Enhanced overlay for better text readability */}
+        {/* Enhanced overlay for better text readability (desktop only) */}
         <div
-          className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/60"
+          className="hidden md:block absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/60"
           aria-hidden="true"
         />
-        {/* Additional decorative overlay */}
+        {/* Additional decorative overlay (desktop only) */}
         <div
-          className="absolute inset-0 bg-gradient-radial from-transparent via-black/10 to-black/30"
+          className="hidden md:block absolute inset-0 bg-gradient-radial from-transparent via-black/10 to-black/30"
           aria-hidden="true"
         />
         {/* Video loading indicator */}
@@ -127,12 +168,11 @@ export default function Hero({
 
       {/* Content Overlay Layer - Restructured for top and bottom positioning */}
       <div className="relative z-10 flex flex-col justify-between h-full px-4 sm:px-6 lg:px-8">
-        
         {/* Top Section - Wedding Date */}
         <div className="flex justify-center pt-32 md:pt-28 lg:pt-32">
           <h1 className="hero-title text-center" role="heading" aria-level={1}>
             <span
-              className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white drop-shadow-2xl shadow-black/50"
+              className="block text-gray-800 md:text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold drop-shadow-2xl shadow-black/50"
               style={{
                 textShadow:
                   "2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5)",
