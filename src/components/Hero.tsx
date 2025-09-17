@@ -71,7 +71,8 @@ export default function Hero({
   useEffect(() => {
     const ua =
       (typeof navigator !== "undefined" ? navigator.userAgent : "") || "";
-    setIsMessengerIAB(/Messenger|FB_IAB/i.test(ua));
+    // Detect Meta in-app browsers: Messenger, Instagram, and generic FB IAB tokens
+    setIsMessengerIAB(/Messenger|Instagram|FB_IAB|FBAN|FBAV/i.test(ua));
     setMounted(true);
     if (typeof window !== "undefined") {
       try {
