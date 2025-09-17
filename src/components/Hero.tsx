@@ -82,7 +82,8 @@ export default function Hero({
 
   const iframeSrc = (() => {
     const videoId = "_pkBDiVYarw";
-    const muteParam = isMessengerIAB ? "0" : "1";
+    // Autoplay policies in Messenger's in-app browser require muted playback
+    const muteParam = "1";
     return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=${muteParam}&loop=1&playlist=${videoId}&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&cc_load_policy=0&fs=0&disablekb=1&color=white&enablejsapi=1${originParam}`;
   })();
 
@@ -117,6 +118,25 @@ export default function Hero({
       postToYouTubePlayer(nextMuted ? "mute" : "unMute");
       return nextMuted;
     });
+  };
+
+  const handleOpenInBrowser = () => {
+    if (typeof window === "undefined") return;
+    const url = window.location.href;
+    try {
+      const ua = navigator.userAgent || "";
+      const isAndroid = /Android/i.test(ua);
+      if (isAndroid) {
+        const cleaned = url.replace(/^https?:\/\//, "");
+        const intentUrl = `intent://${cleaned}#Intent;scheme=https;package=com.android.chrome;end`;
+        window.location.href = intentUrl;
+        return;
+      }
+      // iOS and others: try opening a new tab (often hands off to Safari)
+      window.open(url, "_blank", "noopener,noreferrer");
+    } catch {
+      window.open(url, "_blank");
+    }
   };
 
   return (
@@ -178,6 +198,7 @@ export default function Hero({
       </div>
 
       {/* Sound Control Button - Top Right Corner */}
+      {/* Hide mute button in Messenger IAB to avoid freezes; show elsewhere */}
       {!isMessengerIAB && (
         <div className="absolute top-6 right-6 z-20">
           <Button
@@ -228,6 +249,25 @@ export default function Hero({
           </Button>
         </div>
       </div>
+
+      {/* Messenger in-app browser overlay */}
+      {mounted && isMessengerIAB && (
+        <div className="absolute inset-0 z-30 bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center px-6 text-center">
+          <p className="text-gray-900 text-lg md:text-xl">
+            За да видите този сайт отворете го в браузъра или натиснете тук:
+          </p>
+          <Button
+            onClick={handleOpenInBrowser}
+            className="mt-4 bg-gray-900 text-white px-6 py-3 rounded-md border border-gray-300 hover:shadow-md"
+          >
+            Отвори в браузъра
+          </Button>
+          <p className="text-xs text-muted-foreground mt-3">
+            Ако бутонът не работи, използвайте менюто на Messenger „Open in
+            Browser“.
+          </p>
+        </div>
+      )}
     </section>
   );
 }
