@@ -25,6 +25,9 @@ export default function Hero({
     width: number;
     height: number;
   }>({ width: 0, height: 0 });
+  const [isMessengerIAB, setIsMessengerIAB] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [originParam, setOriginParam] = useState("");
 
   // Compute iframe size. On mobile: contain 16:9 inside viewport (white bars, no crop).
   // On md+ desktops: cover viewport (no bars, may crop edges slightly).
@@ -63,6 +66,25 @@ export default function Hero({
     window.addEventListener("resize", updateSize, { passive: true });
     return () => window.removeEventListener("resize", updateSize);
   }, []);
+
+  // Detect Messenger in-app browser to adjust sound and controls
+  useEffect(() => {
+    const ua =
+      (typeof navigator !== "undefined" ? navigator.userAgent : "") || "";
+    setIsMessengerIAB(/Messenger|FB_IAB/i.test(ua));
+    setMounted(true);
+    if (typeof window !== "undefined") {
+      try {
+        setOriginParam(`&origin=${encodeURIComponent(window.location.origin)}`);
+      } catch {}
+    }
+  }, []);
+
+  const iframeSrc = (() => {
+    const videoId = "_pkBDiVYarw";
+    const muteParam = isMessengerIAB ? "0" : "1";
+    return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=${muteParam}&loop=1&playlist=${videoId}&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&cc_load_policy=0&fs=0&disablekb=1&color=white&enablejsapi=1${originParam}`;
+  })();
 
   const handleScrollToDetails = useCallback(() => {
     if (onScrollToDetails) {
@@ -106,30 +128,36 @@ export default function Hero({
       {/* Background Video Layer */}
       <div className="absolute inset-0 z-0">
         {/* YouTube Video Embed - Using nocookie domain and optimized parameters */}
-        <iframe
-          ref={iframeRef}
-          src="https://www.youtube-nocookie.com/embed/_pkBDiVYarw?autoplay=1&mute=1&loop=1&playlist=_pkBDiVYarw&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&cc_load_policy=0&fs=0&disablekb=1&color=white&enablejsapi=1"
-          className="object-contain md:object-cover bg-white"
-          frameBorder="0"
-          allow="autoplay; encrypted-media; picture-in-picture"
-          allowFullScreen
-          onLoad={() => setVideoLoaded(true)}
-          onError={() => {
-            console.log("YouTube video failed to load, showing fallback image");
-            setVideoLoaded(true);
-          }}
-          title="Wedding background video"
-          style={{
-            pointerEvents: "none",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            width: playerSize.width ? `${playerSize.width}px` : "120vw",
-            height: playerSize.height ? `${playerSize.height}px` : "120vh",
-            transform: "translate(-50%, -50%)",
-            zIndex: -1,
-          }}
-        />
+        {mounted ? (
+          <iframe
+            ref={iframeRef}
+            src={iframeSrc}
+            className="object-contain md:object-cover bg-white"
+            frameBorder="0"
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+            allowFullScreen
+            onLoad={() => setVideoLoaded(true)}
+            onError={() => {
+              console.log(
+                "YouTube video failed to load, showing fallback image"
+              );
+              setVideoLoaded(true);
+            }}
+            title="Wedding background video"
+            style={{
+              pointerEvents: "none",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              width: playerSize.width ? `${playerSize.width}px` : "120vw",
+              height: playerSize.height ? `${playerSize.height}px` : "120vh",
+              transform: "translate(-50%, -50%)",
+              zIndex: -1,
+            }}
+          />
+        ) : (
+          <div className="absolute inset-0 bg-white" aria-hidden="true" />
+        )}
 
         {/* Enhanced overlay for better text readability (desktop only) */}
         <div
@@ -150,21 +178,23 @@ export default function Hero({
       </div>
 
       {/* Sound Control Button - Top Right Corner */}
-      <div className="absolute top-6 right-6 z-20">
-        <Button
-          onClick={toggleMute}
-          variant="ghost"
-          size="sm"
-          className="text-white bg-black/30 focus-visible:bg-black/30 border border-white/50 backdrop-blur-sm transition-all duration-200 focus-visible:ring-2 focus-visible:ring-white/80 ring-offset-2 ring-offset-black/30"
-          aria-label={isMuted ? "Unmute video" : "Mute video"}
-        >
-          {isMuted ? (
-            <VolumeX className="w-5 h-5" />
-          ) : (
-            <Volume2 className="w-5 h-5" />
-          )}
-        </Button>
-      </div>
+      {!isMessengerIAB && (
+        <div className="absolute top-6 right-6 z-20">
+          <Button
+            onClick={toggleMute}
+            variant="ghost"
+            size="sm"
+            className="text-white bg-black/30 focus-visible:bg-black/30 border border-white/50 backdrop-blur-sm transition-all duration-200 focus-visible:ring-2 focus-visible:ring-white/80 ring-offset-2 ring-offset-black/30"
+            aria-label={isMuted ? "Unmute video" : "Mute video"}
+          >
+            {isMuted ? (
+              <VolumeX className="w-5 h-5" />
+            ) : (
+              <Volume2 className="w-5 h-5" />
+            )}
+          </Button>
+        </div>
+      )}
 
       {/* Content Overlay Layer - Restructured for top and bottom positioning */}
       <div className="relative z-10 flex flex-col justify-between h-full px-4 sm:px-6 lg:px-8">
