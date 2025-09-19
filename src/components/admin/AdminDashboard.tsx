@@ -322,14 +322,18 @@ export function AdminDashboard() {
           </Button>
         ),
         cell: ({ row }) => (
-          <div className="font-medium break-words max-w-[180px] md:max-w-none">{row.getValue("guestName")}</div>
+          <div className="font-medium break-words max-w-[180px] md:max-w-none">
+            {row.getValue("guestName")}
+          </div>
         ),
       },
       {
         accessorKey: "email",
         header: "Email",
         cell: ({ row }) => (
-          <div className="text-sm break-words max-w-[200px] md:max-w-none">{row.getValue("email")}</div>
+          <div className="text-sm break-words max-w-[200px] md:max-w-none">
+            {row.getValue("email")}
+          </div>
         ),
       },
       {
@@ -338,9 +342,9 @@ export function AdminDashboard() {
         cell: ({ row }) => {
           const phone = row.getValue("phone") as string | undefined;
           return (
-            <div className="text-sm">{
-              phone || <span className="text-muted-foreground">—</span>
-            }</div>
+            <div className="text-sm">
+              {phone || <span className="text-muted-foreground">—</span>}
+            </div>
           );
         },
       },
@@ -422,10 +426,26 @@ export function AdminDashboard() {
         ),
         cell: ({ row }) => {
           const count = row.getValue("childrenCount") as number;
+          const details = row.original.childrenDetails || [];
           return (
             <div className="text-center">
               {count > 0 ? (
-                <Badge variant="outline">{count}</Badge>
+                <>
+                  <Badge variant="outline">{count}</Badge>
+                  {details.length > 0 && (
+                    <div className="mt-1 text-xs text-muted-foreground break-words max-w-[220px] md:max-w-none space-y-0.5">
+                      {details.map((c, idx) => (
+                        <div key={idx}>
+                          {typeof c === "object" && c
+                            ? `${c.name}${
+                                typeof c.age === "number" ? ` (${c.age})` : ""
+                              }`
+                            : String(c)}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
               ) : (
                 <span className="text-muted-foreground">—</span>
               )}
@@ -489,7 +509,10 @@ export function AdminDashboard() {
                 </div>
               )}
               {allergies && (
-                <div className="text-xs text-muted-foreground break-words max-w-[220px] md:max-w-none">
+                <div
+                  className="text-xs text-muted-foreground max-w-[220px] md:max-w-[220px] truncate"
+                  title={allergies}
+                >
                   Алергии: {allergies}
                 </div>
               )}
@@ -808,7 +831,9 @@ export function AdminDashboard() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Детски менюта (&lt;12)</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Детски менюта (&lt;12)
+            </CardTitle>
             <Baby className="h-4 w-4 text-purple-600" />
           </CardHeader>
           <CardContent>
@@ -1103,7 +1128,9 @@ export function AdminDashboard() {
                 ].filter(Boolean);
 
                 return activeFilters.length > 0
-                  ? `Активни филтри: ${activeFilters.join(", ")} (${activeFilters.length})`
+                  ? `Активни филтри: ${activeFilters.join(", ")} (${
+                      activeFilters.length
+                    })`
                   : "Няма активни филтри";
               })()}
             </div>
@@ -1168,11 +1195,15 @@ export function AdminDashboard() {
                     .filter((g) => g.attending)
                     .reduce(
                       (sum, g) =>
-                        sum + (g.childrenDetails?.filter((c) => c.age < 12).length || 0),
+                        sum +
+                        (g.childrenDetails?.filter((c) => c.age < 12).length ||
+                          0),
                       0
                     )}
                 </div>
-                <div className="text-sm text-muted-foreground">Детски менюта (&lt;12)</div>
+                <div className="text-sm text-muted-foreground">
+                  Детски менюта (&lt;12)
+                </div>
               </div>
             </div>
           </CardContent>
@@ -1260,10 +1291,7 @@ export function AdminDashboard() {
               table.getRowModel().rows.map((row) => {
                 const guest = row.original;
                 return (
-                  <Card
-                    key={row.id}
-                    className="border-l-4 border-l-primary/30"
-                  >
+                  <Card key={row.id} className="border-l-4 border-l-primary/30">
                     <CardContent className="pt-4">
                       <div className="space-y-3">
                         {/* Guest Name and Status */}
@@ -1327,9 +1355,29 @@ export function AdminDashboard() {
                               <span className="font-medium">Деца:</span>
                               <div className="mt-1">
                                 {guest.childrenCount > 0 ? (
-                                  <Badge variant="outline">
-                                    {guest.childrenCount}
-                                  </Badge>
+                                  <div className="space-y-1">
+                                    <Badge variant="outline">
+                                      {guest.childrenCount}
+                                    </Badge>
+                                    {guest.childrenDetails &&
+                                      guest.childrenDetails.length > 0 && (
+                                        <div className="text-xs text-muted-foreground break-words space-y-0.5">
+                                          {guest.childrenDetails.map(
+                                            (c, idx) => (
+                                              <div key={idx}>
+                                                {typeof c === "object" && c
+                                                  ? `${c.name}${
+                                                      typeof c.age === "number"
+                                                        ? ` (${c.age})`
+                                                        : ""
+                                                    }`
+                                                  : String(c)}
+                                              </div>
+                                            )
+                                          )}
+                                        </div>
+                                      )}
+                                  </div>
                                 ) : (
                                   <span className="text-muted-foreground text-xs">
                                     Няма
@@ -1371,7 +1419,10 @@ export function AdminDashboard() {
                                       </div>
                                     )}
                                   {guest.allergies && (
-                                    <div className="text-xs text-muted-foreground mt-1 break-words">
+                                    <div
+                                      className="text-xs text-muted-foreground mt-1 truncate max-w-[220px]"
+                                      title={guest.allergies}
+                                    >
                                       Алергии: {guest.allergies}
                                     </div>
                                   )}
@@ -1406,17 +1457,26 @@ export function AdminDashboard() {
           <div className="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 sm:space-x-2 py-4">
             <div className="flex items-center space-x-2">
               <div className="text-xs text-muted-foreground block sm:hidden">
-                Стр {table.getState().pagination.pageIndex + 1}/{table.getPageCount()}
+                Стр {table.getState().pagination.pageIndex + 1}/
+                {table.getPageCount()}
               </div>
               <div className="hidden sm:block text-sm text-muted-foreground">
                 Показване на{" "}
-                {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}{" "}
+                {table.getState().pagination.pageIndex *
+                  table.getState().pagination.pageSize +
+                  1}{" "}
                 до{" "}
-                {Math.min((table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize, filteredData.length)}{" "}
+                {Math.min(
+                  (table.getState().pagination.pageIndex + 1) *
+                    table.getState().pagination.pageSize,
+                  filteredData.length
+                )}{" "}
                 от {filteredData.length} резултата
               </div>
               <div className="flex items-center space-x-2">
-                <span className="hidden sm:inline text-sm text-muted-foreground">Редове на страница:</span>
+                <span className="hidden sm:inline text-sm text-muted-foreground">
+                  Редове на страница:
+                </span>
                 <Select
                   value={table.getState().pagination.pageSize.toString()}
                   onValueChange={(value) => {
@@ -1438,35 +1498,80 @@ export function AdminDashboard() {
 
             {/* Mobile icon-only controls */}
             <div className="flex items-center gap-2 sm:hidden">
-              <Button variant="outline" size="icon" onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()} aria-label="Първа страница">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => table.setPageIndex(0)}
+                disabled={!table.getCanPreviousPage()}
+                aria-label="Първа страница"
+              >
                 <ChevronsLeft className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="icon" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} aria-label="Предишна страница">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+                aria-label="Предишна страница"
+              >
                 <ChevronLeft className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="icon" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} aria-label="Следваща страница">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+                aria-label="Следваща страница"
+              >
                 <ChevronRight className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="icon" onClick={() => table.setPageIndex(table.getPageCount() - 1)} disabled={!table.getCanNextPage()} aria-label="Последна страница">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                disabled={!table.getCanNextPage()}
+                aria-label="Последна страница"
+              >
                 <ChevronsRight className="h-4 w-4" />
               </Button>
             </div>
 
             {/* Desktop text buttons with icons */}
             <div className="hidden sm:flex items-center gap-2">
-              <Button variant="outline" size="sm" onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.setPageIndex(0)}
+                disabled={!table.getCanPreviousPage()}
+              >
                 <ChevronsLeft className="h-4 w-4 mr-1" /> Първа
               </Button>
-              <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
                 <ChevronLeft className="h-4 w-4 mr-1" /> Предишна
               </Button>
               <div className="text-sm text-muted-foreground">
-                Страница {table.getState().pagination.pageIndex + 1} от {table.getPageCount()}
+                Страница {table.getState().pagination.pageIndex + 1} от{" "}
+                {table.getPageCount()}
               </div>
-              <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
                 Следваща <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
-              <Button variant="outline" size="sm" onClick={() => table.setPageIndex(table.getPageCount() - 1)} disabled={!table.getCanNextPage()}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                disabled={!table.getCanNextPage()}
+              >
                 Последна <ChevronsRight className="h-4 w-4 ml-1" />
               </Button>
             </div>
