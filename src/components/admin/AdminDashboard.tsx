@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import useSWR from "swr";
 import {
   ColumnDef,
@@ -36,12 +36,20 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  Info,
 } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -508,14 +516,7 @@ export function AdminDashboard() {
                   </Badge>
                 </div>
               )}
-              {allergies && (
-                <div
-                  className="text-xs text-muted-foreground max-w-[220px] md:max-w-[220px] truncate"
-                  title={allergies}
-                >
-                  Алергии: {allergies}
-                </div>
-              )}
+              {allergies && <AllergiesCell text={allergies} />}
             </div>
           );
         },
@@ -1419,12 +1420,10 @@ export function AdminDashboard() {
                                       </div>
                                     )}
                                   {guest.allergies && (
-                                    <div
-                                      className="text-xs text-muted-foreground mt-1 truncate max-w-[220px]"
-                                      title={guest.allergies}
-                                    >
-                                      Алергии: {guest.allergies}
-                                    </div>
+                                    <AllergiesCell
+                                      text={guest.allergies}
+                                      className="mt-1"
+                                    />
                                   )}
                                 </div>
                               </div>
@@ -1578,6 +1577,59 @@ export function AdminDashboard() {
           </div>
         </CardContent>
       </Card>
+    </div>
+  );
+}
+
+// Small component: shows truncated allergies with a click-to-view icon only when truncated
+function AllergiesCell({
+  text,
+  className = "",
+}: {
+  text: string;
+  className?: string;
+}) {
+  const containerRef = useRef<HTMLSpanElement | null>(null);
+  const [isTruncated, setIsTruncated] = useState(false);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const check = () => setIsTruncated(el.scrollWidth > el.clientWidth);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [text]);
+
+  return (
+    <div
+      className={`text-xs text-muted-foreground flex items-center gap-1 max-w-[220px] ${className}`}
+    >
+      <span ref={containerRef} className="truncate">
+        Алергии: {text}
+      </span>
+      {isTruncated && (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-5 w-5 p-0"
+              aria-label="Виж всички алергии"
+            >
+              <Info className="h-3.5 w-3.5" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-sm">
+            <DialogHeader>
+              <DialogTitle>Алергии</DialogTitle>
+            </DialogHeader>
+            <div className="whitespace-pre-wrap break-words text-sm text-muted-foreground">
+              {text}
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
