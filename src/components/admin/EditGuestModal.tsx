@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Trash2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -14,6 +15,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import {
   Form,
   FormControl,
@@ -46,6 +58,18 @@ const editGuestSchema = z.object({
     .number()
     .min(0, "Броя деца не може да бъде отрицателен")
     .max(10, "Твърде много деца"),
+  childrenDetails: z
+    .array(
+      z.object({
+        name: z.string().min(1, "Име на дете е задължително"),
+        age: z
+          .number({ invalid_type_error: "Възрастта трябва да е число" })
+          .int("Възрастта трябва да е цяло число")
+          .min(0, "Минимална възраст 0")
+          .max(17, "Максимална възраст 17"),
+      })
+    )
+    .optional(),
   menuChoice: z.enum(["meat", "vegetarian"]).optional(),
   plusOneMenuChoice: z.enum(["meat", "vegetarian"]).optional(),
   allergies: z.string().optional(),
@@ -78,6 +102,7 @@ export function EditGuestModal({
       plusOneAttending: false,
       plusOneName: "",
       childrenCount: 0,
+      childrenDetails: [],
       menuChoice: "meat",
       plusOneMenuChoice: "meat",
       allergies: "",
@@ -95,6 +120,7 @@ export function EditGuestModal({
         plusOneAttending: guest.plusOneAttending,
         plusOneName: guest.plusOneName || "",
         childrenCount: guest.childrenCount,
+        childrenDetails: guest.childrenDetails || [],
 
         menuChoice:
           guest.menuChoice === "meat" || guest.menuChoice === "vegetarian"
@@ -130,6 +156,16 @@ export function EditGuestModal({
             ? data.plusOneName || undefined
             : undefined,
         childrenCount: data.attending ? data.childrenCount : 0,
+        childrenDetails:
+          data.attending && data.childrenCount > 0
+            ? (data.childrenDetails || [])
+                .slice(0, data.childrenCount)
+                .filter((c) => c && c.name && Number.isFinite(Number(c.age)))
+                .map((c) => ({
+                  name: c.name.trim().replace(/\s+/g, " "),
+                  age: Math.max(0, Math.min(17, Number(c.age))),
+                }))
+            : undefined,
 
         menuChoice:
           data.attending && data.menuChoice ? data.menuChoice : undefined,
@@ -159,6 +195,29 @@ export function EditGuestModal({
     }
   };
 
+  const handleRemoveChild = (idx: number) => {
+    const current = form.getValues("childrenDetails") || [];
+    const next = [...current];
+    next.splice(idx, 1);
+    form.setValue("childrenDetails", next, { shouldDirty: true });
+    const currentCount = form.getValues("childrenCount") || 0;
+    form.setValue("childrenCount", Math.max(0, currentCount - 1), {
+      shouldDirty: true,
+    });
+  };
+
+  const handleAddChild = () => {
+    const currentCount = form.getValues("childrenCount") || 0;
+    if (currentCount >= 10) return;
+    const details = form.getValues("childrenDetails") || [];
+    form.setValue("childrenCount", currentCount + 1, { shouldDirty: true });
+    form.setValue(
+      "childrenDetails",
+      [...details, { name: "", age: undefined as unknown as number }],
+      { shouldDirty: true }
+    );
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
@@ -184,6 +243,7 @@ export function EditGuestModal({
                       placeholder="Въведете име на гост"
                       {...field}
                       disabled={isLoading}
+                      className="border border-gray-300 bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                   </FormControl>
                   <FormMessage />
@@ -204,6 +264,7 @@ export function EditGuestModal({
                       placeholder="Въведете email адрес"
                       {...field}
                       disabled={isLoading}
+                      className="border border-gray-300 bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                   </FormControl>
                   <FormMessage />
@@ -224,6 +285,7 @@ export function EditGuestModal({
                       placeholder="Въведете телефонен номер"
                       {...field}
                       disabled={isLoading}
+                      className="border border-gray-300 bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                   </FormControl>
                   <FormMessage />
@@ -291,6 +353,7 @@ export function EditGuestModal({
                             placeholder="Въведете име на партньор"
                             {...field}
                             disabled={isLoading}
+                            className="border border-gray-300 bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20"
                           />
                         </FormControl>
                         <FormMessage />
@@ -316,6 +379,7 @@ export function EditGuestModal({
                             field.onChange(parseInt(e.target.value) || 0)
                           }
                           disabled={isLoading}
+                          className="border border-gray-300 bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20"
                         />
                       </FormControl>
                       <FormMessage />
@@ -323,61 +387,179 @@ export function EditGuestModal({
                   )}
                 />
 
-                {/* Menu Choice */}
-                <FormField
-                  control={form.control}
-                  name="menuChoice"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Меню</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        disabled={isLoading}
+                {/* Children details */}
+                {isAttending && form.watch("childrenCount") > 0 && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <FormLabel>Деца - имена и възраст (0–17)</FormLabel>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={handleAddChild}
+                        disabled={
+                          isLoading || (form.watch("childrenCount") || 0) >= 10
+                        }
+                        aria-label="Добави дете"
                       >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Изберете меню" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="meat">🥩 Месно</SelectItem>
-                          <SelectItem value="vegetarian">🥗 Вегетарианско</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        Добави дете
+                      </Button>
+                    </div>
+                    <div className="space-y-2">
+                      {Array.from({ length: form.watch("childrenCount") }).map(
+                        (_, idx) => (
+                          <div
+                            key={idx}
+                            className="grid grid-cols-1 sm:grid-cols-[1fr_160px_auto] gap-3 items-end"
+                          >
+                            <FormField
+                              control={form.control}
+                              name={`childrenDetails.${idx}.name` as const}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="text-xs">Име</FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      placeholder={`Име #${idx + 1}`}
+                                      {...field}
+                                      className="border border-gray-300 bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={form.control}
+                              name={`childrenDetails.${idx}.age` as const}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="text-xs">
+                                    Възраст
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      type="number"
+                                      min={0}
+                                      max={17}
+                                      placeholder="0–17"
+                                      value={field.value as number | undefined}
+                                      onChange={(e) =>
+                                        field.onChange(
+                                          e.target.value === ""
+                                            ? undefined
+                                            : Number(e.target.value)
+                                        )
+                                      }
+                                      className="border border-gray-300 bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <div className="flex sm:justify-start">
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 text-red-600"
+                                    aria-label={`Премахни дете #${idx + 1}`}
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>
+                                      Премахване на дете
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      Сигурни ли сте, че искате да премахнете
+                                      това дете от списъка? Действието може да
+                                      бъде отменено преди запазване.
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>Отказ</AlertDialogCancel>
+                                    <AlertDialogAction
+                                      onClick={() => handleRemoveChild(idx)}
+                                    >
+                                      Премахни
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
 
-                {/* Plus One Menu Choice */}
-                {isPlusOneAttending && (
+                {/* Menu choices row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
-                    name="plusOneMenuChoice"
+                    name="menuChoice"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Меню за партньор</FormLabel>
+                        <FormLabel>Меню</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                           disabled={isLoading}
                         >
                           <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Изберете меню за партньор" />
+                            <SelectTrigger className="border border-gray-300 bg-white text-black">
+                              <SelectValue placeholder="Изберете меню" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
                             <SelectItem value="meat">🥩 Месно</SelectItem>
-                            <SelectItem value="vegetarian">🥗 Вегетарианско</SelectItem>
+                            <SelectItem value="vegetarian">
+                              🥗 Вегетарианско
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                )}
+
+                  {isPlusOneAttending && (
+                    <FormField
+                      control={form.control}
+                      name="plusOneMenuChoice"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Меню за партньор</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            disabled={isLoading}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="border border-gray-300 bg-white text-black">
+                                <SelectValue placeholder="Изберете меню за партньор" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="meat">🥩 Месно</SelectItem>
+                              <SelectItem value="vegetarian">
+                                🥗 Вегетарианско
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+                </div>
 
                 {/* Allergies */}
                 <FormField
@@ -389,9 +571,9 @@ export function EditGuestModal({
                       <FormControl>
                         <Textarea
                           placeholder="Опишете алергии (ако има)"
-                          className="resize-none"
                           {...field}
                           disabled={isLoading}
+                          className="resize-none border border-gray-300 bg-white text-black placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20"
                         />
                       </FormControl>
                       <FormMessage />
