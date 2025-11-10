@@ -45,7 +45,7 @@ export default function Home() {
               </h2>
               {/* add a message that users have to cinfirm their presence */}
               <p>
-                Моля, потвърдете присъствието си до <b>09.11.2025г!</b>
+                Моля, потвърдете присъствието си до <b>15.11.2025г!</b>
               </p>
             </div>
             <div className="max-w-5xl mx-auto">
