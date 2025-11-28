@@ -33,6 +33,7 @@ export function RSVPForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const submissionsDisabled = true; // RSVP submissions are currently disabled
 
   // Form state
   const [guestFirstName, setGuestFirstName] = useState("");
@@ -88,6 +89,15 @@ export function RSVPForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Prevent submission if disabled
+    if (submissionsDisabled) {
+      toast.error(
+        "RSVP формулярът е деактивиран, защото крайният срок е изтекъл"
+      );
+      return;
+    }
+
     setIsSubmitting(true);
     setErrors({});
 
@@ -264,7 +274,7 @@ export function RSVPForm() {
                 placeholder="Име"
                 value={guestFirstName}
                 onChange={(e) => setGuestFirstName(e.target.value)}
-                disabled={isSubmitting}
+                disabled={isSubmitting || submissionsDisabled}
                 className={`${
                   errors.guestFirstName || errors.guestName
                     ? "border-red-500"
@@ -284,7 +294,7 @@ export function RSVPForm() {
                 placeholder="Фамилия"
                 value={guestLastName}
                 onChange={(e) => setGuestLastName(e.target.value)}
-                disabled={isSubmitting}
+                disabled={isSubmitting || submissionsDisabled}
                 className={`${
                   errors.guestLastName || errors.guestName
                     ? "border-red-500"
@@ -406,7 +416,7 @@ export function RSVPForm() {
                 <Switch
                   checked={plusOneAttending}
                   onCheckedChange={setPlusOneAttending}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || submissionsDisabled}
                   className="data-[state=checked]:bg-primary data-[state=unchecked]:bg-gray-300"
                 />
               </div>
@@ -431,7 +441,7 @@ export function RSVPForm() {
                         placeholder="Име"
                         value={plusOneFirstName}
                         onChange={(e) => setPlusOneFirstName(e.target.value)}
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || submissionsDisabled}
                         className={`${
                           errors.plusOneFirstName || errors.plusOneName
                             ? "border-red-500"
@@ -456,7 +466,7 @@ export function RSVPForm() {
                         placeholder="Фамилия"
                         value={plusOneLastName}
                         onChange={(e) => setPlusOneLastName(e.target.value)}
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || submissionsDisabled}
                         className={`${
                           errors.plusOneLastName || errors.plusOneName
                             ? "border-red-500"
@@ -483,7 +493,7 @@ export function RSVPForm() {
                 <Select
                   value={childrenCount.toString()}
                   onValueChange={(v) => setChildrenCount(parseInt(v))}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || submissionsDisabled}
                 >
                   <SelectTrigger
                     className={`${
@@ -535,7 +545,7 @@ export function RSVPForm() {
                               };
                               setChildrenUi(next);
                             }}
-                            disabled={isSubmitting}
+                            disabled={isSubmitting || submissionsDisabled}
                             className="bg-white text-black placeholder:text-gray-500 border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20"
                           />
                         </div>
@@ -555,7 +565,7 @@ export function RSVPForm() {
                               };
                               setChildrenUi(next);
                             }}
-                            disabled={isSubmitting}
+                            disabled={isSubmitting || submissionsDisabled}
                             className="bg-white text-black placeholder:text-gray-500 border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20"
                           />
                         </div>
@@ -589,7 +599,7 @@ export function RSVPForm() {
                                     };
                                     setChildrenUi(next);
                                   }}
-                                  disabled={isSubmitting}
+                                  disabled={isSubmitting || submissionsDisabled}
                                   className={inputClass}
                                 />
                                 {invalidAge && (
@@ -615,7 +625,7 @@ export function RSVPForm() {
                 <Select
                   value={menuChoice}
                   onValueChange={setMenuChoice}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || submissionsDisabled}
                 >
                   <SelectTrigger
                     className={`${
@@ -642,7 +652,7 @@ export function RSVPForm() {
                   <Select
                     value={plusOneMenuChoice}
                     onValueChange={setPlusOneMenuChoice}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || submissionsDisabled}
                   >
                     <SelectTrigger
                       className={`${
@@ -681,7 +691,7 @@ export function RSVPForm() {
                   placeholder="Опишете алергии към храна или други специални изисквания..."
                   value={allergies}
                   onChange={(e) => setAllergies(e.target.value)}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || submissionsDisabled}
                   rows={3}
                   className={`${
                     errors.allergies ? "border-red-500" : "border-gray-300"
@@ -710,7 +720,7 @@ export function RSVPForm() {
             void handleSubmit(e);
           }}
           className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 text-lg"
-          disabled={isSubmitting}
+          disabled={isSubmitting || submissionsDisabled}
         >
           {isSubmitting ? (
             <>
@@ -722,6 +732,16 @@ export function RSVPForm() {
             </>
           )}
         </Button>
+
+        {submissionsDisabled && (
+          <Alert className="border-yellow-200 bg-yellow-50">
+            <AlertTriangle className="h-4 w-4 text-yellow-600" />
+            <AlertDescription className="text-yellow-800">
+              RSVP формулярът е деактивиран, защото крайният срок за подаване на
+              отговор е изтекъл.
+            </AlertDescription>
+          </Alert>
+        )}
 
         <Alert className="border-gray-200 bg-gray-50">
           <AlertTriangle className="h-4 w-4 text-gray-600" />
